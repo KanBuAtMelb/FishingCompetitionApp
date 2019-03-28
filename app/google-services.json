@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "991861165129",
+    "firebase_url": "https://fishingtest-8c959.firebaseio.com",
+    "project_id": "fishingtest-8c959",
+    "storage_bucket": "fishingtest-8c959.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991861165129:android:97e091ad637a527f",
+        "android_client_info": {
+          "package_name": "com.example.fishingtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991861165129-01n5upd3sma3le3mgsops6i32lsk4i6g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fishingtest",
+            "certificate_hash": "3fe25f1598ff460bebd702b4cbb260a068554412"
+          }
+        },
+        {
+          "client_id": "991861165129-lpnid36evaoba9966grv513rvs3n32kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIWm5EfirWRdFyg-b4LBGV5W6Cl_GE2tE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991861165129-lpnid36evaoba9966grv513rvs3n32kf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

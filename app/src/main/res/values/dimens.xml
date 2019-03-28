@@ -1,0 +1,13 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="activity_horizontal_margin">10dp</dimen>
+    <dimen name="activity_vertical_margin">10dp</dimen>
+    <dimen name="side_navigator_height">175dp</dimen>
+    <dimen name="side_navigator_vertical_spacing">8dp</dimen>
+    <item name="visible" type="id" />
+    <item name="masked" type="id" />
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+</resources>
