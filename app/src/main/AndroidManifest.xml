@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditUserActivity"></activity>
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".MainLogInActivity">
+        <activity android:name=".Controllers.EditUserActivity"></activity>
+        <activity android:name=".Controllers.RegisterActivity" />
+        <activity android:name=".Controllers.LogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,12 +19,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomePageActivity"
+            android:name=".Controllers.HomePageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AdminActivity"
+            android:name=".Controllers.AdminActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".HomePageActivity"/>
+            android:parentActivityName=".Controllers.HomePageActivity"/>
     </application>
 
 </manifest>

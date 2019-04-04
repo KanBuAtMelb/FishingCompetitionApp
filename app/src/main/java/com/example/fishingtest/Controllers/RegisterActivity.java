@@ -1,4 +1,4 @@
-package com.example.fishingtest;
+package com.example.fishingtest.Controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.fishingtest.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -146,7 +147,7 @@ public class RegisterActivity<pulbic> extends AppCompatActivity {
                             showErrorDialog("Registration attempt failed");
                         } else {
                             saveDisplayName();
-                            Intent intent = new Intent(RegisterActivity.this, MainLogInActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this, LogInActivity.class);
                             finish();
                             startActivity(intent);
                         }

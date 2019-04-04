@@ -1,4 +1,4 @@
-package com.example.fishingtest;
+package com.example.fishingtest.Controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.fishingtest.Models.User;
-import com.example.fishingtest.Models.ViewPagerAdapter;
+import com.example.fishingtest.Common.User;
+import com.example.fishingtest.Adapters.ViewPagerAdapter;
+import com.example.fishingtest.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -144,7 +145,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         public void onComplete(@NonNull Task<Void> task) {
                             // user is now signed out
-                            startActivity(new Intent(HomePageActivity.this, MainLogInActivity.class));
+                            startActivity(new Intent(HomePageActivity.this, LogInActivity.class));
                             finish();
                         }
                     });

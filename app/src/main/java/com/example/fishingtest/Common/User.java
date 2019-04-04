@@ -1,4 +1,4 @@
-package com.example.fishingtest.Models;
+package com.example.fishingtest.Common;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

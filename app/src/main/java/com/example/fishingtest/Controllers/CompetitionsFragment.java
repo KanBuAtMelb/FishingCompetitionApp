@@ -1,4 +1,4 @@
-package com.example.fishingtest;
+package com.example.fishingtest.Controllers;
 
 
 import android.os.Bundle;
@@ -9,8 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.fishingtest.Models.CompAdapter;
-import com.example.fishingtest.Models.CompetitionItem;
+import com.example.fishingtest.Adapters.CompAdapter;
+import com.example.fishingtest.R;
 
 import java.util.ArrayList;
 
@@ -42,14 +42,14 @@ public class CompetitionsFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
 
 
-        // TODO: Get Competitions enrolled by the user from Firebase
-        ArrayList<CompetitionItem> comps_enrolled = new ArrayList<CompetitionItem>();
-
-        // Temporary data for recycler view
-        comps_enrolled.add(new CompetitionItem("1"));
-        comps_enrolled.add(new CompetitionItem("2"));
-        comps_enrolled.add(new CompetitionItem("3"));
-        comps_enrolled.add(new CompetitionItem("4"));
+//        // TODO: Get Competitions enrolled by the user from Firebase
+//        ArrayList<CompetitionItem> comps_enrolled = new ArrayList<CompetitionItem>();
+//
+//        // Temporary data for recycler view
+//        comps_enrolled.add(new CompetitionItem("1"));
+//        comps_enrolled.add(new CompetitionItem("2"));
+//        comps_enrolled.add(new CompetitionItem("3"));
+//        comps_enrolled.add(new CompetitionItem("4"));
 
         // TODO: decide what image sample to be used to decide "comps"
         ArrayList<Integer> comps = new ArrayList<>();

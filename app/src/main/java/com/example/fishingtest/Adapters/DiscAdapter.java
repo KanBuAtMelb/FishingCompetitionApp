@@ -1,4 +1,4 @@
-package com.example.fishingtest.Models;
+package com.example.fishingtest.Adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +12,13 @@ import com.example.fishingtest.R;
 
 import java.util.ArrayList;
 
-public class CompAdapter extends RecyclerView.Adapter<CompAdapter.ImageViewHolder>{
+public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.ImageViewHolder>{
 
     private ArrayList<Integer> comps;
 
 
 
-    public  CompAdapter(ArrayList<Integer> comps){
+    public  DiscAdapter(ArrayList<Integer> comps){
         this.comps = comps;
 
     }
@@ -52,7 +52,7 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.ImageViewHolde
     public void onBindViewHolder(@NonNull ImageViewHolder viewHolder, int i) {
         int image_id = comps.get(i);
         viewHolder.compImage.setImageResource(image_id);
-        viewHolder.compTittle.setText("Competition: " + i); // TODO: Might need to modify according to UI design
+        viewHolder.compTittle.setText("Recommendation: " + i); // TODO: Might need to modify according to UI design
 
     }
 

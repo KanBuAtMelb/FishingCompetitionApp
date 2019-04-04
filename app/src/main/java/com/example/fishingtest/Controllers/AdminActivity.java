@@ -1,4 +1,4 @@
-package com.example.fishingtest;
+package com.example.fishingtest.Controllers;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,9 +10,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.fishingtest.Models.Competition;
-import com.example.fishingtest.Models.CompetitionItem;
-import com.example.fishingtest.Models.User;
+import com.example.fishingtest.Common.Competition;
+import com.example.fishingtest.Common.User;
+import com.example.fishingtest.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

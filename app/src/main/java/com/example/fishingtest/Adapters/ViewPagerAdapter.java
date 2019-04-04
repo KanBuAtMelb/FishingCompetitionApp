@@ -1,4 +1,4 @@
-package com.example.fishingtest.Models;
+package com.example.fishingtest.Adapters;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

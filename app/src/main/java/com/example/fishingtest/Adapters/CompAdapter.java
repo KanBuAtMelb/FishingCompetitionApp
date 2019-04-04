@@ -1,4 +1,4 @@
-package com.example.fishingtest.Models;
+package com.example.fishingtest.Adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +12,13 @@ import com.example.fishingtest.R;
 
 import java.util.ArrayList;
 
-public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.ImageViewHolder>{
+public class CompAdapter extends RecyclerView.Adapter<CompAdapter.ImageViewHolder>{
 
     private ArrayList<Integer> comps;
 
 
 
-    public  DiscAdapter(ArrayList<Integer> comps){
+    public  CompAdapter(ArrayList<Integer> comps){
         this.comps = comps;
 
     }
@@ -26,14 +26,28 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.ImageViewHolde
     // New class addressing each "Competition" item view in the list
     public static class ImageViewHolder extends RecyclerView.ViewHolder{
 
+        int currentItem;
         ImageView compImage;
         TextView compTittle;
+        TextView compDescription;
 
 
         public ImageViewHolder(View itemView){
             super(itemView);
             compImage = itemView.findViewById(R.id.comp_image);
             compTittle = itemView.findViewById(R.id.comp_title);
+            compDescription = itemView.findViewById(R.id.comp_description);
+
+//            itemView.setOnClickListener(new View.OnClickListener(){
+//
+//                int position = getAdapterPosition();
+//
+//                Snackbar.make()
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
         }
     }
 
@@ -52,7 +66,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.ImageViewHolde
     public void onBindViewHolder(@NonNull ImageViewHolder viewHolder, int i) {
         int image_id = comps.get(i);
         viewHolder.compImage.setImageResource(image_id);
-        viewHolder.compTittle.setText("Recommendation: " + i); // TODO: Might need to modify according to UI design
+        viewHolder.compTittle.setText("Competition: " + i); // TODO: Might need to modify according to UI design
 
     }
 
