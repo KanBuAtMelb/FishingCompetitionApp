@@ -1,4 +1,4 @@
-package com.example.fishingtest.Controllers;
+package com.example.fishingtest.Controller;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,8 +22,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class RegisterActivity<pulbic> extends AppCompatActivity {
+public class RegisterUserActivity<pulbic> extends AppCompatActivity {
     //Tag
     private final  String TAG = "User Registeration";
     // UI references.
@@ -37,7 +40,7 @@ public class RegisterActivity<pulbic> extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_register_user);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.register_email);
         mPasswordView = (EditText) findViewById(R.id.register_password);
@@ -58,9 +61,6 @@ public class RegisterActivity<pulbic> extends AppCompatActivity {
 
         // Get hold of an instance of FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
-
-
-
     }
 
 
@@ -133,8 +133,6 @@ public class RegisterActivity<pulbic> extends AppCompatActivity {
         String email = mEmailView.getText().toString().trim();
         String password = mPasswordView.getText().toString().trim();
 
-
-
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
                 new OnCompleteListener<AuthResult>() {
 
@@ -147,7 +145,10 @@ public class RegisterActivity<pulbic> extends AppCompatActivity {
                             showErrorDialog("Registration attempt failed");
                         } else {
                             saveDisplayName();
-                            Intent intent = new Intent(RegisterActivity.this, LogInActivity.class);
+
+                            addToDatabase();
+
+                            Intent intent = new Intent(RegisterUserActivity.this, HomePageActivity.class);
                             finish();
                             startActivity(intent);
                         }
@@ -177,7 +178,23 @@ public class RegisterActivity<pulbic> extends AppCompatActivity {
                         }
                     });
 
+
         }
+
+    }
+
+    private void addToDatabase() {
+
+        DatabaseReference databaseUsers;
+
+        databaseUsers = FirebaseDatabase.getInstance().getReference("Users");
+
+        String id = databaseUsers.push().getKey();
+
+        User user = new User(id, mEmailView.getText().toString().trim(),mPasswordView.getText().toString().trim(), mUsernameView.getText().toString().trim());
+
+        databaseUsers.child(id).setValue(user);
+
     }
 
 

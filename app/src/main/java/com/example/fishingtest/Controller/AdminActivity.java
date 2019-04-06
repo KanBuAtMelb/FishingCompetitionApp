@@ -1,4 +1,4 @@
-package com.example.fishingtest.Controllers;
+package com.example.fishingtest.Controller;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +10,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.fishingtest.Common.Competition;
-import com.example.fishingtest.Common.User;
+import com.example.fishingtest.Model.Competition;
+import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -86,9 +86,6 @@ public class AdminActivity extends AppCompatActivity {
                 addComp();
             }
         });
-
-
-
     }
 
     private void addComp() {
@@ -111,8 +108,7 @@ public class AdminActivity extends AppCompatActivity {
 
             String id = databaseUsers.push().getKey();
 
-            Competition comp = new Competition(id,name,date, startT, stopT, status, topic, attendants, result, winner, cgeo);
-
+            Competition comp = new Competition(id,name,111);
             databaseComps.child(id).setValue(comp);
 
         }else{

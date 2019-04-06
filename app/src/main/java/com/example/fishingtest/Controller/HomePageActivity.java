@@ -1,4 +1,4 @@
-package com.example.fishingtest.Controllers;
+package com.example.fishingtest.Controller;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.fishingtest.Common.User;
-import com.example.fishingtest.Adapters.ViewPagerAdapter;
+import com.example.fishingtest.Model.User;
+import com.example.fishingtest.Adapter.ViewPagerAdapter;
 import com.example.fishingtest.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -73,8 +73,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("HOME");
 
-
-
         // NavigationView setup
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -129,6 +127,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
     }
 
 
+    // Side Navigation bar Item selected
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         // Handle navigation view item clicks here.

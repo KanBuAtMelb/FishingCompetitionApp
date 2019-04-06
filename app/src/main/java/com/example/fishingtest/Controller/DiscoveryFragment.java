@@ -1,7 +1,8 @@
-package com.example.fishingtest.Controllers;
+package com.example.fishingtest.Controller;
 
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,18 +10,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.fishingtest.Adapters.CompAdapter;
+import com.example.fishingtest.Adapter.CompAdapter;
+import com.example.fishingtest.Adapter.DiscAdapter;
+import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.R;
 
 import java.util.ArrayList;
 
 
-public class CompetitionsFragment extends Fragment {
+public class DiscoveryFragment extends Fragment {
 
 
-    public CompetitionsFragment() {
 
-
+    public DiscoveryFragment() {
+        // Required empty public constructor
     }
 
 
@@ -33,38 +36,35 @@ public class CompetitionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_competitions, container, false);
+        View view = inflater.inflate(R.layout.fragment_discovery, container, false);
 
         // Get a reference to recyclerView
-        RecyclerView recyclerView =  view.findViewById(R.id.recyclerView_comps);
+        RecyclerView recyclerView =  view.findViewById(R.id.recyclerView_discovery);
         // Set layoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
 
-//        // TODO: Get Competitions enrolled by the user from Firebase
-//        ArrayList<CompetitionItem> comps_enrolled = new ArrayList<CompetitionItem>();
-//
-//        // Temporary data for recycler view
-//        comps_enrolled.add(new CompetitionItem("1"));
-//        comps_enrolled.add(new CompetitionItem("2"));
-//        comps_enrolled.add(new CompetitionItem("3"));
-//        comps_enrolled.add(new CompetitionItem("4"));
+
+
+
+        // TODO: Get Competitions enrolled by the user from Firebase
+
 
         // TODO: decide what image sample to be used to decide "comps"
-        ArrayList<Integer> comps = new ArrayList<>();
+        ArrayList<Competition> comps = new ArrayList<>();
         // Required empty public constructor
         for(int i = 1; i < 12; i++){
-            comps.add(R.drawable.ic_fish_black);
+            Competition temp = new Competition(Integer.toString(i),"Competition #2",R.drawable.ic_fish_blue);
+            comps.add(temp);
         }
 
         // Create an adapter
-        CompAdapter cAdapter = new CompAdapter(comps);
+        DiscAdapter dAdapter = new DiscAdapter(comps);
         // Set adaptor
-        recyclerView.setAdapter(cAdapter);
+        recyclerView.setAdapter(dAdapter);
 
 
         return view;
     }
-
 }

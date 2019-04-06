@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark">
+
+    <TextView
+        android:id="@+id/register_comp_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="20"
+        android:textStyle="bold"
+        android:background="@color/fui_linkColor"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/register_comp_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/register_comp_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/register_comp_start_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/register_comp_stop_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/register_comp_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/register_comp_geo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:layout_margin="20dp"/>
+
+
+    <TextView
+        android:id="@+id/admin_comp_geo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:layout_margin="20dp"/>
+
+    <Button
+        android:id="@+id/register_comp_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Me In" />
+
+</LinearLayout>

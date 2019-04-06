@@ -9,9 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Controllers.EditUserActivity"></activity>
-        <activity android:name=".Controllers.RegisterActivity" />
-        <activity android:name=".Controllers.LogInActivity">
+        <activity
+            android:name=".Controller.RegisterCompActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_register_comp"
+            android:theme="@style/FullscreenTheme"></activity>
+        <activity android:name=".Controller.EditUserActivity" />
+        <activity android:name=".Controller.RegisterUserActivity" />
+        <activity android:name=".Controller.LogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,12 +24,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Controllers.HomePageActivity"
+            android:name=".Controller.HomePageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Controllers.AdminActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".Controllers.HomePageActivity"/>
+            android:name=".Controller.AdminActivity"
+            android:parentActivityName=".Controller.HomePageActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

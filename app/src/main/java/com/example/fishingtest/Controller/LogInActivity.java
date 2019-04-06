@@ -1,4 +1,4 @@
-package com.example.fishingtest.Controllers;
+package com.example.fishingtest.Controller;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -56,7 +56,7 @@ public class LogInActivity extends AppCompatActivity {
 
     // Executed when Register button pressed
     public void registerNewUser(View v) {
-        Intent intent = new Intent(LogInActivity.this, RegisterActivity.class);
+        Intent intent = new Intent(LogInActivity.this, RegisterUserActivity.class);
         finish();
         startActivity(intent);
     }

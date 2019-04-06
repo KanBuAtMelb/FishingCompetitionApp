@@ -1,4 +1,4 @@
-package com.example.fishingtest.Controllers;
+package com.example.fishingtest.Controller;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
