@@ -32,6 +32,8 @@
     <string name="title_activity_add_new_post">AddNewPost</string>
     <string name="title_activity_display_post_details">DisplayPostDetails</string>
 
+    <string name="default_value">Default</string>
+
     <array name="comp_status">
         <item>Completed</item>
         <item>In Progress</item>
