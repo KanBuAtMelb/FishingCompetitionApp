@@ -1,8 +1,8 @@
 package com.example.fishingtest.Controller;
 
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.service.autofill.Dataset;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.fishingtest.Adapter.CompAdapter;
 import com.example.fishingtest.Adapter.DiscAdapter;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.R;
@@ -26,8 +25,12 @@ import java.util.ArrayList;
 
 public class DiscoveryFragment extends Fragment {
 
+    RecyclerView recyclerView;
+    FloatingActionButton fab;
+
+    ArrayList<Competition> comps;
     private DatabaseReference databaseComps;
-    ArrayList<Competition> comps = new ArrayList<>();
+
 
     public DiscoveryFragment() {
         // Required empty public constructor
@@ -46,17 +49,29 @@ public class DiscoveryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
 
         // Get a reference to recyclerView
-        RecyclerView recyclerView =  view.findViewById(R.id.recyclerView_discovery);
+        recyclerView =  view.findViewById(R.id.recyclerView_discovery);
         // Set layoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
         // Create an adapter
-        final DiscAdapter dAdapter = new DiscAdapter(comps);
+        comps = new ArrayList<>();
+        final DiscAdapter dAdapter = new DiscAdapter(comps,getContext());
         // Set adaptor
         recyclerView.setAdapter(dAdapter);
 
+        fab = (FloatingActionButton) view.findViewById(R.id.floating_button_discovery);
 
-        // Get Competitions enrolled by the user from Firebase
+        fab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                // TODO: Check if an Item have been selected
+                Intent myIntent = new Intent(getActivity(), ViewCompDetailsActivity.class);
+                getActivity().startActivity(myIntent);
+            }
+        });
+
+
+        // Get Competitions unregistered by the user from Firebase
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
         databaseComps.addValueEventListener(new ValueEventListener() {
             @Override
@@ -65,6 +80,7 @@ public class DiscoveryFragment extends Fragment {
                 for(DataSnapshot compSnapshot : dataSnapshot.getChildren()){
                     Competition comp = compSnapshot.getValue(Competition.class);
                     if (!dAdapter.contains(comp))
+                        // Todo: check if the comp is already registered by the user and how to dynamic update??
                         dAdapter.addComp(comp);
                 }
 

@@ -24,21 +24,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class CompetitionsFragment extends Fragment {
 
     RecyclerView recyclerView;
     FloatingActionButton fab;
+
     ArrayList<Competition> comps_registered;
+    ArrayList<String> compIDs_registered;
 
     private FirebaseUser user;
-    private DatabaseReference databaseUsers;
-
-    ArrayList<Competition> comps;
-
-
+    private DatabaseReference databaseComps;
+    private DatabaseReference databaseUser;
 
     public CompetitionsFragment() {
     }
@@ -61,42 +59,57 @@ public class CompetitionsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
+        // Create an adapter
+        comps_registered = new ArrayList<>();
+        final CompAdapter cAdapter = new CompAdapter(comps_registered, getContext());
+        // Set adaptor
+        recyclerView.setAdapter(cAdapter);
+
+
         //Floating button
         fab = (FloatingActionButton) view.findViewById(R.id.floating_button_comp);
 
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Intent myIntent = new Intent(getActivity(),RegisterCompActivity.class);
+
+                // TODO: Check if an Item have been selected
+                Intent myIntent = new Intent(getActivity(), ViewCompDetailsActivity.class);
                 getActivity().startActivity(myIntent);
             }
         });
 
-        // TODO: Get Competitions enrolled by the user from Firebase
+        // Get Competitions enrolled by the user from Firebase
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        databaseUsers = FirebaseDatabase.getInstance().getReference("Users");
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
 
-
-        // TODO: decide what image sample to be used to decide "comps"
-        comps = new ArrayList<>();
-        // Required empty public constructor
-        for(int i = 1; i < 12; i++){
-            Competition temp = new Competition(Integer.toString(i));
-            comps.add(temp);
-        }
-
-
-        String userID = user.getUid();
-        DatabaseReference databaseThisUser = databaseUsers.child(userID);
-
-        databaseThisUser.addValueEventListener(new ValueEventListener() {
+        // Get competitions IDs of all registered competitions by the current user
+        databaseUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                User temp = dataSnapshot.getValue(User.class);
-//                String name = temp.displayName;
+                User temp = dataSnapshot.getValue(User.class);
+                compIDs_registered= temp.getComps_registered();
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // TODO: add something here
+            }
+        });
 
+        // Find the full details of the registered competition from Firebase database
+        databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
+        databaseComps.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot compSnapshot: dataSnapshot.getChildren()){
+                    Competition comp = compSnapshot.getValue(Competition.class);
+                    comp.checkArrayList();
+                    if(compIDs_registered.contains(comp.getCompID())){
+                        cAdapter.addComp(comp);
+                    }
+                }
             }
 
             @Override
@@ -104,14 +117,6 @@ public class CompetitionsFragment extends Fragment {
 
             }
         });
-
-
-
-
-        // Create an adapter
-        CompAdapter cAdapter = new CompAdapter(comps);
-        // Set adaptor
-        recyclerView.setAdapter(cAdapter);
 
 
         return view;

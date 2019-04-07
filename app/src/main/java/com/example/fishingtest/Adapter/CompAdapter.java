@@ -1,5 +1,6 @@
 package com.example.fishingtest.Adapter;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,8 +16,6 @@ import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.R;
 
 import java.util.ArrayList;
-
-
 
 
 public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder>{
@@ -56,14 +55,15 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
 
     // Local variables
     ArrayList<Competition> comps;
+    Context context;
 
     int row_index = -1;
 
 
     // Constructor
-    public  CompAdapter(ArrayList<Competition> comps){
-
+    public  CompAdapter(ArrayList<Competition> comps, Context context){
         this.comps = comps;
+        this.context = context;
     }
 
     @NonNull
@@ -95,12 +95,22 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
 
 
         if(row_index ==position){
-            viewHolder.compTittle.setTextColor(Color.parseColor("#F8F8FA"));
-            viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
+            viewHolder.compTittle.setBackgroundColor(Color.parseColor("#ff3300"));
+//            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffff66"));
 
+            if(comp.getImage_url().equals(Common.NA))
+                viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
+            else{
+                // TODO: Set the customised competition image
+            }
         }else{
-            viewHolder.compTittle.setTextColor(Color.parseColor("#FFFFFF"));
-            viewHolder.compImage.setImageResource(R.drawable.ic_fish_black);
+            viewHolder.compTittle.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            viewHolder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            if(comp.getImage_url().equals(Common.NA))
+                viewHolder.compImage.setImageResource(R.drawable.ic_fish_black);
+            else{
+                // TODO: Set the customised competition image
+            }
         }
 
     }
@@ -108,10 +118,21 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
 
     @Override
     public int getItemCount() {
-        return comps.size();
+        if(comps != null)
+            return comps.size();
+        else
+            return 0;
     }
 
 
+    public void addComp(Competition comp){
+        comps.add(comp);
+        notifyDataSetChanged();
+    }
+
+    public Boolean contains(Competition comp){
+        return comps.contains(comp);
+    }
 }
 
 

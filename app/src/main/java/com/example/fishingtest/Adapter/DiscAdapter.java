@@ -71,8 +71,9 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
 
     // Constructor
-    public  DiscAdapter(ArrayList<Competition> comps){
+    public  DiscAdapter(ArrayList<Competition> comps, Context context){
         this.comps = comps;
+        this.context = context;
     }
 
     @NonNull
@@ -134,14 +135,6 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                     }
                 });
 
-
-
-
-
-
-
-
-
             }
         });
 
@@ -189,9 +182,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         notifyDataSetChanged();
     }
 
-    public void clearComps(){
-        comps.clear();
-    }
+
 
     public Boolean contains(Competition comp){
         return comps.contains(comp);

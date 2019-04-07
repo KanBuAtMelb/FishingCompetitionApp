@@ -18,7 +18,7 @@ import com.example.fishingtest.R;
 import org.w3c.dom.Text;
 
 
-public class RegisterCompActivity extends AppCompatActivity {
+public class ViewCompDetailsActivity extends AppCompatActivity {
 
     TextView cName;
     TextView cDate;

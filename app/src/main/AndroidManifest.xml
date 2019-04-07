@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Controller.RegisterCompActivity"
+            android:name=".Controller.ViewCompDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_register_comp"
             android:theme="@style/FullscreenTheme"></activity>
