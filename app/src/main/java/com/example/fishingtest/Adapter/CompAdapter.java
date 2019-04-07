@@ -69,7 +69,7 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
     @NonNull
     @Override
     public CompViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_comp_item,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_rgst_comp_item,viewGroup,false);
         CompViewHolder imageViewHolder = new CompViewHolder(view);
         return imageViewHolder;
     }
@@ -78,8 +78,8 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
     public void onBindViewHolder(@NonNull CompViewHolder viewHolder, int position) {
 
         Competition comp = comps.get(position);
-        viewHolder.compTittle.setText(comp.cname);
-        viewHolder.compDescription.setText(comp.description);
+        viewHolder.compTittle.setText(comp.getCname());
+        viewHolder.compDescription.setText(comp.getcDescription());
 
 
 

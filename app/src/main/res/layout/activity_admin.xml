@@ -7,72 +7,68 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/userProfile_image"
-        android:layout_width="match_parent"
-        android:layout_height="78dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="3dp"
-        tools:srcCompat="@tools:sample/avatars[14]" />
+    <!--<ImageView-->
+        <!--android:id="@+id/userProfile_image"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="78dp"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="3dp"-->
+        <!--tools:srcCompat="@tools:sample/avatars[14]" />-->
 
-    <EditText
-        android:id="@+id/admin_userName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Name"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="163dp" />
+    <!--<EditText-->
+        <!--android:id="@+id/admin_userName"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:ems="10"-->
+        <!--android:hint="Name"-->
+        <!--android:inputType="textPersonName"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="163dp" />-->
 
-    <EditText
-        android:id="@+id/admin_user_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Email"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="232dp" />
+    <!--<EditText-->
+        <!--android:id="@+id/admin_user_email"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:ems="10"-->
+        <!--android:hint="Email"-->
+        <!--android:inputType="textPersonName"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="232dp" />-->
 
-    <EditText
-        android:id="@+id/admin_user_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="232dp" />
+    <!--<EditText-->
+        <!--android:id="@+id/admin_user_password"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:ems="10"-->
+        <!--android:hint="Password"-->
+        <!--android:inputType="textPersonName"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="232dp" />-->
 
-    <EditText
-        android:id="@+id/admin_user_comp_attended"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Competition attended (Integer)"
-        android:inputType="number"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="296dp" />
+    <!--<EditText-->
+        <!--android:id="@+id/admin_user_comp_attended"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:ems="10"-->
+        <!--android:hint="Competition attended (Integer)"-->
+        <!--android:inputType="number"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="296dp" />-->
 
-    <Button
-        android:id="@+id/admin_button_addUser"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add User" />
+    <!--<Button-->
+        <!--android:id="@+id/admin_button_addUser"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Add User" />-->
 
-    <Button
-        android:id="@+id/admin_button_addComp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Competition" />
+
 
     <EditText
         android:id="@+id/admin_comp_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Comp Name"
+        android:hint="Comp Name (Compulsory)"
         android:inputType="textPersonName" />
 
     <EditText
@@ -80,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Comp Date"
+        android:hint="Comp Date (Compulsory)"
         android:inputType="date" />
 
     <EditText
@@ -88,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Comp Start Time"
+        android:hint="Comp Start Time (Compulsory)"
         android:inputType="time" />
 
     <EditText
@@ -99,19 +95,12 @@
         android:hint="Comp Stop Time"
         android:inputType="time" />
 
-    <EditText
-        android:id="@+id/admin_comp_topic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Comp Topic"
-        android:inputType="textPersonName" />
-
     <Spinner
         android:id="@+id/admin_comp_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dropDownWidth="wrap_content"
+        android:autofillHints="Status"
+        android:dropDownWidth="match_parent"
         android:entries="@array/comp_status"
         android:spinnerMode="dropdown" />
 
@@ -138,5 +127,33 @@
         android:ems="10"
         android:hint="Comp_Geo_Range"
         android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/admin_comp_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Comp_Description"
+        android:inputType="textPersonName" />
+
+
+    <Button
+        android:id="@+id/admin_button_selectCompImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Competition Image" />
+
+    <Button
+        android:id="@+id/admin_button_uploadCompImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Upload Competition Image" />
+
+    <Button
+        android:id="@+id/admin_button_addComp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="Add Competition" />
 
 </LinearLayout>

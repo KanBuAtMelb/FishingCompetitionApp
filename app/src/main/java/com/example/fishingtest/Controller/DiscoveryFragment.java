@@ -2,6 +2,7 @@ package com.example.fishingtest.Controller;
 
 
 import android.os.Bundle;
+import android.service.autofill.Dataset;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,13 +15,19 @@ import com.example.fishingtest.Adapter.CompAdapter;
 import com.example.fishingtest.Adapter.DiscAdapter;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 
 public class DiscoveryFragment extends Fragment {
 
-
+    private DatabaseReference databaseComps;
+    ArrayList<Competition> comps = new ArrayList<>();
 
     public DiscoveryFragment() {
         // Required empty public constructor
@@ -43,28 +50,37 @@ public class DiscoveryFragment extends Fragment {
         // Set layoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-
-
-
-
-
-        // TODO: Get Competitions enrolled by the user from Firebase
-
-
-        // TODO: decide what image sample to be used to decide "comps"
-        ArrayList<Competition> comps = new ArrayList<>();
-        // Required empty public constructor
-        for(int i = 1; i < 12; i++){
-            Competition temp = new Competition(Integer.toString(i),"Competition #2",R.drawable.ic_fish_blue);
-            comps.add(temp);
-        }
-
         // Create an adapter
-        DiscAdapter dAdapter = new DiscAdapter(comps);
+        final DiscAdapter dAdapter = new DiscAdapter(comps);
         // Set adaptor
         recyclerView.setAdapter(dAdapter);
 
 
+        // Get Competitions enrolled by the user from Firebase
+        databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
+        databaseComps.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot compSnapshot : dataSnapshot.getChildren()){
+                    Competition comp = compSnapshot.getValue(Competition.class);
+                    if (!dAdapter.contains(comp))
+                        dAdapter.addComp(comp);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //TODO: write something here??
+            }
+        });
+
+
+
+
         return view;
     }
+
+
 }

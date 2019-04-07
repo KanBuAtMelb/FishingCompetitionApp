@@ -189,7 +189,7 @@ public class RegisterUserActivity<pulbic> extends AppCompatActivity {
 
         databaseUsers = FirebaseDatabase.getInstance().getReference("Users");
 
-        String id = databaseUsers.push().getKey();
+        String id = mAuth.getCurrentUser().getUid();
 
         User user = new User(id, mEmailView.getText().toString().trim(),mPasswordView.getText().toString().trim(), mUsernameView.getText().toString().trim());
 
