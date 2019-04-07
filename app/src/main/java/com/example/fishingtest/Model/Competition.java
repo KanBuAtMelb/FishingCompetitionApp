@@ -91,6 +91,28 @@ public class Competition {
         this.cStatus = cStatus;
     }
 
+    // Check if any Arraylist is null after taken from Firebase
+    public void checkArrayList(){
+        if(this.attendants == null)
+            this.attendants = new ArrayList<>();
+        if(this.winners == null)
+            this.winners = new ArrayList<>();
+    }
+
+
+    // Add user to attendant list
+    public void addAttendant(String userID){
+        if(!this.attendants.contains(userID))
+            this.attendants.add(userID);
+    }
+
+    // Add user to winner list
+    public void addWinner(String userID){
+        if (!this.winners.contains(userID))
+            this.winners.add(userID);
+    }
+
+
     // Getters
     public String getCompID() {
         return compID;

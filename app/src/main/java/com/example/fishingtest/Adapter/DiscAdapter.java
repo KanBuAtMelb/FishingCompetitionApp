@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.BoringLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,15 @@ import android.widget.TextView;
 import com.example.fishingtest.Interface.ItemClickListener;
 import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
+import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -54,7 +63,6 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         }
     }
 
-
     // Local variables
     ArrayList<Competition> comps;
 
@@ -77,15 +85,63 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull DiscAdapter.CompViewHolder viewHolder, int position) {
+        final Competition comp = comps.get(position);
 
-        Competition comp = comps.get(position);
         viewHolder.compTittle.setText(comp.getCname());
         viewHolder.compDescription.setText(comp.getcDescription());
         viewHolder.compDate.setText(comp.getDate());
         viewHolder.compRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Update Competition attendants list and user's registered list
+
+
+                // TODO: Update Competition attendants list and user's registered list
+                final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                final String compID = comp.getCompID();
+
+                final DatabaseReference databaseComp = FirebaseDatabase.getInstance().getReference("Competitions").child(compID);
+                final DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
+
+                // Update Users database
+                databaseUser.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User temp = dataSnapshot.getValue(User.class);
+                        temp.checkArrayList();
+                        temp.addRegComp(compID);
+                        databaseUser.setValue(temp);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // TODO: add something here
+                    }
+                });
+
+                // Update Competition database
+                databaseComp.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Competition temp = dataSnapshot.getValue(Competition.class);
+                        temp.checkArrayList();
+                        temp.addAttendant(userID);
+                        databaseComp.setValue(temp);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // TODO: add something here
+                    }
+                });
+
+
+
+
+
+
+
+
+
             }
         });
 
@@ -96,7 +152,6 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
             public void onClick(View view, int position) {
                 row_index = position;
                 Common.currentItem = comps.get(position);
-
                 notifyDataSetChanged();
             }
         });
@@ -104,17 +159,17 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
         if(row_index ==position){
             viewHolder.compTittle.setBackgroundColor(Color.parseColor("#ff3300"));
-            viewHolder.itemView.setBackgroundColor(Color.parseColor("ffff66"));
+//            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffff66"));
 
-            if(comp.getImage_url() == Common.NA)
+            if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
             else{
                 // TODO: Set the customised competition image
             }
         }else{
             viewHolder.compTittle.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            viewHolder.itemView.setBackgroundColor(Color.parseColor("ffffff"));
-            if(comp.getImage_url() == Common.NA)
+//            viewHolder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_blue);
             else{
                 // TODO: Set the customised competition image
@@ -127,5 +182,18 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
     @Override
     public int getItemCount() {
         return comps.size();
+    }
+
+    public void addComp(Competition comp){
+        comps.add(0,comp);
+        notifyDataSetChanged();
+    }
+
+    public void clearComps(){
+        comps.clear();
+    }
+
+    public Boolean contains(Competition comp){
+        return comps.contains(comp);
     }
 }

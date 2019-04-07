@@ -88,7 +88,35 @@ public class User {
         this.accessLevel = Common.user_member;
     }
 
+    //Check if any ArrayList is null, if yes, instantiate it
+    public void checkArrayList(){
+        if(this.comps_attended == null)
+            comps_attended = new ArrayList<>();
 
+        if(this.comps_registered == null)
+            comps_registered = new ArrayList<>();
+
+        if(this.comps_won == null)
+            comps_won = new ArrayList<>();
+    }
+
+    // Add a new competition registered
+    public void addRegComp(String compID){
+        if(!this.comps_registered.contains(compID))
+            this.comps_registered.add(compID);
+    }
+
+    // Add a new competition attended
+    public void addAttComp(String compID){
+        if(this.comps_attended.contains(compID))
+            this.comps_attended.add(compID);
+    }
+
+    // Add new competition won
+    public void addWonComp(String compID){
+        if(!this.comps_won.contains(compID))
+            this.comps_won.add(compID);
+    }
     // Getters
 
     public String getUid() {
@@ -160,4 +188,5 @@ public class User {
     public void setAccessLevel(String accessLevel) {
         this.accessLevel = accessLevel;
     }
+
 }

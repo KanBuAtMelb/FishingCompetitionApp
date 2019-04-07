@@ -50,19 +50,24 @@ public class DiscoveryFragment extends Fragment {
         // Set layoutManager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
+        // Create an adapter
+        final DiscAdapter dAdapter = new DiscAdapter(comps);
+        // Set adaptor
+        recyclerView.setAdapter(dAdapter);
 
 
-        // TODO: Get Competitions enrolled by the user from Firebase
+        // Get Competitions enrolled by the user from Firebase
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
         databaseComps.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                comps.clear();
 
                 for(DataSnapshot compSnapshot : dataSnapshot.getChildren()){
                     Competition comp = compSnapshot.getValue(Competition.class);
-                    comps.add(comp);
+                    if (!dAdapter.contains(comp))
+                        dAdapter.addComp(comp);
                 }
+
             }
 
             @Override
@@ -71,10 +76,7 @@ public class DiscoveryFragment extends Fragment {
             }
         });
 
-        // Create an adapter
-        DiscAdapter dAdapter = new DiscAdapter(comps);
-        // Set adaptor
-        recyclerView.setAdapter(dAdapter);
+
 
 
         return view;
