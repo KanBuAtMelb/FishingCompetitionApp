@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Controller.ProfileActivity">
+
+    <ImageView
+        android:id="@+id/default_picture"
+        android:layout_width="105dp"
+        android:layout_height="115dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        app:srcCompat="@drawable/people"
+        tools:layout_editor_absoluteX="153dp"
+        tools:layout_editor_absoluteY="16dp"
+        tools:ignore="VectorDrawableCompat" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/default_picture"
+        android:text="Name: "
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/email_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/user_name"
+        android:text="Email: "
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/choose_photo"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop="320dp"
+        android:gravity = "center"
+        android:textSize="20dp"
+        android:background="#7f8c8d"
+        android:text = "Choose Photo"
+        android:textColor="#ECF0F1"
+        android:textAllCaps = "false"/>
+
+    <Button
+        android:id="@+id/upload_photo"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop="380dp"
+        android:gravity = "center"
+        android:textSize="20dp"
+        android:background="#7f8c8d"
+        android:text = "Upload Photo"
+        android:textColor="#ECF0F1"
+        android:textAllCaps = "false"/>
+
+
+
+
+    <Button
+        android:id="@+id/game_record"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop="500dp"
+        android:gravity = "center"
+        android:textSize="20dp"
+        android:background="#f39c12"
+        android:text = "Game Record"
+        android:textColor="#ECF0F1"
+        android:textAllCaps = "false"/>
+
+    <Button
+        android:id="@+id/edit_profile"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop="440dp"
+        android:gravity = "center"
+        android:background="#2ecc71"
+        android:textColor="#ECF0F1"
+        android:textSize="20dp"
+        android:text = "Edit"/>
+
+</RelativeLayout>
