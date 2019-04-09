@@ -75,6 +75,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.edit_profile:
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
             case R.id.game_record:
