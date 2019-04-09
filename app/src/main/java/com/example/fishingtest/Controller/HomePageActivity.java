@@ -135,7 +135,9 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         if (id == R.id.side_nav_profile) {
             //Transfer to EditUserActivity
-            Intent profileIntent = new Intent(this, EditUserActivity.class);
+//            Intent profileIntent = new Intent(this, EditUserActivity.class);
+//            startActivity(profileIntent);
+            Intent profileIntent = new Intent(this, ProfileActivity.class);
             startActivity(profileIntent);
 
         } else if (id == R.id.side_nav_logout) {
