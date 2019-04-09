@@ -90,6 +90,9 @@ public class CompetitionsFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User temp = dataSnapshot.getValue(User.class);
                 compIDs_registered= temp.getComps_registered();
+                if (compIDs_registered == null){
+                    compIDs_registered = new ArrayList<>();
+                }
             }
 
             @Override
