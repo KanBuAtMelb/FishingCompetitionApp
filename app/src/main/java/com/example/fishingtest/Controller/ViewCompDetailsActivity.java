@@ -43,7 +43,9 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
         cGeo= (TextView) findViewById(R.id.register_comp_geo);
         cAdd = (FloatingActionButton) findViewById(R.id.floating_button_comp);
 
-        cName.setText(Common.currentItem.getCname());
+        if(Common.currentItem != null){
+            cName.setText(Common.currentItem.getCname());
+        }
 
     }
 }

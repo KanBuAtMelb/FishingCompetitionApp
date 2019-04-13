@@ -4,21 +4,30 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.fishingtest.Interface.ItemClickListener;
 import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
+import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 
-public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder>{
+public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHolder>{
 
 
 
@@ -29,6 +38,7 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
         ImageView compImage;
         TextView compTittle;
         TextView compDescription;
+        Button compUnregisterBtn;
 
         ItemClickListener itemClickListener;
 
@@ -37,6 +47,8 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
             compImage = itemView.findViewById(R.id.comp_image);
             compTittle = itemView.findViewById(R.id.comp_title);
             compDescription = itemView.findViewById(R.id.comp_description);
+            compUnregisterBtn = itemView.findViewById(R.id.btn_comp_unregister);
+
             itemView.setOnClickListener(this);
         }
 
@@ -52,8 +64,8 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
     }
 
 
-
     // Local variables
+    private final static String TAG = "MyCompetition Adapter";
     ArrayList<Competition> comps;
     Context context;
 
@@ -61,7 +73,7 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
 
 
     // Constructor
-    public  CompAdapter(ArrayList<Competition> comps, Context context){
+    public MyCompAdapter(ArrayList<Competition> comps, Context context){
         this.comps = comps;
         this.context = context;
     }
@@ -77,10 +89,9 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
     @Override
     public void onBindViewHolder(@NonNull CompViewHolder viewHolder, int position) {
 
-        Competition comp = comps.get(position);
+        final Competition comp = comps.get(position);
         viewHolder.compTittle.setText(comp.getCname());
         viewHolder.compDescription.setText(comp.getcDescription());
-
 
 
         viewHolder.setItemClickListener(new ItemClickListener() {
@@ -88,7 +99,6 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
             public void onClick(View view, int i) {
                 row_index = i;
                 Common.currentItem = comps.get(i);
-
                 notifyDataSetChanged();
             }
         });
@@ -96,7 +106,6 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
 
         if(row_index ==position){
             viewHolder.compTittle.setBackgroundColor(Color.parseColor("#ff3300"));
-//            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffff66"));
 
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
@@ -105,13 +114,63 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
             }
         }else{
             viewHolder.compTittle.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//            viewHolder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_black);
             else{
                 // TODO: Set the customised competition image
             }
         }
+
+        viewHolder.compUnregisterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                final String compID = comp.getCompID();
+
+                final DatabaseReference databaseComp = FirebaseDatabase.getInstance().getReference("Competitions").child(compID);
+                final DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
+
+                // Update Users database
+                databaseUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User temp = dataSnapshot.getValue(User.class);
+                        temp.checkArrayList();
+                        if(temp.getComps_registered().contains(compID)) {
+                            temp.removeRegComp(compID);
+                            databaseUser.setValue(temp);
+                            Log.d(TAG, "Competition " + compID + " removed from User "+userID +" registration list");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // TODO: add something here
+                    }
+                });
+
+                // Update Competition database
+                databaseComp.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Competition temp = dataSnapshot.getValue(Competition.class);
+                        temp.checkArrayList();
+                        if(temp.getAttendants().contains(userID));{
+                            temp.removeAttendant(userID);
+                            databaseComp.setValue(temp);
+                            Log.d(TAG,"User " + userID +" removed from competition "+ compID+ " attendant list");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // TODO: add something here
+                    }
+                });
+
+            }
+        });
 
     }
 
@@ -130,8 +189,8 @@ public class CompAdapter extends RecyclerView.Adapter<CompAdapter.CompViewHolder
         notifyDataSetChanged();
     }
 
-    public Boolean contains(Competition comp){
-        return comps.contains(comp);
+    public void clearCompList(){
+        this.comps.clear();
     }
 }
 

@@ -84,7 +84,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         // Add fragments
         viewPagerAdapter.AddFragment(new DiscoveryFragment(),"Discovery");
-        viewPagerAdapter.AddFragment(new CompetitionsFragment(), "My Competitions");
+        viewPagerAdapter.AddFragment(new MyCompetitionsFragment(), "My Competitions");
         // Set up adapter
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
