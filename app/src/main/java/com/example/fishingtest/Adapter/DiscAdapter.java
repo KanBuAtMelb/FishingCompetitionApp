@@ -5,12 +5,14 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.BoringLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fishingtest.Interface.ItemClickListener;
 import com.example.fishingtest.Model.Common;
@@ -64,10 +66,11 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
     }
 
     // Local variables
+    private static final String TAG = "Discovery Adapter";
     ArrayList<Competition> comps;
 
     int row_index = -1;
-    Context context;// TODO - we need it for customed comp imgae uploading & downlaoding?
+    Context context;// TODO - ？？ we need it for customed comp imgae uploading & downlaoding?
 
 
     // Constructor
@@ -86,17 +89,18 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull DiscAdapter.CompViewHolder viewHolder, int position) {
+
         final Competition comp = comps.get(position);
 
         viewHolder.compTittle.setText(comp.getCname());
         viewHolder.compDescription.setText(comp.getcDescription());
         viewHolder.compDate.setText(comp.getDate());
+
+        // Click on "Registration Now" button
         viewHolder.compRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                // TODO: Update Competition attendants list and user's registered list
                 final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 final String compID = comp.getCompID();
 
@@ -104,13 +108,17 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                 final DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
 
                 // Update Users database
-                databaseUser.addValueEventListener(new ValueEventListener() {
+                databaseUser.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User temp = dataSnapshot.getValue(User.class);
                         temp.checkArrayList();
-                        temp.addRegComp(compID);
-                        databaseUser.setValue(temp);
+                        if(!temp.getComps_registered().contains(compID)) {
+                            temp.addRegComp(compID);
+                            databaseUser.setValue(temp);
+                            Log.d(TAG, "Competition" + compID + " added to User " + userID + " Registration Competition List");
+                            //Toast.makeText(context, "Competition now in your Competition List", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -120,13 +128,17 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                 });
 
                 // Update Competition database
-                databaseComp.addValueEventListener(new ValueEventListener() {
+                databaseComp.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Competition temp = dataSnapshot.getValue(Competition.class);
                         temp.checkArrayList();
-                        temp.addAttendant(userID);
-                        databaseComp.setValue(temp);
+                        if(!temp.getAttendants().contains(userID)){
+                            temp.addAttendant(userID);
+                            databaseComp.setValue(temp);
+                            Log.d(TAG,"User "+userID+" added to Competition "+compID+" Attendant list");
+                            //Toast.makeText(context, "Competition Registration Succeeds", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -187,4 +199,9 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
     public Boolean contains(Competition comp){
         return comps.contains(comp);
     }
+
+    public void clearCompList(){
+        this.comps.clear();
+    }
+
 }

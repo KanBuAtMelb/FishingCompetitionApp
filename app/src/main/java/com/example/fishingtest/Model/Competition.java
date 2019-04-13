@@ -106,6 +106,12 @@ public class Competition {
             this.attendants.add(userID);
     }
 
+    // Remove user from attendant list
+    public void removeAttendant(String userID){
+        if(this.attendants.contains(userID))
+            this.attendants.remove(userID);
+    }
+
     // Add user to winner list
     public void addWinner(String userID){
         if (!this.winners.contains(userID))

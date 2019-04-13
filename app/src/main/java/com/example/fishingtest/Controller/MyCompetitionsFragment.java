@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.fishingtest.Adapter.CompAdapter;
+import com.example.fishingtest.Adapter.MyCompAdapter;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
@@ -26,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class CompetitionsFragment extends Fragment {
+public class MyCompetitionsFragment extends Fragment {
 
     RecyclerView recyclerView;
     FloatingActionButton fab;
@@ -38,7 +38,7 @@ public class CompetitionsFragment extends Fragment {
     private DatabaseReference databaseComps;
     private DatabaseReference databaseUser;
 
-    public CompetitionsFragment() {
+    public MyCompetitionsFragment() {
     }
 
 
@@ -50,6 +50,10 @@ public class CompetitionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Get the user from Firebase
+        final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_competitions, container, false);
 
@@ -61,7 +65,7 @@ public class CompetitionsFragment extends Fragment {
 
         // Create an adapter
         comps_registered = new ArrayList<>();
-        final CompAdapter cAdapter = new CompAdapter(comps_registered, getContext());
+        final MyCompAdapter cAdapter = new MyCompAdapter(comps_registered, getContext());
         // Set adaptor
         recyclerView.setAdapter(cAdapter);
 
@@ -79,40 +83,40 @@ public class CompetitionsFragment extends Fragment {
             }
         });
 
-        // Get Competitions enrolled by the user from Firebase
 
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
 
-        // Get competitions IDs of all registered competitions by the current user
-        databaseUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User temp = dataSnapshot.getValue(User.class);
-                compIDs_registered= temp.getComps_registered();
-                if (compIDs_registered == null){
-                    compIDs_registered = new ArrayList<>();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // TODO: add something here
-            }
-        });
+//        compIDs_registered = new ArrayList<>();
+//
+//        databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
+//
+//        // Get competitions IDs of all registered competitions by the current user
+//        databaseUser.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                User temp = dataSnapshot.getValue(User.class);
+//                compIDs_registered= temp.getComps_registered();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                // TODO: add something here
+//            }
+//        });
 
         // Find the full details of the registered competition from Firebase database
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
         databaseComps.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                cAdapter.clearCompList();
                 for(DataSnapshot compSnapshot: dataSnapshot.getChildren()){
                     Competition comp = compSnapshot.getValue(Competition.class);
                     comp.checkArrayList();
-                    if(compIDs_registered.contains(comp.getCompID())){
+                    if(comp.getAttendants().contains(userID)){
                         cAdapter.addComp(comp);
                     }
                 }
+
             }
 
             @Override

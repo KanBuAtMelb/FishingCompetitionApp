@@ -106,6 +106,11 @@ public class User {
             this.comps_registered.add(compID);
     }
 
+    public void removeRegComp(String compID){
+        if(this.comps_registered.contains(compID))
+            this.comps_registered.remove(compID);
+    }
+
     // Add a new competition attended
     public void addAttComp(String compID){
         if(this.comps_attended.contains(compID))

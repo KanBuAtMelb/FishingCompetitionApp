@@ -83,12 +83,11 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:background="@color/yellow"
+                android:background="@color/dark_green"
                 android:gravity="center_horizontal"
-                android:onClick="registerComp"
                 android:text="Register Now"
                 android:textSize="12dp"
-                tools:text="Registered" />
+                android:textColor="@color/black"/>
 
 
         </LinearLayout>
