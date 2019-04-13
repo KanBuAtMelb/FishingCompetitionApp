@@ -72,7 +72,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         won = (TextView) findViewById(R.id.won);
         attended.setOnClickListener(this);
         upcoming.setOnClickListener(this);
-        attended.setOnClickListener(this);
+        won.setOnClickListener(this);
 
         //display user name and email address
         databaseUser.addValueEventListener(new ValueEventListener() {
