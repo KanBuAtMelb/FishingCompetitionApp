@@ -23,9 +23,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/default_picture"
+        android:layout_marginTop="165dp"
+        android:textColor="#2A2A2A"
         android:text="Name: "
         android:textSize="16sp"/>
+
 
     <TextView
         android:id="@+id/email_address"
@@ -33,34 +35,37 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/user_name"
+        android:textColor="#2A2A2A"
         android:text="Email: "
         android:textSize="16sp"/>
 
-    <Button
-        android:id="@+id/choose_photo"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:layout_marginTop="320dp"
-        android:gravity = "center"
-        android:textSize="20dp"
-        android:background="#7f8c8d"
-        android:text = "Choose Photo"
-        android:textColor="#ECF0F1"
-        android:textAllCaps = "false"/>
 
-    <Button
-        android:id="@+id/upload_photo"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:layout_marginTop="380dp"
-        android:gravity = "center"
-        android:textSize="20dp"
-        android:background="#7f8c8d"
-        android:text = "Upload Photo"
-        android:textColor="#ECF0F1"
-        android:textAllCaps = "false"/>
+    <TextView
+        android:id="@+id/attended"
+        android:layout_width="92dp"
+        android:layout_height="27dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/upcoming"
+        android:layout_marginStart="20dp"
+        android:text="Attended: " />
 
+    <TextView
+        android:id="@+id/upcoming"
+        android:layout_width="92dp"
+        android:layout_height="27dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="230dp"
+        android:text="Upcoming: " />
 
+    <TextView
+        android:id="@+id/won"
+        android:layout_width="68dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/attended"
+        android:layout_marginEnd="20dp"
+        android:text="Won: " />
 
 
     <Button
@@ -84,6 +89,7 @@
         android:background="#2ecc71"
         android:textColor="#ECF0F1"
         android:textSize="20dp"
-        android:text = "Edit"/>
+        android:text = "Reset the Password"
+        android:textAllCaps = "false"/>
 
 </RelativeLayout>

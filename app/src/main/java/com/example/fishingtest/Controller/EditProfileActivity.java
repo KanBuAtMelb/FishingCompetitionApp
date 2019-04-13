@@ -96,49 +96,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             dialog.show();
         }
     }
-//    private void attemptReset() {
-//        final String mOldpaw = oldpaw.getText().toString();
-//        final String mNewpaw = newpaw.getText().toString();
-//        final String mConpaw = conpaw.getText().toString();
-//
-//
-//        databaseUser.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                User user = dataSnapshot.getValue(User.class);
-//                String oldpaw = user.getPassword();
-//
-//                Log.d("Password1: ", oldpaw);
-//                Log.d("Password2: ", mNewpaw);
-//                Log.d("Password3: ", mConpaw);
-//
-//                if(oldpaw.equals(mOldpaw) && mNewpaw.equals(mConpaw) && mNewpaw.length() > 6){
-//
-//                    String id = mAuth.getCurrentUser().getUid();
-//
-//                    User reSetUser = new User(id, user.getEmail(),mNewpaw.trim(),
-//                            user.getDisplayName());
-//                    databaseUser.setValue(reSetUser);
-//
-//                    Log.d("New Password: ", user.getPassword());
-//                    Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//
-//                } else {
-//                    AlertDialog.Builder dialog = new AlertDialog.Builder(EditProfileActivity.this);
-//                    dialog.setTitle("");
-//                    dialog.setMessage("Please try again.");
-//                    dialog.setPositiveButton(android.R.string.ok, null);
-//                    dialog.setIcon(android.R.drawable.ic_dialog_alert);
-//                    dialog.show();
-//                }
-//            }
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//            }
-//        });
-//    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
