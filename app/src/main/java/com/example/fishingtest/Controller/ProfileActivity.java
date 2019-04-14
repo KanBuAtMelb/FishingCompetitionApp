@@ -89,7 +89,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 int d = check(user.getComps_registered()).size();
                 int e = check(user.getComps_won()).size();
 
-                attended.setText("Attended: " + c);
+                attended.setText("Finished: " + c);
                 upcoming.setText("Upcoming: " + d);
                 won.setText("Won: " + e);
 
@@ -151,7 +151,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(ProfileActivity.this, "Upload Completed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProfileActivity.this, "Avatar update completed!", Toast.LENGTH_LONG).show();
                     String url = taskSnapshot.getDownloadUrl().toString();
                     databaseUser.child("imagePath").setValue(url);
 
