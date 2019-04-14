@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.fishingtest.Adapter.MyCompAdapter;
+import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
@@ -113,7 +114,10 @@ public class MyCompetitionsFragment extends Fragment {
                     Competition comp = compSnapshot.getValue(Competition.class);
                     comp.checkArrayList();
                     if(comp.getAttendants().contains(userID)){
-                        cAdapter.addComp(comp);
+                        String compStartAt = comp.getDate().trim() + " " + comp.getStartTime().trim() + " GMT+08:00"; // Competition Time is based on AEST by default
+                        long result = Common.timeToCompStart(compStartAt);
+                        if(result >= 0.0)
+                            cAdapter.addComp(comp);
                     }
                 }
 

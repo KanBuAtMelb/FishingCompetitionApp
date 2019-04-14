@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.fishingtest.Adapter.DiscAdapter;
+import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -88,16 +89,20 @@ public class DiscoveryFragment extends Fragment {
                 dAdapter.clearCompList();
                 for(DataSnapshot compSnapshot : dataSnapshot.getChildren()){
                     Competition comp = compSnapshot.getValue(Competition.class);
-                    if(comp.getAttendants() == null) {
-                        if (!dAdapter.contains(comp)) {
+
+                    // Only find competitions yet to start
+                    String compStartAt = comp.getDate().trim() + " " + comp.getStartTime().trim() + " GMT+08:00"; // Competition Time is based on AEST by default
+                    long result = Common.timeToCompStart(compStartAt);
+                    if(result >= 0.0){
+                        if(comp.getAttendants() == null) {
                             dAdapter.addComp(comp);
-                        }
-                    } else{
-                        if(!comp.getAttendants().contains(userID)){
-                            if(!dAdapter.contains(comp)) {
+                        } else{
+                            if(!comp.getAttendants().contains(userID)){
                                 dAdapter.addComp(comp);
                             }
                         }
+
+
                     }
                 }
 

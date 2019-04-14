@@ -38,6 +38,8 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
         ImageView compImage;
         TextView compTittle;
         TextView compDescription;
+        TextView compDate;
+        TextView timeBeforeStart;
         Button compUnregisterBtn;
 
         ItemClickListener itemClickListener;
@@ -47,6 +49,8 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
             compImage = itemView.findViewById(R.id.comp_image);
             compTittle = itemView.findViewById(R.id.comp_title);
             compDescription = itemView.findViewById(R.id.comp_description);
+            compDate = itemView.findViewById(R.id.comp_date);
+            timeBeforeStart = itemView.findViewById(R.id.time_before_start);
             compUnregisterBtn = itemView.findViewById(R.id.btn_comp_unregister);
 
             itemView.setOnClickListener(this);
@@ -68,7 +72,6 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
     private final static String TAG = "MyCompetition Adapter";
     ArrayList<Competition> comps;
     Context context;
-
     int row_index = -1;
 
 
@@ -92,6 +95,9 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
         final Competition comp = comps.get(position);
         viewHolder.compTittle.setText(comp.getCname());
         viewHolder.compDescription.setText(comp.getcDescription());
+        viewHolder.compDate.setText(comp.getDate());
+
+
 
 
         viewHolder.setItemClickListener(new ItemClickListener() {

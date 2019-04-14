@@ -52,7 +52,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 String a = user.getEmail();
-                password1 = user.getPassword();
+                //password1 = user.getPassword();
                 email.setText("Email Address: " + a);
             }
             @Override

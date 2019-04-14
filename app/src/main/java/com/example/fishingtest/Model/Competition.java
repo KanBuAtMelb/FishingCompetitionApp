@@ -5,13 +5,13 @@ import java.util.ArrayList;
 public class Competition {
     String compID;
     String cname;
-    String date;  // TODO: should not be String...?
-    String startTime; //TODO: should be not String?
-    String stopTime; //TODO: should be not String?
+    String date;  // Format: "dd/MM/yyyy", default time zone is AEST
+    String startTime; //Format: "dd/MM/yyyy", default time zone is AEST
+    String stopTime; //Format: "dd/MM/yyyy", default time zone is AEST
     String geo_map; //TODO: should be not String
     ArrayList<String> attendants;
     String results;
-    ArrayList<String> winners; //TODO: can be arraylist, fix it later
+    ArrayList<String> winners;
     String comp_type;
     String cDescription;
     String image_url;

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class User {
     String uid;
     String email;
-    String password;
     String displayName;
     String imagePath;
     ArrayList<String> comps_attended;
@@ -22,10 +21,9 @@ public class User {
     }
 
     // Constructor for Admin with full info
-    public User(String uid, String email, String password, String displayName, String imagePath, ArrayList<String> comps_attended, ArrayList<String> comps_registered, ArrayList<String> comps_won, String accessLevel) {
+    public User(String uid, String email, String displayName, String imagePath, ArrayList<String> comps_attended, ArrayList<String> comps_registered, ArrayList<String> comps_won, String accessLevel) {
         this.uid = uid;
         this.email = email;
-        this.password = password;
         this.displayName = displayName;
         this.imagePath = imagePath;
         this.comps_attended = comps_attended;
@@ -38,7 +36,6 @@ public class User {
     public User(String uid, String email, String password, String displayName) {
         this.uid = uid;
         this.email = email;
-        this.password = password;
         this.displayName = displayName;
 
         this.imagePath = Common.NA;
@@ -52,7 +49,6 @@ public class User {
     public User(String uid, String email, String password, String displayName, ArrayList<String> comps_registered) {
         this.uid = uid;
         this.email = email;
-        this.password = password;
         this.displayName = displayName;
         this.comps_registered = comps_registered;
 
@@ -65,7 +61,6 @@ public class User {
     public User(String uid, String email, String password, String displayName, String imagePath, ArrayList<String> comps_attended, ArrayList<String> comps_registered) {
         this.uid = uid;
         this.email = email;
-        this.password = password;
         this.displayName = displayName;
         this.imagePath = imagePath;
         this.comps_attended = comps_attended;
@@ -78,7 +73,6 @@ public class User {
     public User(String uid, String email, String password, String displayName, String imagePath, ArrayList<String> comps_attended, ArrayList<String> comps_registered, ArrayList<String> comps_won) {
         this.uid = uid;
         this.displayName = displayName;
-        this.password = password;
         this.email = email;
         this.imagePath = imagePath;
         this.comps_attended = comps_attended;
@@ -132,10 +126,6 @@ public class User {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public String getDisplayName() {
         return displayName;
     }
@@ -164,10 +154,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setDisplayName(String displayName) {
