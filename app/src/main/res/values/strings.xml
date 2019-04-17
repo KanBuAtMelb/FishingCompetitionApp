@@ -34,13 +34,24 @@
 
     <string name="default_value">Default</string>
 
-    <array name="comp_status">
+    <string-array name="comp_status">
         <item>Completed</item>
         <item>In Progress</item>
         <item>In 24 Hours</item>
         <item>Enrolling</item>
         <item>Planned</item>
-    </array>
+    </string-array>
+
+    <string-array name="comp_type">
+        <item>Select Competition Type</item>
+        <item>By Single Fish Length</item>
+        <item>By Single Fish Width</item>
+        <item>By Single Fish Weight</item>
+        <item>By Total Fish Weight</item>
+        <item>By Fish Species</item>
+        <item>By Fish Quantity</item>
+    </string-array>
+
 
     <string name="title_activity_register_comp">RegisterCompActivity</string>
     <string name="dummy_button">Dummy Button</string>

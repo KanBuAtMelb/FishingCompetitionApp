@@ -150,10 +150,13 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                             finish();
                         }
                     });
-        } else if(id == R.id.side_nav_admin){
-            Intent adminIntent = new Intent(this, AdminActivity.class);
-            startActivity(adminIntent);
+        } else if(id == R.id.side_nav_admin_add_comp){
+            Intent addCompIntent = new Intent(this, AddCompActivity.class);
+            startActivity(addCompIntent);
 
+        } else if(id == R.id.side_nav_admin_update_comp){
+            Intent updateCompIntent = new Intent(this,UpdateCompActivity.class);
+            startActivity(updateCompIntent);
         }
         return true;
     }

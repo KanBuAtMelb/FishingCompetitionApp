@@ -21,10 +21,10 @@
             android:id="@+id/comp_image"
             android:layout_width="300dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@+id/comp_textlines"
             card_view:layout_constraintStart_toStartOf="parent"
@@ -46,32 +46,32 @@
                 android:id="@+id/comp_title"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:textSize="18dp"
+                android:textSize="14dp"
                 android:textStyle="bold"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"/>
 
             <TextView
-                android:id="@+id/comp_description"
+                android:id="@+id/comp_reward"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12dp"
                 android:textStyle="normal"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"/>
 
             <TextView
-                android:id="@+id/comp_date"
+                android:id="@+id/comp_date_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
                 android:textSize="12dp"
                 android:textStyle="italic" />
 
@@ -79,10 +79,10 @@
                 android:id="@+id/time_before_start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
                 android:textSize="12dp"
                 android:textStyle="italic"/>
 
@@ -90,18 +90,16 @@
                 android:id="@+id/btn_comp_unregister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="@color/yellow"
                 android:gravity="center_horizontal"
-                android:text="Cancel registration"
-                android:textColor="@color/black"
-                android:textSize="12dp" />
-
-
-
+                android:text="Cancel Registration"
+                android:textSize="12dp"
+                android:textColor="@color/black"/>
+            
         </LinearLayout>
 
 

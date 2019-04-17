@@ -15,8 +15,21 @@
             android:title="Logout" />
 
         <item
-            android:id="@+id/side_nav_admin"
-            android:icon="@drawable/ic_exit_to_app_black_24dp"
-            android:title="Admin" />
+            android:title="Admin">
+                <menu>
+                        <item android:id="@+id/side_nav_admin_add_comp"
+                            android:icon="@drawable/ic_add_box_black_24dp"
+                            android:title="Add New Competitions"/>
+
+                        <item android:id="@+id/side_nav_admin_update_comp"
+                            android:icon="@drawable/ic_autorenew_black_24dp"
+                            android:title="Update Competitions"/>
+                </menu>
+
+
+        </item>
+
+
+
 
 </menu>

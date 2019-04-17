@@ -32,7 +32,11 @@
             android:name=".Controller.HomePageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Controller.AdminActivity"
+            android:name=".Controller.AddCompActivity"
+            android:parentActivityName=".Controller.HomePageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Controller.UpdateCompActivity"
             android:parentActivityName=".Controller.HomePageActivity"
             android:screenOrientation="portrait" />
     </application>

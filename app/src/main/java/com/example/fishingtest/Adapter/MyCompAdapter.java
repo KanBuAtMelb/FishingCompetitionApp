@@ -37,8 +37,8 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
         int currentItem;
         ImageView compImage;
         TextView compTittle;
-        TextView compDescription;
-        TextView compDate;
+        TextView compReward;
+        TextView compDateTime;
         TextView timeBeforeStart;
         Button compUnregisterBtn;
 
@@ -48,8 +48,8 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
             super(itemView);
             compImage = itemView.findViewById(R.id.comp_image);
             compTittle = itemView.findViewById(R.id.comp_title);
-            compDescription = itemView.findViewById(R.id.comp_description);
-            compDate = itemView.findViewById(R.id.comp_date);
+            compReward = itemView.findViewById(R.id.comp_reward);
+            compDateTime = itemView.findViewById(R.id.comp_date_time);
             timeBeforeStart = itemView.findViewById(R.id.time_before_start);
             compUnregisterBtn = itemView.findViewById(R.id.btn_comp_unregister);
 
@@ -94,11 +94,8 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
 
         final Competition comp = comps.get(position);
         viewHolder.compTittle.setText(comp.getCname());
-        viewHolder.compDescription.setText(comp.getcDescription());
-        viewHolder.compDate.setText(comp.getDate());
-
-
-
+        viewHolder.compReward.setText(comp.getReward());
+        viewHolder.compDateTime.setText(comp.getDate()+ " From "+comp.getStartTime() +" To "+comp.getStopTime());
 
         viewHolder.setItemClickListener(new ItemClickListener() {
             @Override
@@ -131,6 +128,7 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
         viewHolder.compUnregisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: WHAT IF comp is null??
                 final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 final String compID = comp.getCompID();
 

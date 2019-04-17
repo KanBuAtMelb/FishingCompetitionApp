@@ -26,6 +26,8 @@ public class Common {
 
     // Used in Competition and User classes
     public static String NA = "NA";
+    public static int NA_Integer = -1;
+    public static String EMPTY = "";
 
 
     // Used in User class

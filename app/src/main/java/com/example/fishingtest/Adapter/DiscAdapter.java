@@ -37,8 +37,8 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         int currentItem;
         ImageView compImage;
         TextView compTittle;
-        TextView compDescription;
-        TextView compDate;
+        TextView compReward;
+        TextView compDateTime;
         Button compRegisterBtn;
 
         ItemClickListener itemClickListener;
@@ -47,8 +47,8 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
             super(itemView);
             compImage = itemView.findViewById(R.id.comp_image);
             compTittle = itemView.findViewById(R.id.comp_title);
-            compDescription = itemView.findViewById(R.id.comp_description);
-            compDate = itemView.findViewById(R.id.comp_date);
+            compReward = itemView.findViewById(R.id.comp_reward);
+            compDateTime = itemView.findViewById(R.id.comp_date_time);
             compRegisterBtn = itemView.findViewById(R.id.btn_comp_register);
 
             itemView.setOnClickListener(this);
@@ -93,8 +93,8 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         final Competition comp = comps.get(position);
 
         viewHolder.compTittle.setText(comp.getCname());
-        viewHolder.compDescription.setText(comp.getcDescription());
-        viewHolder.compDate.setText(comp.getDate());
+        viewHolder.compReward.setText(comp.getReward());
+        viewHolder.compDateTime.setText(comp.getDate()+ " From "+comp.getStartTime() +" To "+comp.getStopTime());
 
         // Click on "Registration Now" button
         viewHolder.compRegisterBtn.setOnClickListener(new View.OnClickListener() {
