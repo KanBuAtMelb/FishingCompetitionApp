@@ -27,6 +27,7 @@ public class Common {
     // Used in Competition and User classes
     public static String NA = "NA";
     public static int NA_Integer = -1;
+    public static int EMPTY_SPINNER = 0;
     public static String EMPTY = "";
 
 

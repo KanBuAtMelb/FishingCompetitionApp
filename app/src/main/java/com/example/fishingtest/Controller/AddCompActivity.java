@@ -45,8 +45,6 @@ public class AddCompActivity extends AppCompatActivity {
     ArrayList<String> attendants = new ArrayList<>();
     ArrayList<String> winners = new ArrayList<>();
 
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +91,7 @@ public class AddCompActivity extends AppCompatActivity {
         String reward = cReward.getText().toString().trim();
         String startT = cStartTime.getText().toString().trim();
         String stopT = cStopTime.getText().toString().trim();
-        String type = cType.getSelectedItem().toString().trim();
+        int type = cType.getSelectedItemPosition();
         String geo = cGeo.getText().toString().trim();
         String description = cDescription.getText().toString().trim();
 
@@ -117,7 +115,7 @@ public class AddCompActivity extends AppCompatActivity {
         cReward.setText(Common.EMPTY);
         cStartTime.setText(Common.EMPTY);
         cStopTime.setText(Common.EMPTY);
-        cType.setSelection(0);
+        cType.setSelection(Common.EMPTY_SPINNER);
         cGeo.setText(Common.EMPTY);
         cDescription.setText(Common.EMPTY);
     }

@@ -13,7 +13,7 @@ public class Competition {
     private ArrayList<String> attendants;
     private String results;
     private String winner; // Only assume one winner on this design stage
-    private String compType;
+    private int compType;
     private String cDescription;
     private String image_url; // All competitions have the same hard-coded image on this design stage
     private String cStatus;  //TODO: maybe be required in case a comp was planned but cancelled?
@@ -35,7 +35,7 @@ public class Competition {
         this.attendants = new ArrayList<>();
         this.results = Common.NA;
         this.winner = Common.NA;
-        this.compType = Common.NA;
+        this.compType = Common.EMPTY_SPINNER;
         this.cDescription = Common.NA;
         this.image_url = Common.NA;
         this.cStatus = Common.NA;
@@ -55,15 +55,15 @@ public class Competition {
         this.attendants = new ArrayList<>();
         this.results = Common.NA;
         this.winner = Common.NA;
-        this.compType = Common.NA;
+        this.compType = Common.EMPTY_SPINNER;
         this.cDescription = Common.NA;
         this.image_url = Common.NA;
         this.cStatus = Common.NA;
         this.postIDs = new ArrayList<>();
     }
 
-    // Constructor without attendants, winner, result and status
-    public Competition(String compID, String cname, String reward, String date, String startTime, String stopTime, String geo_map,  String compType, String cDescription) {
+    // Constructor without attendants, winner, result and status, used for "Add Competition"
+    public Competition(String compID, String cname, String reward, String date, String startTime, String stopTime, String geo_map, int compType, String cDescription) {
         this.compID = compID;
         this.cname = cname;
         this.reward = reward;
@@ -84,7 +84,7 @@ public class Competition {
     }
 
     // Constructor without attendants and status
-    public Competition(String compID, String cname, String reward, String date, String startTime, String stopTime, String geo_map, String results, String winner, String compType, String cDescription) {
+    public Competition(String compID, String cname, String reward, String date, String startTime, String stopTime, String geo_map, String results, String winner, int compType, String cDescription) {
         this.compID = compID;
         this.cname = cname;
         this.reward = reward;
@@ -103,8 +103,8 @@ public class Competition {
         this.postIDs = new ArrayList<>();
     }
 
-    // Constructor with all info
-    public Competition(String compID, String cname, String reward, String date, String startTime, String stopTime, String geo_map, ArrayList<String> attendants, String results, String winner, String cDescription, String image_url, String cStatus) {
+    // Constructor with all info,, used for "Update Competition"
+    public Competition(String compID, String cname, String reward, String date, String startTime, String stopTime, String geo_map, ArrayList<String> attendants, String results, String winner, int compType, String cDescription, String image_url, String cStatus) {
         this.compID = compID;
         this.cname = cname;
         this.reward = reward;
@@ -115,6 +115,7 @@ public class Competition {
         this.attendants = attendants;
         this.results = results;
         this.winner = winner;
+        this.compType = compType;
         this.cDescription = cDescription;
         this.image_url = image_url;
         this.cStatus = cStatus;
@@ -193,7 +194,7 @@ public class Competition {
         return cStatus;
     }
 
-    public String getCompType() {
+    public int getCompType() {
         return compType;
     }
 
@@ -248,7 +249,7 @@ public class Competition {
         this.cStatus = cStatus;
     }
 
-    public void setComp_type(String compType) {
+    public void setComp_type(int compType) {
         this.compType = compType;
     }
 

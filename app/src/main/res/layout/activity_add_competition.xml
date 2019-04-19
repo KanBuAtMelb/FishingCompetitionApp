@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Comp Name (Compulsory)"
-        android:inputType="textPersonName" />
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/add_comp_reward"
@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Comp_Geo (lat, lng, radius[km])"
-        android:inputType="textPersonName" />
+        android:inputType="text" />
 
     <Spinner
         android:id="@+id/add_comp_type"

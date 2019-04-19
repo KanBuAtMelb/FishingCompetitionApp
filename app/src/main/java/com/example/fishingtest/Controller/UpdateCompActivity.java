@@ -33,7 +33,7 @@ public class UpdateCompActivity extends AppCompatActivity {
     EditText cDate;
     EditText cStartTime;
     EditText cStopTime;
-    EditText cType;  // TODO: using diaglog window to replace spinner
+    Spinner cType;  // TODO: using diaglog window to replace spinner
     EditText cWinner;
     EditText cResult;
     EditText cGeo;
@@ -71,12 +71,15 @@ public class UpdateCompActivity extends AppCompatActivity {
         cDate= (EditText) findViewById(R.id.update_comp_date);
         cStartTime= (EditText) findViewById(R.id.update_comp_start_time);
         cStopTime= (EditText) findViewById(R.id.update_comp_stop_time);
-        cType = (EditText) findViewById(R.id.update_comp_type);
+        cType = (Spinner) findViewById(R.id.update_comp_type);
         cWinner= (EditText) findViewById(R.id.update_comp_winner);
         cResult= (EditText) findViewById(R.id.update_comp_results);
         cGeo= (EditText) findViewById(R.id.update_comp_geo);
         cDescription = (EditText) findViewById(R.id.update_comp_description);
 
+
+        // Set up Spinner
+        cType.setSelection(0);
 
         // Set up List View of Competitions
         compList = new ArrayList<>();
@@ -92,8 +95,9 @@ public class UpdateCompActivity extends AppCompatActivity {
                 cDate.setText(comp.getDate());
                 cStartTime.setText(comp.getStartTime());
                 cStopTime.setText(comp.getStopTime());
-                cType.setText(comp.getCompType()); // Only "By Single Fish Size" is available in current design
 
+                // Spinner
+                cType.setSelection(comp.getCompType());
 
                 cResult.setText(comp.getResults());
                 cGeo.setText(comp.getGeo_map());
@@ -162,7 +166,7 @@ public class UpdateCompActivity extends AppCompatActivity {
         String reward = cReward.getText().toString().trim();
         String startT = cStartTime.getText().toString().trim();
         String stopT = cStopTime.getText().toString().trim();
-        String type = cType.getText().toString().trim();
+        int type = cType.getSelectedItemPosition();
         String result = cResult.getText().toString().trim();
         String winner = cWinner.getText().toString().trim();
         String geo = cGeo.getText().toString().trim();
@@ -174,7 +178,7 @@ public class UpdateCompActivity extends AppCompatActivity {
 
         }else{
 
-            Competition comp = new Competition(compID,name,reward,date,startT,stopT,geo,attendants,result,winner,description, image_url, cStatus);
+            Competition comp = new Competition(compID,name,reward,date,startT,stopT,geo,attendants,result,winner,type,description, image_url, cStatus);
             databaseComps.child(compID).setValue(comp);
         }
     }
@@ -185,7 +189,7 @@ public class UpdateCompActivity extends AppCompatActivity {
         cReward.setText(Common.EMPTY);
         cStartTime.setText(Common.EMPTY);
         cStopTime.setText(Common.EMPTY);
-        cType.setText(Common.EMPTY);
+        cType.setSelection(Common.EMPTY_SPINNER);
         cResult.setText(Common.EMPTY);
         cWinner.setText(Common.EMPTY);
         cGeo.setText(Common.EMPTY);

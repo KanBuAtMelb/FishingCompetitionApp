@@ -18,6 +18,8 @@ import com.example.fishingtest.R;
 
 import org.w3c.dom.Text;
 
+import static com.example.fishingtest.Model.Common.currentItem;
+
 
 public class ViewCompDetailsActivity extends AppCompatActivity {
 
@@ -55,20 +57,27 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
 
         cPosts = (RecyclerView) findViewById(R.id.viewComp_posts);
 
-        if(Common.currentItem != null){
-            Common.currentItem.checkArrayList();
-            cTitle.setText(Common.currentItem.getCname());
-            cReward.setText(Common.currentItem.getReward());
-            cDate.setText(Common.currentItem.getDate());
-            cStartTime.setText(Common.currentItem.getStartTime());
-            cStopTime.setText(Common.currentItem.getStopTime());
-            cGeo.setText(Common.currentItem.getGeo_map());
-            cType.setText(Common.currentItem.getCompType());
-            cWinner.setText(Common.currentItem.getWinner());
-            cResult.setText(Common.currentItem.getResults());
-            // Convert Integer to String
-            cAttendants.setText(Integer.toString(Common.currentItem.getAttendants().size()));
-            cDescription.setText(Common.currentItem.getcDescription());
+        if(currentItem != null){
+            currentItem.checkArrayList();
+            cTitle.setText(currentItem.getCname());
+            cReward.setText(currentItem.getReward());
+            cDate.setText(currentItem.getDate());
+            cStartTime.setText(currentItem.getStartTime());
+            cStopTime.setText(currentItem.getStopTime());
+            cGeo.setText(currentItem.getGeo_map());
+            cWinner.setText(currentItem.getWinner());
+            cResult.setText(currentItem.getResults());
+            cDescription.setText(currentItem.getcDescription());
+            // Spinner item index to text view
+            String[] compTypes = getResources().getStringArray(R.array.comp_type);
+            if(currentItem.getCompType() != Common.EMPTY_SPINNER)
+                cType.setText(compTypes[currentItem.getCompType()]);
+            else
+                cType.setText(Common.EMPTY);
+
+            // Convert Attendant list to total number
+            cAttendants.setText(Integer.toString(currentItem.getAttendants().size()));
+
 
             // Display Posts
 
