@@ -28,6 +28,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder>{
 
@@ -37,6 +40,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         int currentItem;
         ImageView compImage;
         TextView compTittle;
+        TextView compType;
         TextView compReward;
         TextView compDateTime;
         Button compRegisterBtn;
@@ -47,6 +51,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
             super(itemView);
             compImage = itemView.findViewById(R.id.comp_image);
             compTittle = itemView.findViewById(R.id.comp_title);
+            compType = itemView.findViewById(R.id.comp_type);
             compReward = itemView.findViewById(R.id.comp_reward);
             compDateTime = itemView.findViewById(R.id.comp_date_time);
             compRegisterBtn = itemView.findViewById(R.id.btn_comp_register);
@@ -69,8 +74,8 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
     private static final String TAG = "Discovery Adapter";
     ArrayList<Competition> comps;
 
-    int row_index = -1;
-    Context context;// TODO - ？？ we need it for customed comp imgae uploading & downlaoding?
+    public int row_index = -1;
+    Context context;
 
 
     // Constructor
@@ -92,9 +97,15 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
         final Competition comp = comps.get(position);
 
+
         viewHolder.compTittle.setText(comp.getCname());
-        viewHolder.compReward.setText(comp.getReward());
-        viewHolder.compDateTime.setText(comp.getDate()+ " From "+comp.getStartTime() +" To "+comp.getStopTime());
+
+        // Spinner item index to text view
+        String[] compTypes = context.getResources().getStringArray(R.array.comp_type);
+        viewHolder.compType.setText(compTypes[comp.getCompType()]);
+
+        viewHolder.compReward.setText("Reward: $" + comp.getReward() + " AUD");
+        viewHolder.compDateTime.setText("Date: "+ comp.getDate()+ " Time: From "+comp.getStartTime() +" To "+comp.getStopTime());
 
         // Click on "Registration Now" button
         viewHolder.compRegisterBtn.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +162,6 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         });
 
 
-
         viewHolder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -163,7 +173,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
 
         if(row_index ==position){
-            viewHolder.compTittle.setBackgroundColor(Color.parseColor("#ff3300"));
+            viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
 //            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffff66"));
 
             if(comp.getImage_url().equals(Common.NA))
@@ -172,7 +182,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                 // TODO: Set the customised competition image
             }
         }else{
-            viewHolder.compTittle.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            viewHolder.compTittle.setBackgroundColor(Color.parseColor("#6495ED"));
 //            viewHolder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_blue);
@@ -202,6 +212,19 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
     public void clearCompList(){
         this.comps.clear();
+    }
+
+    public void sortByName(){
+        // create sorted comp list for different usage
+        comps.sort(Comparator.comparing(Competition::getCname));
+    }
+
+    public void sortByDate(){
+        comps.sort(Comparator.comparing(Competition::getCompDateTime));
+    }
+
+    public void sortByReward(){
+        comps.sort(Comparator.comparing(Competition::getReward));
     }
 
 }

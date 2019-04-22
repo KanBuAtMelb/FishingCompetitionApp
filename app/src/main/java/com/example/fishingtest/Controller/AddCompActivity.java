@@ -5,23 +5,16 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.fishingtest.Adapter.CompListAdapter;
 import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.R;
-import com.google.android.gms.flags.impl.DataUtils;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -88,7 +81,7 @@ public class AddCompActivity extends AppCompatActivity {
         // TODO: Check input format, espeically date and time, dollar value and geo info
         String name = cName.getText().toString().trim();
         String date = cDate.getText().toString().trim();
-        String reward = cReward.getText().toString().trim();
+        int reward = Integer.parseInt(cReward.getText().toString().trim());
         String startT = cStartTime.getText().toString().trim();
         String stopT = cStopTime.getText().toString().trim();
         int type = cType.getSelectedItemPosition();

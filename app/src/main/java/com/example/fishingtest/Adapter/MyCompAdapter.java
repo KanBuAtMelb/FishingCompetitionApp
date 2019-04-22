@@ -3,13 +3,16 @@ package com.example.fishingtest.Adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.fishingtest.Interface.ItemClickListener;
@@ -27,16 +30,20 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHolder>{
+public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHolder> {
 
-
+    // Local variables
+    private final static String TAG = "MyCompetition Adapter";
+    ArrayList<Competition> comps;
+    Context context;
+    int row_index = -1;
 
     // New class addressing each "Competition" item view in the list
     class CompViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        int currentItem;
         ImageView compImage;
         TextView compTittle;
+        TextView compType;
         TextView compReward;
         TextView compDateTime;
         TextView timeBeforeStart;
@@ -44,10 +51,12 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
 
         ItemClickListener itemClickListener;
 
-        public CompViewHolder(View itemView){
+
+        public CompViewHolder(View itemView) {
             super(itemView);
             compImage = itemView.findViewById(R.id.comp_image);
             compTittle = itemView.findViewById(R.id.comp_title);
+            compType = itemView.findViewById(R.id.comp_type);
             compReward = itemView.findViewById(R.id.comp_reward);
             compDateTime = itemView.findViewById(R.id.comp_date_time);
             timeBeforeStart = itemView.findViewById(R.id.time_before_start);
@@ -56,7 +65,7 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
             itemView.setOnClickListener(this);
         }
 
-        public void setItemClickListener(ItemClickListener itemClickListener){
+        public void setItemClickListener(ItemClickListener itemClickListener) {
             this.itemClickListener = itemClickListener;
         }
 
@@ -68,34 +77,57 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
     }
 
 
-    // Local variables
-    private final static String TAG = "MyCompetition Adapter";
-    ArrayList<Competition> comps;
-    Context context;
-    int row_index = -1;
-
-
     // Constructor
-    public MyCompAdapter(ArrayList<Competition> comps, Context context){
+    public MyCompAdapter(ArrayList<Competition> comps, Context context) {
         this.comps = comps;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public CompViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_rgst_comp_item,viewGroup,false);
-        CompViewHolder imageViewHolder = new CompViewHolder(view);
+    public CompViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        CompViewHolder imageViewHolder = null;
+        LayoutInflater mInflater = LayoutInflater.from(viewGroup.getContext());
+
+        imageViewHolder = new CompViewHolder(mInflater.inflate(R.layout.cardview_rgst_comp_item_top, viewGroup, false));
+
+
         return imageViewHolder;
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull CompViewHolder viewHolder, int position) {
 
         final Competition comp = comps.get(position);
         viewHolder.compTittle.setText(comp.getCname());
-        viewHolder.compReward.setText(comp.getReward());
-        viewHolder.compDateTime.setText(comp.getDate()+ " From "+comp.getStartTime() +" To "+comp.getStopTime());
+
+        // Spinner item index to text view
+        String[] compTypes = context.getResources().getStringArray(R.array.comp_type);
+        viewHolder.compType.setText(compTypes[comp.getCompType()]);
+
+        viewHolder.compReward.setText("Reward: $" + comp.getReward() + " AUD");
+        viewHolder.compDateTime.setText("Date: " + comp.getDate() + " Time: From " + comp.getStartTime() + " To " + comp.getStopTime());
+
+        // Count down date and time
+        String compTime = comp.getDate().concat(" ").concat(comp.getStartTime()).concat(" GMT+08:00");
+        long timeleft = Common.timeToCompStart(compTime);
+        long diffMinutes = timeleft / (60 * 1000) % 60;
+        long diffHours = timeleft / (60 * 60 * 1000) % 24;
+        long diffDays = timeleft / (24 * 60 * 60 * 1000);
+
+        if (diffDays < 1) {
+            viewHolder.timeBeforeStart.setText("Only " + (int) diffHours + " hours, " + (int) diffMinutes + " min left!");
+            viewHolder.timeBeforeStart.setTextSize(16);
+
+            viewHolder.timeBeforeStart.setTextColor(Color.parseColor("#00335c"));
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffa600"));
+        } else {
+            viewHolder.timeBeforeStart.setText("Still have " + (int) diffDays + " days, " + (int) diffHours + " hours, " + (int) diffMinutes + " min");
+            viewHolder.timeBeforeStart.setTextSize(12);
+            viewHolder.timeBeforeStart.setTextColor(Color.parseColor("#66000000"));
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#6495ED"));
+        }
 
         viewHolder.setItemClickListener(new ItemClickListener() {
             @Override
@@ -107,20 +139,20 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
         });
 
 
-        if(row_index ==position){
-            viewHolder.compTittle.setBackgroundColor(Color.parseColor("#ff3300"));
+        if (row_index == position) {
+            //viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
 
-            if(comp.getImage_url().equals(Common.NA))
+            if (comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
-            else{
+            else {
                 // TODO: Set the customised competition image
             }
-        }else{
-            viewHolder.compTittle.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        } else {
+            //viewHolder.compTittle.setBackgroundColor(Color.parseColor("#6495ED"));
 
-            if(comp.getImage_url().equals(Common.NA))
-                viewHolder.compImage.setImageResource(R.drawable.ic_fish_black);
-            else{
+            if (comp.getImage_url().equals(Common.NA))
+                viewHolder.compImage.setImageResource(R.drawable.ic_fish_deep_aqua);
+            else {
                 // TODO: Set the customised competition image
             }
         }
@@ -141,10 +173,10 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User temp = dataSnapshot.getValue(User.class);
                         temp.checkArrayList();
-                        if(temp.getComps_registered().contains(compID)) {
+                        if (temp.getComps_registered().contains(compID)) {
                             temp.removeRegComp(compID);
                             databaseUser.setValue(temp);
-                            Log.d(TAG, "Competition " + compID + " removed from User "+userID +" registration list");
+                            Log.d(TAG, "Competition " + compID + " removed from User " + userID + " registration list");
                         }
                     }
 
@@ -160,10 +192,11 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Competition temp = dataSnapshot.getValue(Competition.class);
                         temp.checkArrayList();
-                        if(temp.getAttendants().contains(userID));{
+                        if (temp.getAttendants().contains(userID)) ;
+                        {
                             temp.removeAttendant(userID);
                             databaseComp.setValue(temp);
-                            Log.d(TAG,"User " + userID +" removed from competition "+ compID+ " attendant list");
+                            Log.d(TAG, "User " + userID + " removed from competition " + compID + " attendant list");
                         }
                     }
 

@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.fishingtest.Adapter.CompListAdapter;
+import com.example.fishingtest.Adapter.EditCompListAdapter;
 import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.R;
@@ -91,7 +91,7 @@ public class UpdateCompActivity extends AppCompatActivity {
                 Competition comp = compList.get(position);
 
                 cName.setText(comp.getCname());
-                cReward.setText(comp.getReward());
+                cReward.setText(Integer.toString(comp.getReward()));
                 cDate.setText(comp.getDate());
                 cStartTime.setText(comp.getStartTime());
                 cStopTime.setText(comp.getStopTime());
@@ -144,7 +144,7 @@ public class UpdateCompActivity extends AppCompatActivity {
                     compList.add(comp);
                 }
 
-                CompListAdapter compListAdapter = new CompListAdapter(UpdateCompActivity.this, compList);
+                EditCompListAdapter compListAdapter = new EditCompListAdapter(UpdateCompActivity.this, compList);
                 cListView.setAdapter(compListAdapter);
 
             }
@@ -163,7 +163,7 @@ public class UpdateCompActivity extends AppCompatActivity {
         // TODO: FORMAT CHECKS TO BE DONE
         String name = cName.getText().toString().trim();
         String date = cDate.getText().toString().trim();
-        String reward = cReward.getText().toString().trim();
+        int reward = Integer.parseInt(cReward.getText().toString().trim());
         String startT = cStartTime.getText().toString().trim();
         String stopT = cStopTime.getText().toString().trim();
         int type = cType.getSelectedItemPosition();

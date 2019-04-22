@@ -13,12 +13,12 @@ import com.example.fishingtest.R;
 
 import java.util.List;
 
-public class CompListAdapter extends ArrayAdapter<Competition> {
+public class EditCompListAdapter extends ArrayAdapter<Competition> {
 
     private Activity context;
     private List<Competition> compList;
 
-    public CompListAdapter(Activity context, List<Competition> compList){
+    public EditCompListAdapter(Activity context, List<Competition> compList){
         super(context, R.layout.activity_add_competition, compList);
         this.context = context;
         this.compList = compList;

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.fishingtest.Adapter.DiscAdapter;
@@ -29,7 +30,9 @@ import java.util.ArrayList;
 
 public class DiscoveryFragment extends Fragment {
 
+    RadioGroup radioGroup;
     RecyclerView recyclerView;
+    DiscAdapter dAdapter;
     FloatingActionButton fab;
 
     ArrayList<Competition> comps;
@@ -58,6 +61,10 @@ public class DiscoveryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
 
+        // Radio button
+        radioGroup = view.findViewById(R.id.disc_sort_group);
+
+
         // Get a reference to recyclerView
         recyclerView =  view.findViewById(R.id.recyclerView_discovery);
         // Set layoutManager
@@ -65,23 +72,32 @@ public class DiscoveryFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         // Create an adapter
         comps = new ArrayList<>();
-        final DiscAdapter dAdapter = new DiscAdapter(comps,getContext());
+        dAdapter = new DiscAdapter(comps,getContext());
         // Set adaptor
         recyclerView.setAdapter(dAdapter);
 
+
+
         fab = (FloatingActionButton) view.findViewById(R.id.floating_button_discovery);
+
 
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 // TODO: Check if an Item have been selected
-                Intent myIntent = new Intent(getActivity(), ViewCompDetailsActivity.class);
-                getActivity().startActivity(myIntent);
+                if(dAdapter.row_index >= 0){
+                    Intent myIntent = new Intent(getActivity(), ViewCompDetailsActivity.class);
+                    getActivity().startActivity(myIntent);
+                }
+                else{
+                    Toast.makeText(getContext(), "Please select a competition for full detail review", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
 
         // Get Competitions unregistered by the user from Firebase
+
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
         databaseComps.addValueEventListener(new ValueEventListener() {
             @Override
@@ -105,12 +121,34 @@ public class DiscoveryFragment extends Fragment {
 
                     }
                 }
-
+                dAdapter.sortByName();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 //TODO: write something here??
+            }
+        });
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                switch(checkedId){
+                    case R.id.disc_sort_by_name:
+                        dAdapter.sortByName();
+                        break;
+                    case R.id.disc_sort_by_date:
+                        dAdapter.sortByDate();
+                        break;
+                    case R.id.disc_sort_by_reward:
+                        dAdapter.sortByReward();
+                        break;
+                    default:
+                        dAdapter.sortByName();
+                }
+
+                dAdapter.notifyDataSetChanged();
             }
         });
 

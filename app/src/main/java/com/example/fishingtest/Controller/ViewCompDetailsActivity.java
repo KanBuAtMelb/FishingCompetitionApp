@@ -1,6 +1,7 @@
 package com.example.fishingtest.Controller;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -42,7 +43,6 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_competition_details);
 
-
         cTitle = (TextView) findViewById(R.id.viewcomp_title);
         cReward = (TextView) findViewById(R.id.viewComp_comp_reward);
         cDate= (TextView) findViewById(R.id.viewComp_comp_date);
@@ -57,31 +57,47 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
 
         cPosts = (RecyclerView) findViewById(R.id.viewComp_posts);
 
+
+
+
         if(currentItem != null){
             currentItem.checkArrayList();
             cTitle.setText(currentItem.getCname());
-            cReward.setText(currentItem.getReward());
-            cDate.setText(currentItem.getDate());
-            cStartTime.setText(currentItem.getStartTime());
-            cStopTime.setText(currentItem.getStopTime());
-            cGeo.setText(currentItem.getGeo_map());
-            cWinner.setText(currentItem.getWinner());
-            cResult.setText(currentItem.getResults());
-            cDescription.setText(currentItem.getcDescription());
+            cReward.setText("Reward: $"+Integer.toString(currentItem.getReward()) + " AUD");
+            cDate.setText("Date: " + currentItem.getDate());
+            cStartTime.setText("Start Time: " + currentItem.getStartTime());
+            cStopTime.setText("Ending Time: " + currentItem.getStopTime());
+            cGeo.setText("Geo: " + currentItem.getGeo_map());
+            cWinner.setText("Winner: " +currentItem.getWinner());
+            cResult.setText("Result: " + currentItem.getResults());
+            cDescription.setSingleLine(false);
+            cDescription.setText("Description: \n" +currentItem.getcDescription());
+
             // Spinner item index to text view
             String[] compTypes = getResources().getStringArray(R.array.comp_type);
             if(currentItem.getCompType() != Common.EMPTY_SPINNER)
-                cType.setText(compTypes[currentItem.getCompType()]);
+                cType.setText("Competition Type: "+compTypes[currentItem.getCompType()]);
             else
-                cType.setText(Common.EMPTY);
+                cType.setText("Competition Type: " + Common.EMPTY);
 
             // Convert Attendant list to total number
-            cAttendants.setText(Integer.toString(currentItem.getAttendants().size()));
+            cAttendants.setText("Attendant number : " + Integer.toString(currentItem.getAttendants().size()));
+
+
 
 
             // Display Posts
 
+
+
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent backHome = new Intent(this, HomePageActivity.class);
+        startActivity(backHome);
+//        super.onBackPressed();
     }
 }

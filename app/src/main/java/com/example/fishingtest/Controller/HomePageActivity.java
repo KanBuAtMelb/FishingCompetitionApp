@@ -9,12 +9,19 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
+import com.example.fishingtest.Model.Common;
+import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.Model.User;
 import com.example.fishingtest.Adapter.ViewPagerAdapter;
 import com.example.fishingtest.R;
@@ -22,9 +29,18 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Array;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HomePageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -33,6 +49,9 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
     // Toolbar
     Toolbar mToolbar;
+    SearchView searchView;
+    SearchView.SearchAutoComplete searchAutoComplete;
+    ArrayAdapter<String> searchAdapter;
 
     // NavigationView setup
     NavigationView navigationView;
@@ -57,6 +76,12 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
     DatabaseReference loginedUser;  // why no public or private??
     private FirebaseAuth myAuth;
 
+    // Competition Firebase info
+    DatabaseReference databaseComps;
+    ArrayList<Competition> compList;
+    List<String> nameList;
+
+
     // Posts time
     Timestamp currStamp;
 
@@ -72,13 +97,42 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         mToolbar =  findViewById(R.id.main_top_toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("HOME");
+        // SearchView in Toolbar in onCreateOptionsMenu??
+        nameList = new ArrayList<>();
+
+
+        // Firebase
+        compList = new ArrayList<>();
+        databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
+        databaseComps.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                compList.clear();
+                for(DataSnapshot compSnapshot : dataSnapshot.getChildren()){
+                    Competition comp = compSnapshot.getValue(Competition.class);
+                    compList.add(comp);
+                }
+
+                nameList = compList.stream()
+                        .map(Competition::getCname)
+                        .collect(Collectors.toList());
+
+//                searchAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // TODO: Do something here?
+            }
+        });
+
+
 
         // NavigationView setup
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         // TabLayout and Viewpager
-        //TabLayout and ViewPager
         tabLayout = findViewById(R.id.main_tablayout);
         viewPager = findViewById(R.id.main_viewpager);
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -100,6 +154,9 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        // TODO: TEST
+//        invalidateOptionsMenu();
+
 
     }
 
@@ -107,8 +164,53 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_top_toolbar,menu);
+
+        // Get the Search menu
+        MenuItem searchItem = menu.findItem(R.id.toolbar_search);
+        // Get the searchview object
+        searchView = (SearchView) searchItem.getActionView();
+        searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchAutoComplete.setDropDownBackgroundResource(R.color.white);
+        searchAdapter = new ArrayAdapter<>(this,android.R.layout.simple_dropdown_item_1line,nameList);
+        searchAutoComplete.setAdapter(searchAdapter);
+
+        // Listen to search view item on click event
+        searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String queryString = (String)parent.getItemAtPosition(position);
+                searchAutoComplete.setText(queryString);
+            }
+        });
+
+        // When submitting search query, find the competition for full detail display
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                for(int i = 0; i < compList.size(); i++){
+                    if(compList.get(i).getCname().equals(s)){
+                        Common.currentItem = compList.get(i);
+                        startActivity(new Intent(HomePageActivity.this, ViewCompDetailsActivity.class));
+                        finish();
+                        break;
+                    }
+                }
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+
         return true;
     }
+
+
+
     // Toolbar item clicked
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -117,7 +219,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
             case R.id.toolbar_notification:
                 //TODO: a Pop-up window for new coming event?? Any Firebase service to be used?
 
-                return true;
 
             default:
                 // If the user's action was not recognized

@@ -1,12 +1,16 @@
 package com.example.fishingtest.Model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class Competition {
     private String compID;
-    private String cname;
-    private String reward;
-    private String date;  // Format: "dd/MM/yyyy", default time zone is AEST
+    public  String cname;
+    public  int reward;
+    public String date;  // Format: "dd/MM/yyyy", default time zone is AEST
     private String startTime; //Format: "dd/MM/yyyy", default time zone is AEST
     private String stopTime; //Format: "dd/MM/yyyy", default time zone is AEST
     private String geo_map; //TODO: should be not String
@@ -28,7 +32,7 @@ public class Competition {
 
         this.cname = Common.NA;
         this.date = Common.NA;
-        this.reward = Common.NA;
+        this.reward = Common.NA_Integer;
         this.startTime = Common.NA;
         this.stopTime = Common.NA;
         this.geo_map = Common.NA;
@@ -43,7 +47,7 @@ public class Competition {
     }
 
     //Constructor with name and date only
-    public Competition(String compID, String cname, String reward, String date, String startTime, String stopTime) {
+    public Competition(String compID, String cname, int reward, String date, String startTime, String stopTime) {
         this.compID = compID;
         this.cname = cname;
         this.reward = reward;
@@ -63,7 +67,7 @@ public class Competition {
     }
 
     // Constructor without attendants, winner, result and status, used for "Add Competition"
-    public Competition(String compID, String cname, String reward, String date, String startTime, String stopTime, String geo_map, int compType, String cDescription) {
+    public Competition(String compID, String cname, int reward, String date, String startTime, String stopTime, String geo_map, int compType, String cDescription) {
         this.compID = compID;
         this.cname = cname;
         this.reward = reward;
@@ -84,7 +88,7 @@ public class Competition {
     }
 
     // Constructor without attendants and status
-    public Competition(String compID, String cname, String reward, String date, String startTime, String stopTime, String geo_map, String results, String winner, int compType, String cDescription) {
+    public Competition(String compID, String cname,int reward, String date, String startTime, String stopTime, String geo_map, String results, String winner, int compType, String cDescription) {
         this.compID = compID;
         this.cname = cname;
         this.reward = reward;
@@ -104,7 +108,7 @@ public class Competition {
     }
 
     // Constructor with all info,, used for "Update Competition"
-    public Competition(String compID, String cname, String reward, String date, String startTime, String stopTime, String geo_map, ArrayList<String> attendants, String results, String winner, int compType, String cDescription, String image_url, String cStatus) {
+    public Competition(String compID, String cname, int reward, String date, String startTime, String stopTime, String geo_map, ArrayList<String> attendants, String results, String winner, int compType, String cDescription, String image_url, String cStatus) {
         this.compID = compID;
         this.cname = cname;
         this.reward = reward;
@@ -144,6 +148,22 @@ public class Competition {
     }
 
 
+    public Date getCompDateTime(){
+
+        // For Competition info
+        DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm z");
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date newDate = new Date();
+        try {
+            // Convert string into Date
+            newDate = df.parse(date + " " + startTime + " GMT+08:00");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return newDate;
+    }
+
 
     // Getters
     public String getCompID() {
@@ -154,7 +174,7 @@ public class Competition {
         return cname;
     }
 
-    public String getReward(){return reward;}
+    public int getReward(){return reward;}
 
     public String getDate() {
         return date;
