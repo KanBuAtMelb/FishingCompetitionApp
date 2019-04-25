@@ -70,7 +70,7 @@
         android:id="@+id/floating_button_discovery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/white"
+        android:background="@android:color/white"
         android:src="@drawable/ic_navigate_next_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

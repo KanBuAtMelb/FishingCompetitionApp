@@ -54,7 +54,6 @@ public class Competition {
         this.date = date;
         this.startTime = startTime;
         this.stopTime = stopTime;
-
         this.geo_map = Common.NA;
         this.attendants = new ArrayList<>();
         this.results = Common.NA;
@@ -77,8 +76,6 @@ public class Competition {
         this.geo_map = geo_map;
         this.compType = compType;
         this.cDescription = cDescription;
-
-
         this.attendants = new ArrayList<>();
         this.results = Common.NA;
         this.winner = Common.NA;
@@ -148,7 +145,7 @@ public class Competition {
     }
 
 
-    public Date getCompDateTime(){
+    public Date calCompDateTime(){
 
         // For Competition info
         DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm z");

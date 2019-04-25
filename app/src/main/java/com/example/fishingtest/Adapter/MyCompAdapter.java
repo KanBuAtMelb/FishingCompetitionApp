@@ -37,7 +37,7 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
     private final static String TAG = "MyCompetition Adapter";
     ArrayList<Competition> comps;
     Context context;
-    int row_index = -1;
+    public int row_index = -1;
 
     // New class addressing each "Competition" item view in the list
     class CompViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

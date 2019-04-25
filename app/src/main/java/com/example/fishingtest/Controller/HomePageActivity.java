@@ -1,11 +1,16 @@
 package com.example.fishingtest.Controller;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -19,12 +24,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.Model.User;
 import com.example.fishingtest.Adapter.ViewPagerAdapter;
 import com.example.fishingtest.R;
+import com.example.fishingtest.Service.TrackingService;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,6 +53,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
     // Set tag to the view??
     private static  final String TAG = "MainPageActivity";
+    private static final int PERMISSIONS_REQUEST = 100;
 
     // Toolbar
     Toolbar mToolbar;
@@ -91,6 +99,26 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
+        // Check whether the GPS tracking is enabled
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            finish();
+        }
+
+        //Check whether this app has access to the location permission//
+        int permission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        //If the location permission has been granted, then start the TrackerService//
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            startTrackerService();
+        } else{
+            //If the app doesn’t currently have access to the user’s location, then request access
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST);
+        }
 
 
         // Toolbar
@@ -212,20 +240,20 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
 
     // Toolbar item clicked
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
-
-            case R.id.toolbar_notification:
-                //TODO: a Pop-up window for new coming event?? Any Firebase service to be used?
-
-
-            default:
-                // If the user's action was not recognized
-                // Invoke the superclass to handle it
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item){
+//        switch(item.getItemId()){
+//
+//            case R.id.toolbar_notification:
+//                //TODO: a Pop-up window for new coming event?? Any Firebase service to be used?
+//
+//
+//            default:
+//                // If the user's action was not recognized
+//                // Invoke the superclass to handle it
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
 
     // Side Navigation bar Item selected
@@ -236,8 +264,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         if (id == R.id.side_nav_profile) {
             //Transfer to EditUserActivity
-//            Intent profileIntent = new Intent(this, EditUserActivity.class);
-//            startActivity(profileIntent);
             Intent profileIntent = new Intent(this, ProfileActivity.class);
             startActivity(profileIntent);
 
@@ -270,6 +296,20 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         } else {
             super.onBackPressed();
         }
+    }
+
+    //Start the TrackerService//
+    private void startTrackerService() {
+
+        Intent ir=new Intent(this, TrackingService.class);
+        ir.putExtra("UserID", currentUserID);
+        this.startService(ir);
+
+        //Notify the user that tracking has been enabled//
+        Toast.makeText(this, "GPS tracking enabled", Toast.LENGTH_SHORT).show();
+
+        //Close MainActivity
+//        finish();
     }
 
 }

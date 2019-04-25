@@ -37,6 +37,8 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
     TextView cDescription;
     RecyclerView cPosts;
 
+    Button btn_newPost;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
         cResult = (TextView) findViewById(R.id.viewComp_comp_result);
         cAttendants = (TextView) findViewById(R.id.viewComp_comp_attendants);
         cDescription = (TextView) findViewById(R.id.viewComp_comp_description);
+        btn_newPost = (Button)findViewById(R.id.viewComp_addPost);
 
         cPosts = (RecyclerView) findViewById(R.id.viewComp_posts);
 
@@ -84,10 +87,22 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
             cAttendants.setText("Attendant number : " + Integer.toString(currentItem.getAttendants().size()));
 
 
+            // Click Button to add new post
+            btn_newPost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Todo: Ziqi to follow
+                }
+            });
+
+
+            // Button only visible for competition in progress
+
+
 
 
             // Display Posts
-
+            // Todo: Ziqi to follow
 
 
         }
@@ -97,6 +112,7 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent backHome = new Intent(this, HomePageActivity.class);
+        this.finish();
         startActivity(backHome);
 //        super.onBackPressed();
     }

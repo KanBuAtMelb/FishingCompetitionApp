@@ -20,6 +20,9 @@
         android:padding="8dp"
         android:layout_margin="8dp"/>
 
+
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="600dp">
@@ -105,11 +108,22 @@
                 android:gravity="top"
                 android:layout_marginBottom="8dp"/>
 
+            <Button
+                android:id="@+id/viewComp_addPost"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:background="@color/yellow"
+                android:text="My New Post" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/viewComp_posts"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@color/white"/>
+                android:background="@color/warm_grey"/>
 
         </LinearLayout>
     </ScrollView>

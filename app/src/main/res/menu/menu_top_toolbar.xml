@@ -11,10 +11,10 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"/>
 
-    <item
-        android:id="@+id/toolbar_notification"
-        android:icon="@drawable/ic_notification_outline_black_24dp"
-        android:title="@string/toolbar_notification"
-        app:showAsAction="ifRoom|collapseActionView"/>
+    <!--<item-->
+        <!--android:id="@+id/toolbar_notification"-->
+        <!--android:icon="@drawable/ic_notification_outline_black_24dp"-->
+        <!--android:title="@string/toolbar_notification"-->
+        <!--app:showAsAction="ifRoom|collapseActionView"/>-->
 
 </menu>

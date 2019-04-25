@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.fishingtest.Adapter.MyCompAdapter;
 import com.example.fishingtest.Model.Common;
@@ -78,9 +79,13 @@ public class MyCompetitionsFragment extends Fragment {
             @Override
             public void onClick(View view){
 
-                // TODO: Check if an Item have been selected
-                Intent myIntent = new Intent(getActivity(), ViewCompDetailsActivity.class);
-                getActivity().startActivity(myIntent);
+                if(cAdapter.row_index >= 0){
+                    Intent myIntent = new Intent(getActivity(), ViewCompDetailsActivity.class);
+                    getActivity().startActivity(myIntent);
+                }
+                else{
+                    Toast.makeText(getContext(), "Please select a competition for full detail review", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

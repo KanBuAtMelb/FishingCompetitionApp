@@ -223,7 +223,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
     }
 
     public void sortByDate(){
-        comps.sort(Comparator.comparing(Competition::getCompDateTime));
+        comps.sort(Comparator.comparing(Competition::calCompDateTime));
     }
 
     public void sortByReward(){
