@@ -60,7 +60,6 @@
 
     <string name="firebase_path"></string>
 
-
     <string name="title_activity_register_comp">RegisterCompActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
