@@ -129,7 +129,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         btn_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Todo: Need Geo Check and Image Fresh Check
+                //Todo: Ziqi need to do Geo Check and Image Fresh Check
                 Toast.makeText(ShotPreviewActivity.this, "You click the post button",Toast.LENGTH_SHORT).show();
                 String postUUID = UUID.randomUUID().toString();
                 Common.uploadFishingPost(ShotPreviewActivity.this, database, fbUser, currentComp, postUUID, originalImageUri, measuredImageUri, measuredLong);

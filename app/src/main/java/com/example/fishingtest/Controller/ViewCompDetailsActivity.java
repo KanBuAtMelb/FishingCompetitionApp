@@ -106,7 +106,7 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
 
 
             // Display Posts
-            // Todo: Ziqi to follow
+            // Todo: Ziqi to do the view of post recycleview
 
 
         }
