@@ -1,12 +1,13 @@
 package com.example.fishingtest.Model;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class Competition {
+public class Competition implements Serializable {
     private String compID;
     public  String cname;
     public  int reward;
