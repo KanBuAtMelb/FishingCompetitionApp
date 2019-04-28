@@ -109,7 +109,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         //If the location permission has been granted, then start the TrackerService//
         if (permission == PackageManager.PERMISSION_GRANTED) {
-            startTrackerService();
+//            startTrackerService();
         } else{
             //If the app doesn’t currently have access to the user’s location, then request access
             ActivityCompat.requestPermissions(this,

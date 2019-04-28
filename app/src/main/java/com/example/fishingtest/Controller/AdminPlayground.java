@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.fishingtest.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,12 +43,19 @@ public class AdminPlayground extends AppCompatActivity {
     Location currentLoc;
     private static final int PERMISSIONS_REQUEST = 100;
 
+    TextView lat;
+    TextView lon;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_playground);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        lat =(TextView) findViewById(R.id.admin_playground_lat);
+        lon =(TextView) findViewById(R.id.admin_playground_lon);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +123,14 @@ public class AdminPlayground extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+        databaseGPS.removeValue();
+        finish();
+        super.onBackPressed();
+    }
+
     private final class MyLocationListener implements LocationListener {
 
         public MyLocationListener(){
@@ -124,6 +140,8 @@ public class AdminPlayground extends AppCompatActivity {
         @Override
         public void onLocationChanged(Location location) {
             Log.e("gzq","onLocationChanged" + location.toString());
+            lat.setText("Latitude: " +Double.toString(location.getLatitude()));
+            lon.setText("Longitude: " + Double.toString(location.getLongitude()));
 
             databaseGPS.setValue(location);
         }
