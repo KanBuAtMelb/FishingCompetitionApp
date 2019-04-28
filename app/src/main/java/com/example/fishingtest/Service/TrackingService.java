@@ -1,6 +1,8 @@
 package com.example.fishingtest.Service;
 
 import com.example.fishingtest.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -16,10 +18,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.IBinder;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.DebugUtils;
 import android.util.Log;
 import android.Manifest;
 import android.location.Location;
@@ -27,6 +32,8 @@ import android.app.Notification;
 import android.content.pm.PackageManager;
 import android.app.PendingIntent;
 import android.app.Service;
+
+import java.util.concurrent.Executor;
 
 public class TrackingService extends Service {
 
@@ -43,9 +50,11 @@ public class TrackingService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        android.os.Debug.waitForDebugger();
-        buildNotification();
-        loginToFirebase();  // ???
+        android.os.Debug.waitForDebugger(); // For Debugging
+//        buildNotification();
+//        requestLocationUpdates();
+
+//        loginToFirebase();  // ???
     }
 
     //Create the persistent notification//
@@ -58,15 +67,14 @@ public class TrackingService extends Service {
 
         // Create the persistent notification//
         String channelID = "GPS Enabling";
-        Notification.Builder builder = new Notification.Builder(this, channelID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelID)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.tracking_enabled_notif))
 
-        //Make this notification ongoing so it can’t be dismissed by the user//
                 .setOngoing(true)
                 .setContentIntent(broadcastIntent)
                 .setSmallIcon(R.drawable.ic_edit_location_black_24dp);
-        startForeground(1, builder.build());
+        startForeground(88, builder.build());
     }
 
     protected BroadcastReceiver stopReceiver = new BroadcastReceiver() {
@@ -110,7 +118,8 @@ public class TrackingService extends Service {
         LocationRequest request = new LocationRequest();
 
         //Specify how often your app should request the device’s location//
-        request.setInterval(10000);
+        request.setInterval(0); //TODO: only for test, to be removed later
+        request.setNumUpdates(1); // TODO: only for test, to be removed later
 
         //Get the most accurate location data available//
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -121,22 +130,46 @@ public class TrackingService extends Service {
 
         //If the app currently has access to the location permission...//
         if (permission == PackageManager.PERMISSION_GRANTED) {
-
-            //...then request location updates//
-            client.requestLocationUpdates(request, new LocationCallback() {
-                @Override
-                public void onLocationResult(LocationResult locationResult) {
-
-                    //Get a reference to the database, so your app can perform read and write operations//
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Locations").child(currentUserID);
-                    Location location = locationResult.getLastLocation();
-                    if (location != null) {
-
-                        //Save the location data to the database//
-                        ref.setValue(location);
+            client.getLastLocation()
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if(location != null){
+                            double wayLatitude = location.getLatitude();
+                            double wayLongitude = location.getLongitude();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG,"Listener failed");
                     }
                 }
-            }, null);
+
+            );
+
+
+
+
+
+
+
+//            //then request location updates//
+//            client.requestLocationUpdates(request, new LocationCallback() {
+//                @Override
+//                public void onLocationResult(LocationResult locationResult) {
+//
+//                    //Get a reference to the database, so your app can perform read and write operations//
+//                    Location location = locationResult.getLastLocation();
+//                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Locations").child(currentUserID);
+//
+//                    if (location != null) {
+//                        //Save the location data to the database//
+//                        ref.setValue(location);
+//                    }
+//                }
+//            }, null);
         }
     }
 }

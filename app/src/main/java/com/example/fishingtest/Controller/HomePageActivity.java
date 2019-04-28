@@ -14,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -42,10 +41,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -188,6 +185,25 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
     }
 
+
+    // GPS request result
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        //If the permission has been granted...//
+        if (requestCode == PERMISSIONS_REQUEST && grantResults.length == 1
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            //...then start the GPS tracking service//
+            startTrackerService();
+        } else {
+
+            //If the user denies the permission request, then display a toast with some more information//
+            Toast.makeText(this, "Please enable location services to allow GPS tracking", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     // Toolbar items
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -284,6 +300,9 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         } else if(id == R.id.side_nav_admin_update_comp){
             Intent updateCompIntent = new Intent(this,UpdateCompActivity.class);
             startActivity(updateCompIntent);
+        } else if(id == R.id.side_nav_admin_playground){
+            Intent playGroundIntent = new Intent(this, AdminPlayground.class);
+            startActivity(playGroundIntent);
         }
         return true;
     }
