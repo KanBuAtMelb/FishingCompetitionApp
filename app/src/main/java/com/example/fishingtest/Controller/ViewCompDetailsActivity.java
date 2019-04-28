@@ -19,6 +19,8 @@ import com.example.fishingtest.R;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
+
 import static com.example.fishingtest.Model.Common.currentItem;
 
 
@@ -56,7 +58,7 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
         cResult = (TextView) findViewById(R.id.viewComp_comp_result);
         cAttendants = (TextView) findViewById(R.id.viewComp_comp_attendants);
         cDescription = (TextView) findViewById(R.id.viewComp_comp_description);
-        btn_newPost = (Button)findViewById(R.id.viewComp_addPost);
+        btn_newPost = (Button)findViewById(R.id.viewComp_PostButton);
 
         cPosts = (RecyclerView) findViewById(R.id.viewComp_posts);
 
@@ -91,7 +93,9 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
             btn_newPost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Todo: Ziqi to follow
+                    Intent intent = new Intent(ViewCompDetailsActivity.this, ShotPreviewActivity.class);
+                    intent.putExtra("currentComp", currentItem);
+                    startActivity(intent);
                 }
             });
 
@@ -102,7 +106,7 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
 
 
             // Display Posts
-            // Todo: Ziqi to follow
+            // Todo: Ziqi to do the view of post recycleview
 
 
         }
