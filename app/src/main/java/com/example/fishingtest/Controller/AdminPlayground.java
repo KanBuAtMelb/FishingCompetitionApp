@@ -1,8 +1,13 @@
 package com.example.fishingtest.Controller;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -20,8 +25,22 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
 
 public class AdminPlayground extends AppCompatActivity {
+
+    DatabaseReference databaseGPS;
+    FirebaseDatabase user_gps;
+    String currentUserID;
+    Location currentLoc;
+    private static final int PERMISSIONS_REQUEST = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,43 +59,90 @@ public class AdminPlayground extends AppCompatActivity {
         });
 
 
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        LocationRequest request = new LocationRequest();
+        List<String> list = locationManager.getProviders(true);
 
-        //Specify how often your app should request the device’s location//
-        request.setInterval(0); //TODO: only for test, to be removed later
-        request.setNumUpdates(1); // TODO: only for test, to be removed later
+        if (list != null) {
+            for (String x : list) {
+                Log.e("gzq", "name: " + x);
+            }
+        }
 
-        //Get the most accurate location data available//
-        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
+        LocationProvider lpGps = locationManager.getProvider(LocationManager.GPS_PROVIDER);
+        LocationProvider lpNet = locationManager.getProvider(LocationManager.NETWORK_PROVIDER);
+        LocationProvider lpPsv = locationManager.getProvider(LocationManager.PASSIVE_PROVIDER);
 
-        int permission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
 
-        //If the app currently has access to the location permission...//
-        if (permission == PackageManager.PERMISSION_GRANTED) {
-            client.getLastLocation()
-                    .addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if(location != null){
-                                double wayLatitude = location.getLatitude();
-                                double wayLongitude = location.getLongitude();
-                            }
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                                              @Override
-                                              public void onFailure(@NonNull Exception e) {
-                                                  Log.d("TAG","Listener failed");
-                                              }
-                                          }
+        Criteria criteria = new Criteria();
 
-                    );
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
 
+        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
+
+        criteria.setBearingAccuracy(Criteria.ACCURACY_HIGH);
+
+        criteria.setSpeedAccuracy(Criteria.ACCURACY_HIGH);
+
+        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
+
+        criteria.setVerticalAccuracy(Criteria.ACCURACY_HIGH);
+
+        String mProvider = locationManager.getBestProvider(criteria, true);
+        if (mProvider != null) {
+            Log.e("gzq", "mProvider:" + mProvider);
+        }
+
+        MyLocationListener locationListener = new MyLocationListener();
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //If the app doesn’t currently have access to the user’s location, then request access
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_REQUEST);
+                return;
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5, 10, locationListener);
+        }
+
+
+
+        //Firebase
+        currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseGPS = FirebaseDatabase.getInstance().getReference().child("Live_GPS").child(currentUserID);
 
     }
 
+    private final class MyLocationListener implements LocationListener {
+
+        public MyLocationListener(){
+        }
+
+
+        @Override
+        public void onLocationChanged(Location location) {
+            Log.e("gzq","onLocationChanged" + location.toString());
+
+            databaseGPS.setValue(location);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.e("gzq","onLocationChanged" + status);
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            Log.e("gzq","onProviderEnabled");
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            Log.e("gzq","onProviderDisabled");
+        }
+    }
+
 }
-}
+

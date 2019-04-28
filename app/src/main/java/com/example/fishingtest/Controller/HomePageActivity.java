@@ -255,22 +255,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
 
 
-    // Toolbar item clicked
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item){
-//        switch(item.getItemId()){
-//
-//            case R.id.toolbar_notification:
-//                //TODO: a Pop-up window for new coming event?? Any Firebase service to be used?
-//
-//
-//            default:
-//                // If the user's action was not recognized
-//                // Invoke the superclass to handle it
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
 
     // Side Navigation bar Item selected
     @Override
@@ -288,6 +272,12 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                     .signOut(this)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         public void onComplete(@NonNull Task<Void> task) {
+                            // stop GPS service
+                            stopTrackerService();
+
+                            // delete GPS Live data in Firebase
+
+
                             // user is now signed out
                             startActivity(new Intent(HomePageActivity.this, LogInActivity.class));
                             finish();
@@ -320,15 +310,23 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
     //Start the TrackerService//
     private void startTrackerService() {
 
-        Intent ir=new Intent(this, TrackingService.class);
-        ir.putExtra("UserID", currentUserID);
-        this.startService(ir);
+        Intent startIntent=new Intent(this, TrackingService.class);
+        startIntent.putExtra("UserID", currentUserID);
+        this.startService(startIntent);
 
         //Notify the user that tracking has been enabled//
         Toast.makeText(this, "GPS tracking enabled", Toast.LENGTH_SHORT).show();
 
-        //Close MainActivity
-//        finish();
+    }
+
+    //Stop the Tracakerservice
+    private void stopTrackerService(){
+
+        Intent stopIntent =new Intent(this, TrackingService.class);
+        this.stopService(stopIntent);
+
+        //Notify the user that tracking has been enabled//
+        Toast.makeText(this, "GPS tracking disabled", Toast.LENGTH_SHORT).show();
     }
 
 }
