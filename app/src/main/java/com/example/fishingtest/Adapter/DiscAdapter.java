@@ -232,7 +232,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
     }
 
     public void sortByReward(){
-        comps.sort(Comparator.comparing(Competition::getReward));
+        comps.sort(Comparator.comparing(Competition::getReward).reversed());
     }
 
 }
