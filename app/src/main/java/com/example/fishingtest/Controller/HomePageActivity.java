@@ -1,9 +1,14 @@
 package com.example.fishingtest.Controller;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +23,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +57,8 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
     // Set tag to the view??
     private static  final String TAG = "MainPageActivity";
     private static final int PERMISSIONS_REQUEST = 100;
+
+
 
     // Toolbar
     Toolbar mToolbar;
@@ -90,33 +98,44 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
     // Posts time
     Timestamp currStamp;
 
+    // GPS
+    LocationManager locationManager;
+    DatabaseReference databaseGPS;
+    MyLocationListener locationListener;
 
+
+    private final class MyLocationListener implements LocationListener {
+
+        public MyLocationListener(){
+        }
+
+
+        @Override
+        public void onLocationChanged(Location location) {
+            Log.e("KB_Home","onLocationChanged" + location.toString());
+            databaseGPS.setValue(location);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            Log.e("KB_Home","onLocationChanged" + status);
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            Log.e("KB_Home","onProviderEnabled");
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            Log.e("KB_Home","onProviderDisabled");
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-
-        // Check whether the GPS tracking is enabled
-        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            finish();
-        }
-
-        //Check whether this app has access to the location permission//
-        int permission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-
-        //If the location permission has been granted, then start the TrackerService//
-        if (permission == PackageManager.PERMISSION_GRANTED) {
-//            startTrackerService();
-        } else{
-            //If the app doesn’t currently have access to the user’s location, then request access
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST);
-        }
-
 
         // Toolbar
         mToolbar =  findViewById(R.id.main_top_toolbar);
@@ -127,6 +146,9 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
 
         // Firebase
+        currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseGPS = FirebaseDatabase.getInstance().getReference().child("Live_GPS").child(currentUserID);
+
         compList = new ArrayList<>();
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
         databaseComps.addValueEventListener(new ValueEventListener() {
@@ -183,6 +205,49 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 //        invalidateOptionsMenu();
 
 
+
+        // GPS
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        List<String> list = locationManager.getProviders(true);
+
+        if (list != null) {
+            for (String x : list) {
+                Log.e("KB_Home", "name: " + x);
+            }
+        }
+
+        Criteria criteria = new Criteria();
+
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
+        criteria.setBearingAccuracy(Criteria.ACCURACY_HIGH);
+        criteria.setSpeedAccuracy(Criteria.ACCURACY_HIGH);
+        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
+        criteria.setVerticalAccuracy(Criteria.ACCURACY_HIGH);
+
+        String mProvider = locationManager.getBestProvider(criteria, true);
+        if (mProvider != null) {
+            Log.e("KB_Home", "mProvider:" + mProvider);
+        }
+
+       locationListener = new MyLocationListener();
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //If the app doesn’t currently have access to the user’s location, then request access
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_REQUEST);
+                return;
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5, 10, locationListener);
+        }
+
+
+
+
     }
 
 
@@ -195,7 +260,9 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             //...then start the GPS tracking service//
-            startTrackerService();
+//            startTrackerService();
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5, 10, locationListener);
         } else {
 
             //If the user denies the permission request, then display a toast with some more information//
@@ -273,9 +340,12 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         public void onComplete(@NonNull Task<Void> task) {
                             // stop GPS service
-                            stopTrackerService();
+//                            stopTrackerService();
+
+
 
                             // delete GPS Live data in Firebase
+                            databaseGPS.removeValue();
 
 
                             // user is now signed out
@@ -306,6 +376,8 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
             super.onBackPressed();
         }
     }
+
+
 
     //Start the TrackerService//
     private void startTrackerService() {

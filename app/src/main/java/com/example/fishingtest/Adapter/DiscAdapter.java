@@ -168,9 +168,14 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         viewHolder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position) {
-                row_index = position;
-                Common.currentItem = comps.get(position);
-                notifyDataSetChanged();
+                if(position>= 0){
+                    row_index = position;
+                    Common.currentItem = comps.get(position);
+                    notifyDataSetChanged();
+                }else{
+                    Toast.makeText(context, "Please select a competition to view.",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 

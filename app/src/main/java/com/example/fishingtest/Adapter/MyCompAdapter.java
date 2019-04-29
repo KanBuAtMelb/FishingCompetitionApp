@@ -14,6 +14,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fishingtest.Interface.ItemClickListener;
 import com.example.fishingtest.Model.Common;
@@ -133,9 +134,13 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
         viewHolder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int i) {
-                row_index = i;
-                Common.currentItem = comps.get(i);
-                notifyDataSetChanged();
+                if(position>= 0){
+                    row_index = position;
+                    Common.currentItem = comps.get(position);
+                    notifyDataSetChanged();
+                }else{
+                    Toast.makeText(context, "Please select a competition to view.",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
