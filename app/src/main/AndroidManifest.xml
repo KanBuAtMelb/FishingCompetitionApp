@@ -24,9 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Controller.ShotPreviewActivity">
+        <activity android:name=".Controller.ShotPreviewActivity"
             android:parentActivityName=".Controller.ViewCompDetailsActivity"
-            android:screenOrientation="portrait"</activity>
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".Controller.ProfileActivity" />
         <activity android:name=".Controller.EditProfileActivity" />
