@@ -1,6 +1,7 @@
 package com.example.fishingtest.Controller;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -242,7 +243,8 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                         PERMISSIONS_REQUEST);
                 return;
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5, 10, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000,2,locationListener);
         }
 
 
@@ -252,6 +254,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
 
     // GPS request result
+    @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -262,7 +265,9 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
             //...then start the GPS tracking service//
 //            startTrackerService();
 
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5, 10, locationListener);
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
         } else {
 
             //If the user denies the permission request, then display a toast with some more information//
@@ -341,6 +346,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                         public void onComplete(@NonNull Task<Void> task) {
                             // stop GPS service
 //                            stopTrackerService();
+                            locationManager.removeUpdates(locationListener);
 
 
 
