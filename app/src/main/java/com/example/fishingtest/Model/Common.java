@@ -49,6 +49,10 @@ public class Common {
 
     public static Competition currentItem = null;
 
+    // Location
+    public static double curLat = 200.0;
+    public static double curLon = 200.0;
+
 //    public static List<Competition> compList = new ArrayList<>();
 //    public static List<Competition> compsBydate = new ArrayList<>();
 //    public static List<Competition> compsByName = new ArrayList<>();
