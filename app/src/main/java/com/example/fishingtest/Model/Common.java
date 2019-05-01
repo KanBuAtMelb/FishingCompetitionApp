@@ -173,8 +173,9 @@ public class Common {
                         Uri meaDownloadUrl = taskSnapshot.getDownloadUrl();
                         Toast.makeText(context, "Measured Image: Upload finished!", Toast.LENGTH_SHORT).show();
                         if (uploadOriTask.isComplete() && uploadMeaTask.isComplete()) {
-                            Post post = new Post(currentUser.getUid(), currentComp.getCompID(), oriDownloadUrl.toString(), meaDownloadUrl.toString(), measuredData, timeStamp);
+                            Post post = new Post(currentUser.getUid(), currentComp.getCompID(), oriDownloadUrl.toString(), meaDownloadUrl.toString(), measuredData, timeStamp, curLon, curLat);
                             postToDB(context, postDBRef, post);
+
                         }
                     }
                 });

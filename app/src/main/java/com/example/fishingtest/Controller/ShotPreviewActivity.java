@@ -133,6 +133,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
                 Toast.makeText(ShotPreviewActivity.this, "You click the post button",Toast.LENGTH_SHORT).show();
                 String postUUID = UUID.randomUUID().toString();
                 Common.uploadFishingPost(ShotPreviewActivity.this, database, fbUser, currentComp, postUUID, originalImageUri, measuredImageUri, measuredLong);
+                finish();
             }
         });
 
@@ -211,7 +212,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         File measuredImageFile = getLatestPhoto(this);
         measuredImageUri = Common.getImageContentUri(this, measuredImageFile);
         imgBtn_measure.setImageURI(measuredImageUri);
-        String regex = "\\d+cm";
+        String regex = "\\d+(\\.\\d+)?cm|\\d+(\\.\\d+)?m";
         Pattern meaPattern = Pattern.compile(regex);
         Matcher meaMatcher;
         try {
@@ -237,11 +238,11 @@ public class ShotPreviewActivity extends AppCompatActivity {
     }
 
     private void openCamera() {
-        //獲取系統版本
+        //get current version
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        // 激活相机
+        // make intent for system default camera
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // 判断存储卡是否可以用，可用进行存储
+        // looking for sd card mount
         if (hasSdcard()) {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat timeStampFormat = new SimpleDateFormat(
                     "yyyy_MM_dd_HH_mm_ss");
@@ -249,17 +250,17 @@ public class ShotPreviewActivity extends AppCompatActivity {
             tempFile = new File(Environment.getExternalStorageDirectory(),
                     filename + ".jpg");
             if (currentapiVersion < 24) {
-                // 从文件中创建uri
+                // create file uri
                 originalImageUri = Uri.fromFile(tempFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, originalImageUri);
             } else {
-                //兼容android7.0 使用共享文件的形式
+                //compatite with Android 7.0
                 ContentValues contentValues = new ContentValues(1);
                 contentValues.put(MediaStore.Images.Media.DATA, tempFile.getAbsolutePath());
-                //检查是否有存储权限，以免崩溃
+                //check permission of R/W
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
-                    //申请WRITE_EXTERNAL_STORAGE权限
+                    //Ask permission
                     Toast.makeText(this,"please give permission for read/write",Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -267,24 +268,21 @@ public class ShotPreviewActivity extends AppCompatActivity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, originalImageUri);
             }
         }
-        // 开启一个带有返回值的Activity，请求码为PHOTO_REQUEST_CAREMA
+        // get result of system default camera
         startActivityForResult(intent, PHOTO_REQUEST_CAREMA);
     }
 
-    /*
-     * 判断sdcard是否被挂载
-     */
     private static boolean hasSdcard() {
         return Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED);
     }
 
     private static File getLatestPhoto(Context context) {
-        //拍摄照片的地址
+        //find album path
         String CAMERA_IMAGE_BUCKET_NAME = Environment.getExternalStorageDirectory().toString() + "/Pictures/Measure";
-        //拍摄照片的地址ID
+        //get photo id
         String CAMERA_IMAGE_BUCKET_ID = getBucketId(CAMERA_IMAGE_BUCKET_NAME);
-        //查询路径和修改时间
+        //check path and time
         String[] projection = {MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media.DATE_MODIFIED};
         //
@@ -292,7 +290,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         //
         String[] selectionArgs = {CAMERA_IMAGE_BUCKET_ID};
 
-        //检查camera文件夹，查询并排序
+        //check album and sort photo
         String cameraPair = null;
         Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 projection,
@@ -317,8 +315,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
             if (grantResults.length > 0) {//grantResults 数组中存放的是授权结果
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     openCamera();
-                }else {//用户拒绝授权
-                    //可以简单提示用户
+                }else {
                     Toast.makeText(this, "No permission for take photo", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -327,8 +324,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
                 intentToMeasure();
                 btn_post.setClickable(postReady());
                 btn_post.setBackgroundColor(greenOrRed(postReady()));
-            }else {//用户拒绝授权
-                //可以简单提示用户
+            }else {
                 Toast.makeText(this, "No permission for get Measure Data", Toast.LENGTH_SHORT).show();
             }
         }

@@ -13,16 +13,20 @@ public class Post{
     public String meaDownloadUrl;
     public String measuredData;
     public String timeStamp;
+    public double longtitude;
+    public double latitude;
 
     public Post() {
     }
 
-    public Post(String userId, String compId, String oriDownloadUrl, String meaDownloadUrl, String measuredData, String timeStamp) {
+    public Post(String userId, String compId, String oriDownloadUrl, String meaDownloadUrl, String measuredData, String timeStamp, double longtitude, double latitude) {
         this.userId = userId;
         this.compId = compId;
         this.oriDownloadUrl = oriDownloadUrl;
         this.meaDownloadUrl = meaDownloadUrl;
         this.measuredData = measuredData;
         this.timeStamp = timeStamp;
+        this.longtitude = longtitude;
+        this.latitude = latitude;
     }
 }
