@@ -3,16 +3,14 @@ package com.example.fishingtest.Adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,19 +28,31 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
-public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHolder> {
+public class MyCompAdapter extends RecyclerView.Adapter {
 
     // Local variables
     private final static String TAG = "MyCompetition Adapter";
-    ArrayList<Competition> comps;
-    Context context;
+    //    private ArrayList<Competition> comps;
+    private Context context;
+
+
+
     public int row_index = -1;
+    public static final int VIEW_TYPE_TITLE= 0;
+    public static final int VIEW_TYPE_INPRG=1;
+    public static final int VIEW_TYPE_24HR =2;
+    public static final int VIEW_TYPE_ITEM= 3;
+
+    private List<Map<Integer,Competition>> mData;
+
 
     // New class addressing each "Competition" item view in the list
-    class CompViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
+    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView compImage;
         TextView compTittle;
         TextView compType;
@@ -50,11 +60,9 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
         TextView compDateTime;
         TextView timeBeforeStart;
         Button compUnregisterBtn;
-
         ItemClickListener itemClickListener;
 
-
-        public CompViewHolder(View itemView) {
+        public ItemViewHolder(View itemView) {
             super(itemView);
             compImage = itemView.findViewById(R.id.comp_image);
             compTittle = itemView.findViewById(R.id.comp_title);
@@ -78,72 +86,189 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
         }
     }
 
+    class TitleViewHolder extends RecyclerView.ViewHolder {
+        TextView title;
+        public TitleViewHolder(@NonNull View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.recyclerView_title);
+        }
+    }
+
 
     // Constructor
-    public MyCompAdapter(ArrayList<Competition> comps, Context context) {
-        this.comps = comps;
+    public MyCompAdapter(List<Map<Integer,Competition>> mData, Context context) {
+        this.mData = mData;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public CompViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        CompViewHolder imageViewHolder = null;
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater mInflater = LayoutInflater.from(viewGroup.getContext());
 
-        imageViewHolder = new CompViewHolder(mInflater.inflate(R.layout.cardview_rgst_comp_item_top, viewGroup, false));
+        switch(viewType){
+            case VIEW_TYPE_TITLE:
+                viewHolder = new TitleViewHolder(mInflater.inflate(R.layout.recyclerview_title, viewGroup, false));
+                break;
+            case VIEW_TYPE_INPRG:
+                viewHolder = new ItemViewHolder(mInflater.inflate(R.layout.cardview_rgst_comp_item_inprogress, viewGroup,false));
+                break;
+            case VIEW_TYPE_24HR:
+                viewHolder = new ItemViewHolder(mInflater.inflate(R.layout.cardview_rgst_comp_item_within24hours, viewGroup,false));
+                break;
+            case VIEW_TYPE_ITEM:
+                viewHolder = new ItemViewHolder(mInflater.inflate(R.layout.cardview_rgst_comp_item_normal, viewGroup,false));
+                break;
 
+        }
 
-        return imageViewHolder;
+        return viewHolder;
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull CompViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+        Competition comp;
 
-        final Competition comp = comps.get(position);
+        // Set up Division Title
+        if(mData.get(position).containsKey(VIEW_TYPE_TITLE)){
+            TitleViewHolder vh = (TitleViewHolder) viewHolder;
+            vh.title.setText(mData.get(position).get(VIEW_TYPE_TITLE).getCompID());
+        }
+
+        // Set up competition card view
+        else if(mData.get(position).containsKey(VIEW_TYPE_INPRG)){
+            ItemViewHolder vh = (ItemViewHolder) viewHolder;
+            comp = mData.get(position).get(VIEW_TYPE_INPRG);
+            fillView(vh, comp, position);
+            vh.timeBeforeStart.setText("Competition in Progress! ");
+            vh.timeBeforeStart.setTextSize(18);
+            vh.timeBeforeStart.setTextColor(Color.parseColor("#00335c"));
+//            vh.itemView.setBackgroundColor(Color.parseColor("#EC7063"));
+        }
+
+        else if(mData.get(position).containsKey(VIEW_TYPE_24HR)){
+            ItemViewHolder vh = (ItemViewHolder) viewHolder;
+            comp = mData.get(position).get(VIEW_TYPE_24HR);
+            fillView(vh, comp,position);
+            String compStartTime = comp.getDate().concat(" ").concat(comp.getStartTime()).concat(" GMT+10:00");
+            long timeLeftStart = Common.timeToCompStart(compStartTime);
+            long diffMinutes = timeLeftStart / (60 * 1000) % 60;
+            long diffHours = timeLeftStart / (60 * 60 * 1000) % 24;
+            vh.timeBeforeStart.setText("Only " + (int) diffHours + " hours, " + (int) diffMinutes + " min left!");
+            vh.timeBeforeStart.setTextSize(16);
+            vh.timeBeforeStart.setTextColor(Color.parseColor("#00335c"));
+//            vh.itemView.setBackgroundColor(Color.parseColor("#ffa600"));
+        }
+
+        else if(mData.get(position).containsKey(VIEW_TYPE_ITEM)){
+            ItemViewHolder vh = (ItemViewHolder) viewHolder;
+            comp = mData.get(position).get(VIEW_TYPE_ITEM);
+            fillView(vh, comp,position);
+            String compStartTime = comp.getDate().concat(" ").concat(comp.getStartTime()).concat(" GMT+10:00");
+            long timeLeftStart = Common.timeToCompStart(compStartTime);
+            long diffHours = timeLeftStart / (60 * 60 * 1000) % 24;
+            long diffDays = timeLeftStart / (24 * 60 * 60 * 1000);
+            vh.timeBeforeStart.setText("Still have " + (int) diffDays + " days, " + (int) diffHours + " hours, ");
+            vh.timeBeforeStart.setTextSize(12);
+            vh.timeBeforeStart.setTextColor(Color.parseColor("#66000000"));
+//            vh.itemView.setBackgroundColor(Color.parseColor("#6495ED"));
+        }
+
+
+        if(viewHolder instanceof ItemViewHolder){
+            ItemViewHolder vh = (ItemViewHolder) viewHolder;
+            vh.setItemClickListener(new ItemClickListener() {
+                @Override
+                public void onClick(View view, int i) {
+                    if(position>= 0){
+                        row_index = position;
+                        Common.currentItem = findComp(position);
+                        notifyDataSetChanged();
+                    }else{
+                        Toast.makeText(context, "Please select a competition to view.",Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+            vh.compUnregisterBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                    final String compID = findComp(position).getCompID();
+
+                    final DatabaseReference databaseComp = FirebaseDatabase.getInstance().getReference("Competitions").child(compID);
+                    final DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
+
+                    // Update Users database
+                    databaseUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User temp = dataSnapshot.getValue(User.class);
+                            temp.checkArrayList();
+                            if (temp.getComps_registered().contains(compID)) {
+                                temp.removeRegComp(compID);
+                                databaseUser.setValue(temp);
+                                Log.d(TAG, "Competition " + compID + " removed from User " + userID + " registration list");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // TODO: add something here
+                        }
+                    });
+
+                    // Update Competition database
+                    databaseComp.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Competition temp = dataSnapshot.getValue(Competition.class);
+                            temp.checkArrayList();
+                            if (temp.getAttendants().contains(userID)) {
+                                temp.removeAttendant(userID);
+                                databaseComp.setValue(temp);
+                                Log.d(TAG, "User " + userID + " removed from competition " + compID + " attendant list");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // TODO: add something here
+                        }
+                    });
+
+                    //Unsubscribe the competition for leaving out the Notification from this competition
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(compID);
+                }
+            });
+
+        }
+    }
+
+    private Competition findComp(int position) {
+        Competition c = new Competition();
+
+        if(mData.get(position).get(VIEW_TYPE_INPRG)!= null)
+            c= mData.get(position).get(VIEW_TYPE_INPRG);
+        else if(mData.get(position).get(VIEW_TYPE_24HR)!= null)
+            c= mData.get(position).get(VIEW_TYPE_24HR);
+        else if(mData.get(position).get(VIEW_TYPE_ITEM)!= null)
+            c= mData.get(position).get(VIEW_TYPE_ITEM);
+
+        return c;
+    };
+
+    private void fillView(ItemViewHolder viewHolder, Competition comp, int position) {
+
         viewHolder.compTittle.setText(comp.getCname());
-
         // Spinner item index to text view
         String[] compTypes = context.getResources().getStringArray(R.array.comp_type);
         viewHolder.compType.setText(compTypes[comp.getCompType()]);
-
         viewHolder.compReward.setText("Reward: $" + comp.getReward() + " AUD");
         viewHolder.compDateTime.setText("Date: " + comp.getDate() + " Time: From " + comp.getStartTime() + " To " + comp.getStopTime());
-
-        // Count down date and time
-        String compTime = comp.getDate().concat(" ").concat(comp.getStartTime()).concat(" GMT+08:00");
-        long timeleft = Common.timeToCompStart(compTime);
-        long diffMinutes = timeleft / (60 * 1000) % 60;
-        long diffHours = timeleft / (60 * 60 * 1000) % 24;
-        long diffDays = timeleft / (24 * 60 * 60 * 1000);
-
-        if (diffDays < 1) {
-            viewHolder.timeBeforeStart.setText("Only " + (int) diffHours + " hours, " + (int) diffMinutes + " min left!");
-            viewHolder.timeBeforeStart.setTextSize(16);
-
-            viewHolder.timeBeforeStart.setTextColor(Color.parseColor("#00335c"));
-            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffa600"));
-        } else {
-            viewHolder.timeBeforeStart.setText("Still have " + (int) diffDays + " days, " + (int) diffHours + " hours, " + (int) diffMinutes + " min");
-            viewHolder.timeBeforeStart.setTextSize(12);
-            viewHolder.timeBeforeStart.setTextColor(Color.parseColor("#66000000"));
-            viewHolder.itemView.setBackgroundColor(Color.parseColor("#6495ED"));
-        }
-
-        viewHolder.setItemClickListener(new ItemClickListener() {
-            @Override
-            public void onClick(View view, int i) {
-                if(position>= 0){
-                    row_index = position;
-                    Common.currentItem = comps.get(position);
-                    notifyDataSetChanged();
-                }else{
-                    Toast.makeText(context, "Please select a competition to view.",Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
 
         if (row_index == position) {
             //viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
@@ -163,79 +288,41 @@ public class MyCompAdapter extends RecyclerView.Adapter<MyCompAdapter.CompViewHo
             }
         }
 
-        viewHolder.compUnregisterBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: WHAT IF comp is null??
-                final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                final String compID = comp.getCompID();
-
-                final DatabaseReference databaseComp = FirebaseDatabase.getInstance().getReference("Competitions").child(compID);
-                final DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
-
-                // Update Users database
-                databaseUser.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        User temp = dataSnapshot.getValue(User.class);
-                        temp.checkArrayList();
-                        if (temp.getComps_registered().contains(compID)) {
-                            temp.removeRegComp(compID);
-                            databaseUser.setValue(temp);
-                            Log.d(TAG, "Competition " + compID + " removed from User " + userID + " registration list");
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // TODO: add something here
-                    }
-                });
-
-                // Update Competition database
-                databaseComp.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Competition temp = dataSnapshot.getValue(Competition.class);
-                        temp.checkArrayList();
-                        if (temp.getAttendants().contains(userID)) ;
-                        {
-                            temp.removeAttendant(userID);
-                            databaseComp.setValue(temp);
-                            Log.d(TAG, "User " + userID + " removed from competition " + compID + " attendant list");
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // TODO: add something here
-                    }
-                });
-
-                //Unsubscribe the competition for leaving out the Notification from this competition
-                FirebaseMessaging.getInstance().unsubscribeFromTopic(compID);
-            }
-        });
-
     }
 
 
     @Override
+    public int getItemViewType(int position) {
+        // Count down date and time
+        if(mData.get(position).get(VIEW_TYPE_TITLE) != null)
+            return VIEW_TYPE_TITLE;
+        else if(mData.get(position).get(VIEW_TYPE_INPRG)!= null)
+            return VIEW_TYPE_INPRG;
+        else if(mData.get(position).get(VIEW_TYPE_24HR)!= null)
+            return VIEW_TYPE_24HR;
+        else
+            return VIEW_TYPE_ITEM;
+
+
+    };
+
+
+    @Override
     public int getItemCount() {
-        if(comps != null)
-            return comps.size();
+        if(mData!= null)
+            return mData.size();
         else
             return 0;
     }
 
 
-    public void addComp(Competition comp){
-        comps.add(comp);
+    public void addCompMap(Map map){
+        mData.add(map);
         notifyDataSetChanged();
     }
 
     public void clearCompList(){
-        this.comps.clear();
+        this.mData.clear();
     }
 }
 
