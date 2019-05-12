@@ -35,11 +35,9 @@
     <string name="default_value">Default</string>
 
     <string-array name="comp_status">
-        <item>Completed</item>
+        <item>Upcoming</item>
         <item>In Progress</item>
-        <item>In 24 Hours</item>
-        <item>Enrolling</item>
-        <item>Planned</item>
+        <item>Finished</item>
     </string-array>
 
     <string-array name="comp_type">

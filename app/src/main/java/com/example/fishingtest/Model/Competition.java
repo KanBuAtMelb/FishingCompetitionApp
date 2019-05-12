@@ -23,6 +23,7 @@ public class Competition implements Serializable {
     private String image_url; // All competitions have the same hard-coded image on this design stage
     private String cStatus;  //TODO: maybe be required in case a comp was planned but cancelled?
     private ArrayList<String> postIDs;
+    private String date_translated;
 
     public Competition() {
     }
@@ -45,6 +46,8 @@ public class Competition implements Serializable {
         this.image_url = Common.NA;
         this.cStatus = Common.NA;
         this.postIDs = new ArrayList<>();
+
+        this.date_translated = Common.NA;
     }
 
     //Constructor with name and date only
@@ -64,6 +67,8 @@ public class Competition implements Serializable {
         this.image_url = Common.NA;
         this.cStatus = Common.NA;
         this.postIDs = new ArrayList<>();
+
+        this.date_translated = newDateFormat();
     }
 
     // Constructor without attendants, winner, result and status, used for "Add Competition"
@@ -83,6 +88,8 @@ public class Competition implements Serializable {
         this.image_url = Common.NA;
         this.cStatus = Common.NA;
         this.postIDs = new ArrayList<>();
+
+        this.date_translated = newDateFormat();
     }
 
     // Constructor without attendants and status
@@ -103,6 +110,8 @@ public class Competition implements Serializable {
         this.image_url = Common.NA;
         this.cStatus = Common.NA;
         this.postIDs = new ArrayList<>();
+
+        this.date_translated = newDateFormat();
     }
 
     // Constructor with all info,, used for "Update Competition"
@@ -122,6 +131,8 @@ public class Competition implements Serializable {
         this.image_url = image_url;
         this.cStatus = cStatus;
         this.postIDs = new ArrayList<>();
+
+        this.date_translated = newDateFormat();
     }
 
     // Check if any Arraylist is null after taken from Firebase
@@ -160,6 +171,27 @@ public class Competition implements Serializable {
         }
 
         return newDate;
+    }
+
+    public String newDateFormat(){
+
+        String newFormat = new String();
+
+        String date_split[] = date.split("/");
+        String time_split[] = startTime.split(":");
+
+        for(int i = 0 ; i < date_split.length;i++){
+            if(date_split[i].length() == 1)
+                date_split[i] = new String("0")+ date_split[i];
+        }
+
+        for(int i = 0 ; i < time_split.length;i++){
+            if(time_split[i].length() == 1)
+                time_split[i] = new String("0")+ time_split[i];
+        }
+
+        newFormat = new String("20")+ date_split[2] + date_split[0] + date_split[1] + time_split[0] + time_split[1];
+        return newFormat;
     }
 
 
@@ -220,6 +252,10 @@ public class Competition implements Serializable {
         return postIDs;
     }
 
+    public String getDate_translated() { return date_translated;}
+
+
+
     // Setters
     public void setCname(String cname) {
         this.cname = cname;
@@ -231,6 +267,8 @@ public class Competition implements Serializable {
 
     public void setCompID(String compID){this.compID = compID;}
 
+    public void setReward(int reward) { this.reward = reward;}
+
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
@@ -239,9 +277,9 @@ public class Competition implements Serializable {
         this.stopTime = stopTime;
     }
 
-    public void setGeo_map(String geo_map) {
-        this.geo_map = geo_map;
-    }
+    public void setGeo_map(String geo_map) { this.geo_map = geo_map; }
+
+    public void setCompType(int compType) { this.compType = compType; }
 
     public void setAttendants(ArrayList<String> attendants) {
         this.attendants = attendants;
@@ -251,7 +289,7 @@ public class Competition implements Serializable {
         this.results = results;
     }
 
-    public void setWinners(String winner) {
+    public void setWinner(String winner) {
         this.winner = winner;
     }
 
