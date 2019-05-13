@@ -15,7 +15,8 @@
             android:title="Logout" />
 
         <item
-            android:title="Admin">
+            android:title="Admin"
+            android:id="@+id/side_nav_admin">
                 <menu>
                         <item android:id="@+id/side_nav_admin_add_comp"
                             android:icon="@drawable/ic_add_box_black_24dp"

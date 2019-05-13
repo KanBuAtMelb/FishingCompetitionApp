@@ -152,6 +152,26 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseGPS = FirebaseDatabase.getInstance().getReference().child("Live_GPS").child(currentUserID);
 
+
+        // -- Get current user
+        loginedUser = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
+        loginedUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    user = dataSnapshot.getValue(User.class);
+                    hideItem();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
         compList = new ArrayList<>();
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
         databaseComps.addValueEventListener(new ValueEventListener() {
@@ -196,17 +216,15 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         //Set up Drawer layout
         // DrawerLayout
+//        hideItem();
         myDrawerlayout = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, myDrawerlayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         myDrawerlayout.addDrawerListener(toggle);
         toggle.syncState();
 
+
         currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        // TODO: TEST
-//        invalidateOptionsMenu();
-
 
 
         // GPS
@@ -247,6 +265,18 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
             }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000,2,locationListener);
+        }
+    }
+
+    private void hideItem()
+    {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+
+        if(user.getAccessLevel().equals(Common.user_member)){
+            nav_Menu.findItem(R.id.side_nav_admin).setVisible(false);
+            nav_Menu.findItem(R.id.side_nav_admin_add_comp).setVisible(false);
+            nav_Menu.findItem(R.id.side_nav_admin_update_comp).setVisible(false);
         }
     }
 
