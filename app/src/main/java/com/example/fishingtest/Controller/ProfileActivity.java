@@ -146,7 +146,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             imageUri = data.getData();
             profileImage.setImageURI(imageUri);
             StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-            StorageReference imagesRef = storageRef.child("images").child("head_picture");
+            StorageReference imagesRef = storageRef.child("User_Images");
             StorageReference fileRef = imagesRef.child(userID);
             fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -154,7 +154,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.makeText(ProfileActivity.this, "Avatar update completed!", Toast.LENGTH_LONG).show();
                     String url = taskSnapshot.getDownloadUrl().toString();
                     databaseUser.child("imagePath").setValue(url);
-
                 }
             });
   }
