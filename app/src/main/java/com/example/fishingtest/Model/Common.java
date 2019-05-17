@@ -23,6 +23,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -128,24 +129,28 @@ public class Common {
 
     //this function include uploading to storage and database. Before image save its download url in database, the image should be uploaded to the cloud storage and get the download url from the storage,
     //so that we can save the download url to database and retrieve by another usage directly for downloading the image.
-    public static void uploadFishingPost(final Context context, final DatabaseReference database, final FirebaseUser currentUser, final Competition currentComp, final String postUUID, final Uri oriImageUri, final Uri meaImageUri, final String measuredData) {
+    public static void uploadFishingPost(final Context context, final DatabaseReference database, final FirebaseUser currentUser, final Competition currentComp, final Uri oriImageUri, final Uri meaImageUri, final String measuredData) {
+        Long tsLong = System.currentTimeMillis()/1000;
+        String timestamp = tsLong.toString();
+
         final String competitionCategory = "Competitions";
         final String originalFishPhotoCategory = "Original";
         final String measuredFishPhotoCategory = "Measured";
+        final String postID = timestamp + "_" + currentUser.getUid();
 
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference compRef = storageRef.child("Images").child(competitionCategory);
+        StorageReference compRef = storageRef.child("images").child(competitionCategory);
         StorageReference userRef = compRef.child(currentUser.getUid());
-        StorageReference postRef = userRef.child(postUUID);
+        StorageReference postRef = userRef.child(postID);
         StorageReference originalImagesRef = postRef.child(originalFishPhotoCategory);
         StorageReference measuredImagesRef = postRef.child(measuredFishPhotoCategory);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String originalFilename = currentUser.getUid() + "_" + timeStamp + "_ori";
-        String measuredFilename = currentUser.getUid() + "_" + timeStamp + "_mea";
+
+        String originalFilename = currentUser.getUid() + "_" + timestamp + "_ori";
+        String measuredFilename = currentUser.getUid() + "_" + timestamp + "_mea";
         StorageReference originalFileRef = originalImagesRef.child(originalFilename);
         StorageReference measuredFileRef = measuredImagesRef.child(measuredFilename);
 
-        DatabaseReference postDBRef = database.child("Posts").child(competitionCategory).child(currentComp.getCompID()).child(currentUser.getUid()).child(postUUID);
+        DatabaseReference postDBRef = database.child("Posts").child(competitionCategory).child(currentComp.getCompID()).child(postID);
         //create upload task which is a new thread, then it will upload the image to cloud storage by local image uri
         UploadTask uploadOriTask = originalFileRef.putFile(oriImageUri);
         UploadTask uploadMeaTask = measuredFileRef.putFile(meaImageUri);
@@ -164,7 +169,7 @@ public class Common {
                 uploadMeaTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        // Handle unsuccessful uploads
+                        // Handle unsuccessful uploads+
                         Toast.makeText(context, "Measured Image: Upload failed!\n" + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -173,9 +178,9 @@ public class Common {
                         Uri meaDownloadUrl = taskSnapshot.getDownloadUrl();
                         Toast.makeText(context, "Measured Image: Upload finished!", Toast.LENGTH_SHORT).show();
                         if (uploadOriTask.isComplete() && uploadMeaTask.isComplete()) {
-                            Post post = new Post(currentUser.getUid(), currentComp.getCompID(), oriDownloadUrl.toString(), meaDownloadUrl.toString(), measuredData, timeStamp, curLon, curLat);
+                            Post post = new Post(postID, currentUser.getUid(), currentComp.getCompID(), oriDownloadUrl.toString(), meaDownloadUrl.toString(), measuredData, timestamp, curLon, curLat);
+                            Toast.makeText(context, "Posting......", Toast.LENGTH_SHORT).show();
                             postToDB(context, postDBRef, post);
-
                         }
                     }
                 });

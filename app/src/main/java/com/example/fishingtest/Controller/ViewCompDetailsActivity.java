@@ -37,9 +37,10 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
     TextView cResult;
     TextView cAttendants;
     TextView cDescription;
-    RecyclerView cPosts;
+
 
     Button btn_newPost;
+    Button btn_viewPosts;
 
 
     @Override
@@ -59,9 +60,7 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
         cAttendants = (TextView) findViewById(R.id.viewComp_comp_attendants);
         cDescription = (TextView) findViewById(R.id.viewComp_comp_description);
         btn_newPost = (Button)findViewById(R.id.viewComp_PostButton);
-
-        cPosts = (RecyclerView) findViewById(R.id.viewComp_posts);
-
+        btn_viewPosts = (Button)findViewById(R.id.viewComp_ViewPostButton);
 
 
 
@@ -94,6 +93,16 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ViewCompDetailsActivity.this, ShotPreviewActivity.class);
+                    intent.putExtra("currentComp", currentItem);
+                    startActivity(intent);
+                }
+            });
+
+            // Click Button to view posts
+            btn_viewPosts.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ViewCompDetailsActivity.this, ViewPostsActivity.class);
                     intent.putExtra("currentComp", currentItem);
                     startActivity(intent);
                 }
