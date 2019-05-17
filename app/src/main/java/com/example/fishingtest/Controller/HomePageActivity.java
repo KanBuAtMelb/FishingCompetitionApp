@@ -9,14 +9,12 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -216,7 +214,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         //Set up Drawer layout
         // DrawerLayout
-//        hideItem();
         myDrawerlayout = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, myDrawerlayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -237,6 +234,17 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 Log.e("KB_Home", "name: " + x);
             }
         }
+
+//        String provider = new String();
+//        if(list.contains(LocationManager.GPS_PROVIDER)){
+//            provider = LocationManager.GPS_PROVIDER;
+//
+//        }else if(list.contains(LocationManager.NETWORK_PROVIDER)){
+//            provider = LocationManager.NETWORK_PROVIDER;
+//        }else{
+//            Toast.makeText(this, "Please turn on your GPS or Connect to Wifi",
+//                    Toast.LENGTH_LONG).show();
+//        };
 
         Criteria criteria = new Criteria();
 
@@ -263,8 +271,8 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                         PERMISSIONS_REQUEST);
                 return;
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000,2,locationListener);
+            locationManager.requestLocationUpdates(mProvider, 1000, 2, locationListener);
+//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000,2,locationListener);
         }
     }
 
@@ -392,7 +400,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
             startActivity(addCompIntent);
 
         } else if(id == R.id.side_nav_admin_update_comp){
-            Intent updateCompIntent = new Intent(this,UpdateCompActivity.class);
+            Intent updateCompIntent = new Intent(this, EditCompActivity.class);
             startActivity(updateCompIntent);
         } else if(id == R.id.side_nav_admin_playground){
             Intent playGroundIntent = new Intent(this, AdminPlayground.class);

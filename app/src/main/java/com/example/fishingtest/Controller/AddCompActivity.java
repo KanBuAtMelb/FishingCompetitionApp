@@ -1,5 +1,7 @@
 package com.example.fishingtest.Controller;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,14 +9,19 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
@@ -38,6 +45,8 @@ public class AddCompActivity extends AppCompatActivity {
     ArrayList<String> attendants = new ArrayList<>();
     ArrayList<String> winners = new ArrayList<>();
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +66,6 @@ public class AddCompActivity extends AppCompatActivity {
         cType = (Spinner) findViewById(R.id.add_comp_type);
         cGeo= (EditText) findViewById(R.id.add_comp_geo);
         cDescription = (EditText) findViewById(R.id.add_comp_description);
-
-
 
         cAdd = (Button) findViewById(R.id.admin_button_addComp);
 

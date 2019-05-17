@@ -213,7 +213,6 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
     }
 
 
-
     public Boolean contains(Competition comp){
         return comps.contains(comp);
     }

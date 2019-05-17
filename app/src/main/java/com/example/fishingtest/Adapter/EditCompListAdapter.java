@@ -30,12 +30,13 @@ public class EditCompListAdapter extends ArrayAdapter<Competition> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.listview_comp,null, true);
 
-//        // Get the Layout Parameters for ListView Current Item View
+      // Get the Layout Parameters for ListView Current Item View
 //        ViewGroup.LayoutParams params = listViewItem.getLayoutParams();
 //
 //        // Set the height of the Item View
 //        params.height = 20;
 //        listViewItem.setLayoutParams(params);
+
 
         TextView compName = (TextView) listViewItem.findViewById(R.id.listView_compName);
         TextView compDate = (TextView) listViewItem.findViewById(R.id.listView_compDate);
@@ -44,6 +45,9 @@ public class EditCompListAdapter extends ArrayAdapter<Competition> {
 
         compName.setText(comp.getCname());
         compDate.setText(comp.getDate());
+
+        // TODO: iF it is an old competition, do something on background image
+
 
         return listViewItem;
     }

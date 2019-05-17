@@ -1,5 +1,7 @@
 package com.example.fishingtest.Controller;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -16,15 +19,20 @@ import com.example.fishingtest.Adapter.EditCompListAdapter;
 import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
-public class UpdateCompActivity extends AppCompatActivity {
+public class EditCompActivity extends AppCompatActivity {
 
 
     // Competition UI
@@ -40,6 +48,7 @@ public class UpdateCompActivity extends AppCompatActivity {
     EditText cDescription;
     ListView cListView;
 
+    Button cAddImage;
     Button cUpdate;
 
     // Firebase
@@ -51,10 +60,15 @@ public class UpdateCompActivity extends AppCompatActivity {
     ArrayList<String> attendants;
 
 
+    // For Competition Image uploading
+    static final int COMP_IMAGE_GALLERY = 22;
+    Uri imageUri;
+    ImageView profileImage;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_competition);
+        setContentView(R.layout.activity_edit_competition);
 
         compID = new String();
         image_url = new String();
@@ -115,9 +129,28 @@ public class UpdateCompActivity extends AppCompatActivity {
         });
 
 
-        cUpdate = (Button) findViewById(R.id.admin_button_updateComp);
+
+        // Click "Upload Competition Image button"
+        cAddImage = (Button) findViewById(R.id.admin_button_addCompImage);
+
+
+        cAddImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent();
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent, COMP_IMAGE_GALLERY);
+
+                clear_textView();
+            }
+        });
+
+
 
         // Click the "Add Comp" button
+        cUpdate = (Button) findViewById(R.id.admin_button_updateComp);
+
         cUpdate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -128,6 +161,24 @@ public class UpdateCompActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == COMP_IMAGE_GALLERY && resultCode == RESULT_OK && data != null) {
+            imageUri = data.getData();
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+            StorageReference imagesRef = storageRef.child("Comp_Images");
+            StorageReference fileRef = imagesRef.child(compID);
+            fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(EditCompActivity.this, "Competition image uploaded!", Toast.LENGTH_LONG).show();
+                    image_url = taskSnapshot.getDownloadUrl().toString();
+                    databaseComps.child(compID).child("image_url").setValue(image_url);
+                }
+            });
+        }
+    }
 
     @Override
     protected void onStart() {
@@ -144,7 +195,7 @@ public class UpdateCompActivity extends AppCompatActivity {
                     compList.add(comp);
                 }
 
-                EditCompListAdapter compListAdapter = new EditCompListAdapter(UpdateCompActivity.this, compList);
+                EditCompListAdapter compListAdapter = new EditCompListAdapter(EditCompActivity.this, compList);
                 cListView.setAdapter(compListAdapter);
 
             }

@@ -35,7 +35,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_register_comp"
             android:theme="@style/FullscreenTheme" />
-        <activity android:name=".Controller.EditUserActivity" />
         <activity android:name=".Controller.RegisterUserActivity" />
         <activity android:name=".Controller.LogInActivity">
             <intent-filter>
@@ -53,7 +52,7 @@
             android:parentActivityName=".Controller.HomePageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Controller.UpdateCompActivity"
+            android:name=".Controller.EditCompActivity"
             android:parentActivityName=".Controller.HomePageActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
