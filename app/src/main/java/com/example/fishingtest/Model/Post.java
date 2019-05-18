@@ -1,8 +1,9 @@
 package com.example.fishingtest.Model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Post{
+public class Post implements Serializable {
     public String postId;
     public String userId;
     public String compId;
@@ -30,5 +31,13 @@ public class Post{
 
     public String getMeasuredData() {
         return measuredData;
+    }
+
+    public String getOriDownloadUrl() {
+        return oriDownloadUrl;
+    }
+
+    public String getMeaDownloadUrl() {
+        return meaDownloadUrl;
     }
 }

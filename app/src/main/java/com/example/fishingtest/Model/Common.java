@@ -128,12 +128,14 @@ public class Common {
         String timestamp = tsLong.toString();
 
         final String competitionCategory = "Competitions";
+        final String competitionImageCategory = "Comp_Images";
+        final String postImageCategory = "Posts";
         final String originalFishPhotoCategory = "Original";
         final String measuredFishPhotoCategory = "Measured";
         final String postID = timestamp + "_" + currentUser.getUid();
 
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference compRef = storageRef.child("images").child(competitionCategory);
+        StorageReference compRef = storageRef.child(competitionImageCategory).child(postImageCategory);
         StorageReference userRef = compRef.child(currentUser.getUid());
         StorageReference postRef = userRef.child(postID);
         StorageReference originalImagesRef = postRef.child(originalFishPhotoCategory);
@@ -206,5 +208,10 @@ public class Common {
                 return null;
             }
         }
+    }
+
+    public static String timeStampToTime(String timeStamp) {
+        String result = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.parseLong(String.valueOf(timeStamp)) * 1000));
+        return result;
     }
 }

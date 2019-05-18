@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:foreground="?selectableItemBackground"
+    card_view:cardBackgroundColor="#E6E6E6"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="3dp"
+    card_view:contentPadding="2dp"
+    android:clickable="true">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/post_content"
+    <include
+        android:id="@+id/banner"
+        layout="@layout/banner_post" />
+
+    <include
+        android:id="@+id/post_row_text"
+        layout="@layout/row_post_text_data" />
+
+    <ImageView
+        android:id="@+id/imgView_post_fish_photo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="Something" />
+        android:layout_height="240dp"
+        android:layout_margin="10dp"
+        android:scaleType="fitCenter"/>
 
 </LinearLayout>
+
+</android.support.v7.widget.CardView>
