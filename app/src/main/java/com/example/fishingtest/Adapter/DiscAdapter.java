@@ -1,7 +1,9 @@
 package com.example.fishingtest.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.BoringLayout;
@@ -27,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -93,6 +97,21 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         return imageViewHolder;
     }
 
+//    private Target target = new Target() {
+//        @Override
+//        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//        }
+//
+//        @Override
+//        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+//
+//        }
+//
+//        @Override
+//        public void onPrepareLoad(Drawable placeHolderDrawable) {
+//        }
+//    };
+
     @Override
     public void onBindViewHolder(@NonNull DiscAdapter.CompViewHolder viewHolder, int position) {
 
@@ -129,7 +148,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                             temp.addRegComp(compID);
                             databaseUser.setValue(temp);
                             Log.d(TAG, "Competition" + compID + " added to User " + userID + " Registration Competition List");
-                            //Toast.makeText(context, "Competition now in your Competition List", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Competition Registered Success!", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -180,6 +199,8 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         });
 
 
+        // Competition images
+
         if(row_index ==position){
             viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
 //            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffff66"));
@@ -187,7 +208,8 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
             else{
-                // TODO: Set the customised competition image
+                // Set the customised competition image
+                Picasso.get().load(comp.getImage_url()).into(viewHolder.compImage);
             }
         }else{
             viewHolder.compTittle.setBackgroundColor(Color.parseColor("#6495ED"));
@@ -195,7 +217,12 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_blue);
             else{
-                // TODO: Set the customised competition image
+                // Set the customised competition image
+                Picasso.get().load(comp.getImage_url()).into(viewHolder.compImage);
+//                viewHolder.compImage.setAdjustViewBounds(true);
+////                viewHolder.compImage.setMaxHeight(300);
+//                viewHolder.compImage.setMaxWidth(600);
+//                viewHolder.compImage.setScaleType(ImageView.ScaleType.FIT_XY);
             }
         }
 

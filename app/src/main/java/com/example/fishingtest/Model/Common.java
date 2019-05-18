@@ -114,7 +114,6 @@ public class Common {
         try {
         // Convert string into Date
         date = df.parse("20/04/19 23:50 GMT+08:00");
-//        System.out.println("Converted by df2 = " + df.format(compDate));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -142,7 +142,6 @@ public class EditCompActivity extends AppCompatActivity {
                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent, COMP_IMAGE_GALLERY);
 
-                clear_textView();
             }
         });
 

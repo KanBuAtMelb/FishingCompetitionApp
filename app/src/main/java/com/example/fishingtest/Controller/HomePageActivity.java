@@ -169,7 +169,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         });
 
 
-
         compList = new ArrayList<>();
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
         databaseComps.addValueEventListener(new ValueEventListener() {
@@ -204,9 +203,11 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         tabLayout = findViewById(R.id.main_tablayout);
         viewPager = findViewById(R.id.main_viewpager);
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
         // Add fragments
         viewPagerAdapter.AddFragment(new DiscoveryFragment(),"Discovery");
         viewPagerAdapter.AddFragment(new MyCompetitionsFragment(), "My Competitions");
+
         // Set up adapter
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

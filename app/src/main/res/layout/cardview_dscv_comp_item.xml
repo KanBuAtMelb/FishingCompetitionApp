@@ -20,9 +20,14 @@
 
         <ImageView
             android:id="@+id/comp_image"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            app:srcCompat="@drawable/ic_fish_black"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/ic_fish_blue"
+            tools:layout_editor_absoluteX="153dp"
+            tools:layout_editor_absoluteY="16dp"
+            tools:ignore="VectorDrawableCompat"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toStartOf="@+id/comp_textlines"
             card_view:layout_constraintStart_toStartOf="parent"
@@ -30,8 +35,9 @@
 
         <LinearLayout
             android:id="@+id/comp_textlines"
-            android:layout_width="400dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toEndOf="@+id/comp_image"
             card_view:layout_constraintEnd_toEndOf="parent"

@@ -46,9 +46,6 @@ public class EditCompListAdapter extends ArrayAdapter<Competition> {
         compName.setText(comp.getCname());
         compDate.setText(comp.getDate());
 
-        // TODO: iF it is an old competition, do something on background image
-
-
         return listViewItem;
     }
 }
