@@ -403,9 +403,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         } else if(id == R.id.side_nav_admin_update_comp){
             Intent updateCompIntent = new Intent(this, EditCompActivity.class);
             startActivity(updateCompIntent);
-        } else if(id == R.id.side_nav_admin_playground){
-            Intent playGroundIntent = new Intent(this, AdminPlayground.class);
-            startActivity(playGroundIntent);
         }
         return true;
     }

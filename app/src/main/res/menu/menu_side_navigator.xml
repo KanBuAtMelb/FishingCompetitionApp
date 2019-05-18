@@ -26,9 +26,6 @@
                             android:icon="@drawable/ic_autorenew_black_24dp"
                             android:title="Update Competitions"/>
 
-                        <item android:id="@+id/side_nav_admin_playground"
-                                android:icon="@drawable/ic_search_outline_black_24dp"
-                                android:title="Playground"/>
                 </menu>
 
 
