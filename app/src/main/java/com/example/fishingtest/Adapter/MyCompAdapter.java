@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -185,6 +186,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
                     if(position>= 0){
                         row_index = position;
                         Common.currentItem = findComp(position);
+
                         notifyDataSetChanged();
                     }else{
                         Toast.makeText(context, "Please select a competition to view.",Toast.LENGTH_LONG).show();
@@ -236,12 +238,14 @@ public class MyCompAdapter extends RecyclerView.Adapter {
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            // TODO: add something here
+                            Toast.makeText(context, "Competition still Registered", Toast.LENGTH_SHORT).show();
                         }
                     });
 
                     //Unsubscribe the competition for leaving out the Notification from this competition
                     FirebaseMessaging.getInstance().unsubscribeFromTopic(compID);
+
+                    Toast.makeText(context, "Competition Removed from My Competition List", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -271,12 +275,13 @@ public class MyCompAdapter extends RecyclerView.Adapter {
         viewHolder.compDateTime.setText("Date: " + comp.getDate() + " Time: From " + comp.getStartTime() + " To " + comp.getStopTime());
 
         if (row_index == position) {
-            //viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
+            viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
 
             if (comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
             else {
-                // TODO: Set the customised competition image
+                // Set the customised competition image
+                Picasso.get().load(comp.getImage_url()).into(viewHolder.compImage);
             }
         } else {
             //viewHolder.compTittle.setBackgroundColor(Color.parseColor("#6495ED"));
@@ -284,7 +289,8 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             if (comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_deep_aqua);
             else {
-                // TODO: Set the customised competition image
+                // Set the customised competition image
+                Picasso.get().load(comp.getImage_url()).into(viewHolder.compImage);
             }
         }
 

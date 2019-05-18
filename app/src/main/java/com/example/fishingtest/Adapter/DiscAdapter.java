@@ -97,21 +97,6 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         return imageViewHolder;
     }
 
-//    private Target target = new Target() {
-//        @Override
-//        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//        }
-//
-//        @Override
-//        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-//
-//        }
-//
-//        @Override
-//        public void onPrepareLoad(Drawable placeHolderDrawable) {
-//        }
-//    };
-
     @Override
     public void onBindViewHolder(@NonNull DiscAdapter.CompViewHolder viewHolder, int position) {
 
@@ -174,12 +159,14 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        // TODO: add something here
+                        Toast.makeText(context, "Competition Registration Cancelled", Toast.LENGTH_SHORT).show();
                     }
                 });
 
                 //Subscribe this competition for waiting Notification from the competition
                 FirebaseMessaging.getInstance().subscribeToTopic(compID);
+
+                Toast.makeText(context, "Competition Registration Successful", Toast.LENGTH_SHORT).show();
             }
         });
 

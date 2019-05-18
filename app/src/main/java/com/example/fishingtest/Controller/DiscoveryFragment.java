@@ -97,7 +97,6 @@ public class DiscoveryFragment extends Fragment {
 
 
         // Get Competitions unregistered by the user from Firebase
-
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
         databaseComps.addValueEventListener(new ValueEventListener() {
             @Override
@@ -130,6 +129,7 @@ public class DiscoveryFragment extends Fragment {
             }
         });
 
+        // Sorting options
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
