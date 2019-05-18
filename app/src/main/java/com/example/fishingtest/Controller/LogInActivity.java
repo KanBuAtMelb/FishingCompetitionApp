@@ -51,13 +51,18 @@ public class LogInActivity extends AppCompatActivity {
     // Executed when Sign in button pressed
     public void signInExistingUser(View v)   {
         attemptLogin();
-
     }
 
     // Executed when Register button pressed
     public void registerNewUser(View v) {
         Intent intent = new Intent(LogInActivity.this, RegisterUserActivity.class);
+        startActivity(intent);
         finish();
+    }
+
+    // Executed when Forget My Password button pressed
+    public void forgetPassword(View v){
+        Intent intent = new Intent(LogInActivity.this, ResetPasswordActivity.class);
         startActivity(intent);
     }
 

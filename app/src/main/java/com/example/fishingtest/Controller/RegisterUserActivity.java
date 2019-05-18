@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,7 +28,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterUserActivity<pulbic> extends AppCompatActivity {
     //Tag
-    private final  String TAG = "User Registeration";
+    private final  String TAG = "User Registration";
+
+    //Toolbar
+    Toolbar mToolbar;
+
     // UI references.
     private AutoCompleteTextView mEmailView;
     private AutoCompleteTextView mUsernameView;
@@ -63,7 +68,15 @@ public class RegisterUserActivity<pulbic> extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
+    @Override
+    public void onBackPressed() {
 
+//        super.onBackPressed();
+
+        Intent intent = new Intent(RegisterUserActivity.this, LogInActivity.class);
+        finish();
+        startActivity(intent);
+    }
 
     // Executed when Sign Up button is pressed.
     public void signUp(View v) {

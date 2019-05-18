@@ -21,7 +21,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Controller.ViewPostsActivity"
+        <activity android:name=".Controller.ResetPasswordActivity"></activity>
+        <activity
+            android:name=".Controller.ViewPostsActivity"
             android:parentActivityName=".Controller.ViewCompDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -62,7 +64,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".Service.TrackingService" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
