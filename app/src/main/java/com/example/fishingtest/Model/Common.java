@@ -190,6 +190,11 @@ public class Common {
         Toast.makeText(context, "Post Success!", Toast.LENGTH_SHORT).show();
     }
 
+    public static void commentToDB(final Context context, final DatabaseReference database, Comment comment) {
+        database.setValue(comment);
+        Toast.makeText(context, "Comment Success!", Toast.LENGTH_SHORT).show();
+    }
+
     public static Uri getImageContentUri(Context context, File imageFile) {
         String filePath = imageFile.getAbsolutePath();
         Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
