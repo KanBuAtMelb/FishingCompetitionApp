@@ -284,7 +284,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
                 Picasso.get().load(comp.getImage_url()).into(viewHolder.compImage);
             }
         } else {
-            //viewHolder.compTittle.setBackgroundColor(Color.parseColor("#6495ED"));
+            viewHolder.compTittle.setBackgroundColor(Color.parseColor("#6495ED"));
 
             if (comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_deep_aqua);

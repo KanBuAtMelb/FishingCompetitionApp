@@ -81,8 +81,6 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
     public int row_index = -1;
     Context context;
-
-
     // Constructor
     public  DiscAdapter(ArrayList<Competition> comps, Context context){
         this.comps = comps;
@@ -133,7 +131,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                             temp.addRegComp(compID);
                             databaseUser.setValue(temp);
                             Log.d(TAG, "Competition" + compID + " added to User " + userID + " Registration Competition List");
-                            Toast.makeText(context, "Competition Registered Success!", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, "Competition added to your List!", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -153,7 +151,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                             temp.addAttendant(userID);
                             databaseComp.setValue(temp);
                             Log.d(TAG,"User "+userID+" added to Competition "+compID+" Attendant list");
-                            //Toast.makeText(context, "Competition Registration Succeeds", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, "Competition Registration Successful", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -167,6 +165,12 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                 FirebaseMessaging.getInstance().subscribeToTopic(compID);
 
                 Toast.makeText(context, "Competition Registration Successful", Toast.LENGTH_SHORT).show();
+
+
+                if(comps.size() == 0){
+                    row_index = -1;
+
+                }
             }
         });
 
@@ -222,7 +226,8 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
     }
 
     public void addComp(Competition comp){
-        comps.add(0,comp);
+
+        comps.add(comp);
         notifyDataSetChanged();
     }
 

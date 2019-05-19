@@ -121,6 +121,7 @@ public class DiscoveryFragment extends Fragment {
                     }
                 }
                 dAdapter.sortByName();
+                dAdapter.notifyDataSetChanged();
             }
 
             @Override
