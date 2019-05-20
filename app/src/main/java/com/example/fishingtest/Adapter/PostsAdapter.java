@@ -55,8 +55,10 @@ public class PostsAdapter extends RecyclerView.Adapter{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
-                if (user.getImagePath() != Common.NA){
+                if (!(user.getImagePath().equals(Common.NA))) {
                     Picasso.get().load(user.getImagePath()).fit().into(mHolder.userAvatar);
+                } else {
+                    mHolder.userAvatar.setImageResource(R.drawable.people);
                 }
 
                 mHolder.username.setText(user.getDisplayName());
@@ -89,7 +91,7 @@ public class PostsAdapter extends RecyclerView.Adapter{
         myPostsData.addAll(items);
     }
     public void addItem(Post item){
-        myPostsData.add(item);
+        myPostsData.add(0, item);
         notifyDataSetChanged();
     }
     public void deleteItem(int position) {

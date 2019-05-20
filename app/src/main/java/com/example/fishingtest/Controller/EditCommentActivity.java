@@ -12,6 +12,8 @@ import com.example.fishingtest.Model.Comment;
 import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Post;
 import com.example.fishingtest.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,6 +24,7 @@ public class EditCommentActivity extends AppCompatActivity {
     Post currentPost;
     DatabaseReference commentDBRef;
     DatabaseReference database;
+    FirebaseUser fbUser;
     final String competitionCategory = "Competitions";
 
     @Override
@@ -31,6 +34,11 @@ public class EditCommentActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         currentPost = (Post) intent.getSerializableExtra("selectedPost");
+
+        fbUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (fbUser == null) {
+            finish();
+        }
 
         database = FirebaseDatabase.getInstance().getReference();
 
@@ -44,7 +52,7 @@ public class EditCommentActivity extends AppCompatActivity {
                 Long tsLong = System.currentTimeMillis()/1000;
                 String timestamp = tsLong.toString();
                 String commentId = timestamp + "_" + currentPost.getPostId();
-                Comment comment = new Comment(commentId, currentPost.compId, currentPost.postId, currentPost.userId, edit_comment.getText().toString(), timestamp);
+                Comment comment = new Comment(commentId, currentPost.compId, currentPost.postId, fbUser.getUid(), edit_comment.getText().toString(), timestamp);
                 commentDBRef = database.child("Posts").child(competitionCategory).child(currentPost.getCompId()).child(currentPost.getPostId()).child("Comments").child(commentId);
                 Common.commentToDB(EditCommentActivity.this, commentDBRef, comment);
                 finish();

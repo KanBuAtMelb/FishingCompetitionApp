@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/post_detail_linear">
+
         <include
             android:id="@+id/post_detail_banner"
             layout="@layout/banner_post" />
@@ -20,7 +21,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Original Fish Photo: " />
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Original Fish Photo"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imgView_post_detail_ori"
@@ -31,7 +37,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Measured Fish Photo: " />
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Measured Fish Photo"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imgView_post_detail_mea"
@@ -43,7 +54,31 @@
             android:id="@+id/btn_post_detail_send_comment"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/fui_idp_button_background_twitter"
+            android:fontFamily="sans-serif-smallcaps"
             android:text="Send Comment"
-            android:layout_margin="10dp" />
+            android:textSize="14sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:lineSpacingExtra="18sp"
+            android:text="Comments"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/linear_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -48,12 +48,30 @@ public class ViewPostsActivity extends AppCompatActivity {
 
         postDBRef = database.child("Posts").child(competitionCategory).child(currentComp.getCompID());
 
+        database.child("Posts").child(competitionCategory).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!(dataSnapshot.hasChild(currentComp.getCompID()))) {
+                    Toast.makeText(ViewPostsActivity.this, "No one catch fish now! Go to be the first person!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         ChildEventListener postListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Post post = dataSnapshot.getValue(Post.class);
-                adapter.addItem(post);
-                Log.i("Check Add","add post Measured Data = " + post.getMeasuredData());
+                if (dataSnapshot.getChildrenCount() > 0) {
+                    Post post = dataSnapshot.getValue(Post.class);
+                    adapter.addItem(post);
+                    Log.i("Check Add","add post Measured Data = " + post.getMeasuredData());
+                } else {
+                    Toast.makeText(ViewPostsActivity.this, "No one catch fish now! Go to be the first person!", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -77,7 +95,7 @@ public class ViewPostsActivity extends AppCompatActivity {
             }
         } ;
 
-        postDBRef.addChildEventListener(postListener);
+        postDBRef.orderByChild("timeStamp").addChildEventListener(postListener);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }

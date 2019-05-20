@@ -36,6 +36,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 
 import java.io.File;
@@ -210,7 +211,8 @@ public class ShotPreviewActivity extends AppCompatActivity {
     private void getMeasureData() {
         File measuredImageFile = getLatestPhoto(this);
         measuredImageUri = Common.getImageContentUri(this, measuredImageFile);
-        imgBtn_measure.setImageURI(measuredImageUri);
+        Picasso.get().load(measuredImageUri).rotate(90).into(imgBtn_measure);
+        //imgBtn_measure.setImageURI(measuredImageUri);
         String regex = "\\d+(\\.\\d+)?cm|\\d+(\\.\\d+)?m";
         Pattern meaPattern = Pattern.compile(regex);
         Matcher meaMatcher;
