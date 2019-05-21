@@ -3,7 +3,6 @@ package com.example.fishingtest.Model;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.location.Location;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -56,7 +55,6 @@ public class Common {
     // Location
     public static double curLat = 200.0;
     public static double curLon = 200.0;
-    public static Location curLoc;
 
 //    public static List<Competition> compList = new ArrayList<>();
 //    public static List<Competition> compsBydate = new ArrayList<>();
@@ -239,34 +237,41 @@ public class Common {
         }
     }
 
-    public static double DMStoDD(String givenDMS, String geoRef) {
-        double dimensionality = 0.0;
-        if (null==givenDMS){
-            return dimensionality;
+
+    public static Boolean verifyTime(String timeStr){
+        boolean answer = false;
+
+        if(timeStr.contains(":")){
+            String[] data = timeStr.trim().split(":");
+            if(data.length ==2){
+                int hour = Integer.parseInt(data[0]);
+                int min = Integer.parseInt(data[1]);
+                if (hour <= 24 && hour >= 0) {
+                    if(min <= 60 && min >= 0)
+                        answer = true;
+
+                }
+            }
         }
-
-        String[] split = givenDMS.split(",");
-        for (int i = 0; i < split.length; i++) {
-
-            String[] s = split[i].split("/");
-            double v = Double.parseDouble(s[0]) / Double.parseDouble(s[1]);
-            dimensionality=dimensionality+v/Math.pow(60,i);
-        }
-
-        if (geoRef.equals("S") || geoRef.equals("W")) {
-            dimensionality = dimensionality * -1;
-        }
-
-        return dimensionality;
+        return answer;
     }
 
-    public static boolean ifInCircle(Location center, Location test, float radius) {
-        float distanceInMeters = center.distanceTo(test);
-        boolean isWithin = distanceInMeters < radius;
-        if (isWithin) {
-            return true;
-        } else {
-            return false;
+    public static Boolean verifyGeoInfo(String geoStr){
+        boolean answer = false;
+
+        if(geoStr.contains(",")){
+            String[] data = geoStr.trim().split(",");
+            if(data.length ==3){
+                try {
+                    double lat = Double.parseDouble(data[0]);
+                    double lon = Double.parseDouble(data[1]);
+                    double rds = Double.parseDouble(data[2]);
+                    answer = true;
+                }catch (Exception e){
+                    Log.e(TAG, "Geo info formatting incorrect");
+                }
+            }
         }
+        return answer;
     }
 }

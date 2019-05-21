@@ -198,9 +198,10 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
+
             else{
                 // Set the customised competition image
-                Picasso.get().load(comp.getImage_url()).into(viewHolder.compImage);
+                Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
             }
         }else{
             viewHolder.compTittle.setBackgroundColor(Color.parseColor("#6495ED"));
@@ -209,7 +210,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_blue);
             else{
                 // Set the customised competition image
-                Picasso.get().load(comp.getImage_url()).into(viewHolder.compImage);
+                Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
 //                viewHolder.compImage.setAdjustViewBounds(true);
 ////                viewHolder.compImage.setMaxHeight(300);
 //                viewHolder.compImage.setMaxWidth(600);

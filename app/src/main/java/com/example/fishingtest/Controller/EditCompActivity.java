@@ -1,15 +1,22 @@
 package com.example.fishingtest.Controller;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -29,10 +36,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
-public class EditCompActivity extends AppCompatActivity {
+public class EditCompActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
 
     // Competition UI
@@ -48,6 +59,7 @@ public class EditCompActivity extends AppCompatActivity {
     EditText cDescription;
     ListView cListView;
 
+    ImageButton cImage;
     Button cAddImage;
     Button cUpdate;
 
@@ -90,6 +102,7 @@ public class EditCompActivity extends AppCompatActivity {
         cResult= (EditText) findViewById(R.id.update_comp_results);
         cGeo= (EditText) findViewById(R.id.update_comp_geo);
         cDescription = (EditText) findViewById(R.id.update_comp_description);
+        cImage = (ImageButton) findViewById(R.id.update_comp_comp_image);
 
 
         // Set up Spinner
@@ -118,34 +131,50 @@ public class EditCompActivity extends AppCompatActivity {
                 cDescription.setText(comp.getcDescription());
                 cWinner.setText(comp.getWinner());
 
+                if(comp.getImage_url().equals(Common.NA)) {
+                    cImage.setImageResource(R.drawable.ic_fish_black);
+                    cImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                }
+                else{
+                    // Set the customised competition image
+                    Picasso.get().load(comp.getImage_url()).fit().into(cImage);
+                }
+
 
                 // Hold these invisible values
                 compID = comp.getCompID();
                 image_url = comp.getImage_url();
                 cStatus = comp.getcStatus();
+
                 if (comp.getAttendants().size() > 0)
                     attendants = comp.getAttendants();
             }
         });
 
 
-
-        // Click "Upload Competition Image button"
-        cAddImage = (Button) findViewById(R.id.admin_button_addCompImage);
-
-
-        cAddImage.setOnClickListener(new View.OnClickListener() {
+        // Click on the ImageButton
+        cImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent galleryIntent = new Intent();
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent, COMP_IMAGE_GALLERY);
-
             }
         });
 
 
+        // Click Competition Date to select the date on a Calendar
+        cDate.setShowSoftInputOnFocus(false);
+        cDate.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "Date Picker");
+            }
+        });
 
         // Click the "Add Comp" button
         cUpdate = (Button) findViewById(R.id.admin_button_updateComp);
@@ -154,7 +183,6 @@ public class EditCompActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 update_comp();
-                clear_textView();
             }
         });
     }
@@ -165,6 +193,7 @@ public class EditCompActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == COMP_IMAGE_GALLERY && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
+            cImage.setImageURI(imageUri);
             StorageReference storageRef = FirebaseStorage.getInstance().getReference();
             StorageReference imagesRef = storageRef.child("Comp_Images");
             StorageReference fileRef = imagesRef.child(compID);
@@ -226,10 +255,15 @@ public class EditCompActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Please enter a competition name and date and times", Toast.LENGTH_SHORT).show();
 
+        }else if(!(Common.verifyTime(startT) && Common.verifyTime(stopT))){
+            Toast.makeText(this,"Please ensure the time stamps are in format of \"HH:mm\", applying 24 hrs",Toast.LENGTH_LONG).show();
+        }else if(!Common.verifyGeoInfo(geo)){
+            Toast.makeText(this,"Please ensure the geo information is in format of \"lat, long, radius\"",Toast.LENGTH_LONG).show();
         }else{
-
             Competition comp = new Competition(compID,name,reward,date,startT,stopT,geo,attendants,result,winner,type,description, image_url, cStatus);
             databaseComps.child(compID).setValue(comp);
+            Toast.makeText(this,"Competition updated!",Toast.LENGTH_LONG).show();
+            clear_textView();
         }
     }
 
@@ -246,4 +280,17 @@ public class EditCompActivity extends AppCompatActivity {
         cDescription.setText(Common.EMPTY);
     }
 
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
+        String compDate = format.format(c.getTime());
+
+        cDate.setText(compDate);
+
+    }
 }

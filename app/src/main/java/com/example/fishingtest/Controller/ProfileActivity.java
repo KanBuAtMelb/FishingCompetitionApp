@@ -93,7 +93,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 upcoming.setText("Upcoming: " + d);
                 won.setText("Won: " + e);
 
-                if (user.getImagePath()!= Common.NA){
+                if (!user.getImagePath().equals(Common.NA)){
                     Picasso.get().load(user.getImagePath()).into(profileImage);
                 }
             }

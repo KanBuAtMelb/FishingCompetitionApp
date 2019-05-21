@@ -61,8 +61,6 @@ public class DiscoveryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
 
-        // Radio button
-        radioGroup = view.findViewById(R.id.disc_sort_group);
 
 
         // Get a reference to recyclerView
@@ -129,6 +127,10 @@ public class DiscoveryFragment extends Fragment {
                 //TODO: write something here??
             }
         });
+
+        // Radio button
+        radioGroup = view.findViewById(R.id.disc_sort_group);
+
 
         // Sorting options
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
