@@ -50,7 +50,7 @@ public class PostDetailActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
-                if (user.getImagePath().equals(Common.NA)){
+                if (user.getImagePath() != Common.NA){
                     Picasso.get().load(user.getImagePath()).fit().into(userAvatar);
                 }
 

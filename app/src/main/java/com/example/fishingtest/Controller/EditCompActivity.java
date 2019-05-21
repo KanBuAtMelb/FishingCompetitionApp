@@ -222,9 +222,6 @@ public class EditCompActivity extends AppCompatActivity {
         String geo = cGeo.getText().toString().trim();
         String description = cDescription.getText().toString().trim();
 
-        //TODO: Check date formatting
-
-
         if(TextUtils.isEmpty(name)||TextUtils.isEmpty(date)||TextUtils.isEmpty(startT)||TextUtils.isEmpty(stopT)){
 
             Toast.makeText(this, "Please enter a competition name and date and times", Toast.LENGTH_SHORT).show();
