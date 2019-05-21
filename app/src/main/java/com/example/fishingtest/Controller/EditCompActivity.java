@@ -1,6 +1,7 @@
 package com.example.fishingtest.Controller;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -29,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -48,6 +51,7 @@ public class EditCompActivity extends AppCompatActivity {
     EditText cDescription;
     ListView cListView;
 
+    ImageButton cImage;
     Button cAddImage;
     Button cUpdate;
 
@@ -90,6 +94,7 @@ public class EditCompActivity extends AppCompatActivity {
         cResult= (EditText) findViewById(R.id.update_comp_results);
         cGeo= (EditText) findViewById(R.id.update_comp_geo);
         cDescription = (EditText) findViewById(R.id.update_comp_description);
+        cImage = (ImageButton) findViewById(R.id.update_comp_comp_image);
 
 
         // Set up Spinner
@@ -118,11 +123,21 @@ public class EditCompActivity extends AppCompatActivity {
                 cDescription.setText(comp.getcDescription());
                 cWinner.setText(comp.getWinner());
 
+                if(comp.getImage_url().equals(Common.NA)) {
+                    cImage.setImageResource(R.drawable.ic_fish_black);
+                    cImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                }
+                else{
+                    // Set the customised competition image
+                    Picasso.get().load(comp.getImage_url()).fit().into(cImage);
+                }
+
 
                 // Hold these invisible values
                 compID = comp.getCompID();
                 image_url = comp.getImage_url();
                 cStatus = comp.getcStatus();
+
                 if (comp.getAttendants().size() > 0)
                     attendants = comp.getAttendants();
             }
@@ -130,20 +145,31 @@ public class EditCompActivity extends AppCompatActivity {
 
 
 
-        // Click "Upload Competition Image button"
-        cAddImage = (Button) findViewById(R.id.admin_button_addCompImage);
+//        // Click "Upload Competition Image button"
+//        cAddImage = (Button) findViewById(R.id.admin_button_addCompImage);
 
 
-        cAddImage.setOnClickListener(new View.OnClickListener() {
+        // TODO: Click on the ImageButton
+        cImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent galleryIntent = new Intent();
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent, COMP_IMAGE_GALLERY);
-
             }
         });
+
+//        cAddImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent galleryIntent = new Intent();
+//                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+//                galleryIntent.setType("image/*");
+//                startActivityForResult(galleryIntent, COMP_IMAGE_GALLERY);
+//
+//            }
+//        });
 
 
 
@@ -165,6 +191,7 @@ public class EditCompActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == COMP_IMAGE_GALLERY && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
+            cImage.setImageURI(imageUri);
             StorageReference storageRef = FirebaseStorage.getInstance().getReference();
             StorageReference imagesRef = storageRef.child("Comp_Images");
             StorageReference fileRef = imagesRef.child(compID);

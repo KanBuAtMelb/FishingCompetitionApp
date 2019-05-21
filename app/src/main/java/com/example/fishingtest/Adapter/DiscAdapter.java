@@ -198,6 +198,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
+
             else{
                 // Set the customised competition image
                 Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
