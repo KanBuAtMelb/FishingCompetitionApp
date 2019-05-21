@@ -88,6 +88,18 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
             cAttendants.setText("Attendant number : " + Integer.toString(currentItem.getAttendants().size()));
 
 
+            if (currentItem.getcStatus().equals("1")) {
+                btn_newPost.setVisibility(View.VISIBLE);
+            } else {
+                btn_newPost.setVisibility(View.INVISIBLE);
+            }
+
+            if (currentItem.getcStatus().equals("2") || currentItem.getcStatus().equals("1")) {
+                btn_viewPosts.setVisibility(View.VISIBLE);
+            } else {
+                btn_viewPosts.setVisibility(View.INVISIBLE);
+            }
+
             // Click Button to add new post
             btn_newPost.setOnClickListener(new View.OnClickListener() {
                 @Override

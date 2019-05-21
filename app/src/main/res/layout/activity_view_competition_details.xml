@@ -36,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:fontFamily="sans-serif-smallcaps"
                 android:inputType="textPersonName"
                 android:padding="8dp" />
 
@@ -44,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:fontFamily="sans-serif-smallcaps"
                 android:inputType="date"
                 android:padding="8dp" />
 
@@ -52,6 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:fontFamily="sans-serif-smallcaps"
                 android:inputType="time"
                 android:padding="8dp" />
 
@@ -60,6 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:fontFamily="sans-serif-smallcaps"
                 android:inputType="time"
                 android:padding="8dp" />
 
@@ -68,30 +72,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:fontFamily="sans-serif-smallcaps"
                 android:padding="8dp" />
 
             <TextView
                 android:id="@+id/viewComp_comp_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-smallcaps"
                 android:padding="8dp" />
 
             <TextView
                 android:id="@+id/viewComp_comp_winner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-smallcaps"
                 android:padding="8dp" />
 
             <TextView
                 android:id="@+id/viewComp_comp_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-smallcaps"
                 android:padding="8dp" />
 
             <TextView
                 android:id="@+id/viewComp_comp_attendants"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-smallcaps"
                 android:padding="8dp" />
 
 
@@ -101,16 +110,17 @@
                 android:layout_height="120dp"
                 android:layout_marginBottom="8dp"
                 android:ems="10"
+                android:fontFamily="sans-serif-smallcaps"
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:padding="8dp" />
 
             <Button
                 android:id="@+id/viewComp_PostButton"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="8dp"
+                android:layout_margin="10dp"
                 android:background="@color/yellow"
                 android:text="My New Post"
                 android:textColor="@color/colorPrimary"
@@ -118,14 +128,16 @@
 
             <Button
                 android:id="@+id/viewComp_ViewPostButton"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="8dp"
+                android:layout_margin="10dp"
                 android:background="@color/yellow"
                 android:text="View Posts"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
+
+
 
         </LinearLayout>
     </ScrollView>

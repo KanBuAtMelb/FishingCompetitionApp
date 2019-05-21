@@ -28,8 +28,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.fishingtest.Model.Common.currentItem;
-
 public class PostsAdapter extends RecyclerView.Adapter{
     List<Post> myPostsData = new ArrayList<>();
     Context mContext;

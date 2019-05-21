@@ -394,7 +394,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
                     if (Common.ifInCircle(comp_location, ori_location, comp_radius)) {
                         return true;
                     } else {
-                        Toast.makeText(this, "The photo is not taken in competition area." + Double.toString(comp_location.getLatitude()) + "," + Double.toString(comp_location.getLongitude()) + Double.toString(ori_location.getLatitude()) + "," + Double.toString(ori_location.getLongitude()), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "The photo is not taken in competition area." + "Comp Loc: " + Double.toString(comp_location.getLatitude()) + "," + Double.toString(comp_location.getLongitude()) + " OriImg Loc: " + Double.toString(ori_location.getLatitude()) + "," + Double.toString(ori_location.getLongitude()), Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 } else {
