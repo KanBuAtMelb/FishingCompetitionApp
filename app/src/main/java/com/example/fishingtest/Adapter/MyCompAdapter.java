@@ -3,7 +3,6 @@ package com.example.fishingtest.Adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,8 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -281,7 +278,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
             else {
                 // Set the customised competition image
-                Picasso.get().load(comp.getImage_url()).into(viewHolder.compImage);
+                Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
             }
         } else {
             viewHolder.compTittle.setBackgroundColor(Color.parseColor("#6495ED"));
@@ -290,7 +287,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_deep_aqua);
             else {
                 // Set the customised competition image
-                Picasso.get().load(comp.getImage_url()).into(viewHolder.compImage);
+                Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
             }
         }
 
