@@ -236,4 +236,42 @@ public class Common {
             v.requestLayout();
         }
     }
+
+
+    public static Boolean verifyTime(String timeStr){
+        boolean answer = false;
+
+        if(timeStr.contains(":")){
+            String[] data = timeStr.trim().split(":");
+            if(data.length ==2){
+                int hour = Integer.parseInt(data[0]);
+                int min = Integer.parseInt(data[1]);
+                if (hour <= 24 && hour >= 0) {
+                    if(min <= 60 && min >= 0)
+                        answer = true;
+
+                }
+            }
+        }
+        return answer;
+    }
+
+    public static Boolean verifyGeoInfo(String geoStr){
+        boolean answer = false;
+
+        if(geoStr.contains(",")){
+            String[] data = geoStr.trim().split(",");
+            if(data.length ==3){
+                try {
+                    double lat = Double.parseDouble(data[0]);
+                    double lon = Double.parseDouble(data[1]);
+                    double rds = Double.parseDouble(data[2]);
+                    answer = true;
+                }catch (Exception e){
+                    Log.e(TAG, "Geo info formatting incorrect");
+                }
+            }
+        }
+        return answer;
+    }
 }

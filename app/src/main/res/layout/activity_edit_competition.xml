@@ -51,6 +51,7 @@
         android:layout_marginBottom="4dp"
         android:ems="10"
         android:textStyle="bold"
+        android:textAlignment="center"
         android:hint="Comp Name"
         android:inputType="text"
         app:layout_constraintTop_toBottomOf="@+id/update_comp_listview"
@@ -87,7 +88,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
                 android:hint="Comp Reward"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textAlignment="center"/>
 
             <EditText
                 android:id="@+id/update_comp_date"
@@ -95,7 +97,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
                 android:hint="Comp Date"
-                android:inputType="date" />
+                android:inputType="none"
+                android:textAlignment="center"/>
 
             <EditText
                 android:id="@+id/update_comp_start_time"
@@ -103,7 +106,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
                 android:hint="Start Time"
-                android:inputType="time" />
+                android:inputType="time"
+                android:textAlignment="center"/>
 
             <EditText
                 android:id="@+id/update_comp_stop_time"
@@ -111,7 +115,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
                 android:hint="Stop Time"
-                android:inputType="time" />
+                android:inputType="time"
+                android:textAlignment="center"/>
         </LinearLayout>
 
 
@@ -132,7 +137,7 @@
     <ScrollView
         android:id="@+id/update_comp_items"
         android:layout_width="match_parent"
-        android:layout_height="500px"
+        android:layout_height="450px"
         app:layout_constraintTop_toBottomOf="@+id/update_comp_image_and_date"
         app:layout_constraintBottom_toTopOf="@id/admin_button_updateComp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -142,8 +147,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-
-
 
             <Spinner
                 android:id="@+id/update_comp_type"
@@ -165,12 +168,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="2dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="2dp"
                 android:ems="10"
                 android:hint="Comp_Geo (lat, lng, radius[km])"
                 android:inputType="text"
+
                 app:layout_constraintBottom_toTopOf="@+id/update_comp_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -181,9 +185,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginStart="2dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="2dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="2dp"
                 android:ems="10"
                 android:hint="Comp_Description"
                 android:inputType="textMultiLine"
@@ -197,9 +201,9 @@
                 android:layout_width="392dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="2dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="2dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@+id/admin_button_updateComp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -234,12 +238,11 @@
     <Button
         android:id="@+id/admin_button_updateComp"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_margin="4dp"
-        android:layout_marginStart="2dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="20dp"
         android:background="@color/cardview_light_background"
         android:text="Update Competition"
         app:layout_constraintBottom_toBottomOf="parent"
