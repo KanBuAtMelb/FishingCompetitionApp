@@ -13,6 +13,10 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.icu.text.DateFormatSymbols;
+import android.icu.util.DateInterval;
+import android.location.Location;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -41,6 +45,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -64,12 +70,18 @@ public class ShotPreviewActivity extends AppCompatActivity {
     public static File tempFile;
     private Uri originalImageUri;
     private Uri measuredImageUri;
+    private static File originalFilePath;
+    private static File measuredFilePath;
     boolean photoReady = false;
     boolean measuredDataReady = false;
     String measuredLong;
     Competition currentComp;
     DatabaseReference database;
     FirebaseUser fbUser;
+    Location comp_location;
+    Double comp_latitude;
+    Double comp_longitude;
+    float comp_radius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +104,19 @@ public class ShotPreviewActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         currentComp = (Competition) intent.getSerializableExtra("currentComp");
+
+        comp_latitude = Double.parseDouble(currentComp.getGeo_map().split(",")[0]);
+        comp_longitude = Double.parseDouble(currentComp.getGeo_map().split(",")[1]);
+
+        try {
+            comp_radius = Float.valueOf((currentComp.getGeo_map().split(",")[2]).trim()).floatValue() * 1000;
+        } catch (NumberFormatException e) {
+            Toast.makeText(ShotPreviewActivity.this, "Competition radius wrong.",Toast.LENGTH_SHORT).show();
+        }
+
+        comp_location = new Location("");
+        comp_location.setLatitude(comp_latitude);
+        comp_location.setLongitude(comp_longitude);
 
         imgBtn_shot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,10 +155,22 @@ public class ShotPreviewActivity extends AppCompatActivity {
         btn_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Todo: Ziqi need to do Geo Check and Image Fresh Check
-                Toast.makeText(ShotPreviewActivity.this, "You click the post button",Toast.LENGTH_SHORT).show();
-                Common.uploadFishingPost(ShotPreviewActivity.this, database, fbUser, currentComp, originalImageUri, measuredImageUri, measuredLong);
-                finish();
+                if (Common.curLoc != null) {
+                    boolean freshFlag = checkImageFresh(originalFilePath, measuredFilePath);
+
+                    if (Common.ifInCircle(comp_location, Common.curLoc, comp_radius)) {
+                        if (freshFlag) {
+                            Toast.makeText(ShotPreviewActivity.this, "You clicked the post button",Toast.LENGTH_SHORT).show();
+                            Common.uploadFishingPost(ShotPreviewActivity.this, database, fbUser, currentComp, originalImageUri, measuredImageUri, measuredLong);
+                            finish();
+                        }
+                    } else {
+                        Toast.makeText(ShotPreviewActivity.this, "Your location is not in competition area.",Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(ShotPreviewActivity.this, "Sorry, Your location is not ready or you are staying in room with WiFi, Please move your step at outside to active it.",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -253,6 +290,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
             if (currentapiVersion < 24) {
                 // create file uri
                 originalImageUri = Uri.fromFile(tempFile);
+                originalFilePath = tempFile;
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, originalImageUri);
             } else {
                 //compatite with Android 7.0
@@ -266,6 +304,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
                     return;
                 }
                 originalImageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                originalFilePath = tempFile;
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, originalImageUri);
             }
         }
@@ -301,6 +340,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         if (Objects.requireNonNull(cursor).moveToFirst()) {
             cameraPair = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
             File imagefile = new File(cameraPair);
+            measuredFilePath = imagefile;
             return imagefile;
         }
         return null;
@@ -313,7 +353,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == REQUEST_CODE_ASK_Take_Photo_Action){
-            if (grantResults.length > 0) {//grantResults 数组中存放的是授权结果
+            if (grantResults.length > 0) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     openCamera();
                 }else {
@@ -329,5 +369,47 @@ public class ShotPreviewActivity extends AppCompatActivity {
                 Toast.makeText(this, "No permission for get Measure Data", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private boolean checkImageFresh(File oriImg, File meaImg) {
+        try {
+            long fiveMins = 60*5;
+            long threeMins = 60*3;
+
+            Long ori_fileTime = (oriImg.lastModified())/1000;
+            Long mea_fileTime = (meaImg.lastModified())/1000;
+            Long current_time = System.currentTimeMillis()/1000;
+
+            if (((current_time - ori_fileTime) < fiveMins) && ((current_time - mea_fileTime) < fiveMins)) {
+                if (Math.abs(mea_fileTime - ori_fileTime) <= threeMins) {
+                    ExifInterface ori_exifInterface = new ExifInterface(oriImg.getPath());
+
+                    Double ori_latitude = Common.DMStoDD(ori_exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE), ori_exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF));
+                    Double ori_longitude = Common.DMStoDD(ori_exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE), ori_exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF));
+
+                    Location ori_location = new Location("");
+                    ori_location.setLatitude(ori_latitude);
+                    ori_location.setLongitude(ori_longitude);
+
+                    if (Common.ifInCircle(comp_location, ori_location, comp_radius)) {
+                        return true;
+                    } else {
+                        Toast.makeText(this, "The photo is not taken in competition area." + Double.toString(comp_location.getLatitude()) + "," + Double.toString(comp_location.getLongitude()) + Double.toString(ori_location.getLatitude()) + "," + Double.toString(ori_location.getLongitude()), Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                } else {
+                    Toast.makeText(this, "The time difference between the two photos can not exceed 3 minutes.", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            } else {
+                Toast.makeText(this, "Both photos must be taken in 5 minutes.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Given photo is not correct", Toast.LENGTH_SHORT).show();
+        }
+
+        Toast.makeText(this, "Given photo is not correct", Toast.LENGTH_SHORT).show();
+        return false;
     }
 }

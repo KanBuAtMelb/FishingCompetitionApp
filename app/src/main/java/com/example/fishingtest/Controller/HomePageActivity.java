@@ -113,6 +113,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         public void onLocationChanged(Location location) {
             Log.e("KB_Home","onLocationChanged" + location.toString());
             databaseGPS.setValue(location);
+            Common.curLoc = location;
             Common.curLat = location.getLatitude();
             Common.curLon = location.getLongitude();
         }

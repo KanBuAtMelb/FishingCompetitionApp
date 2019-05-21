@@ -3,6 +3,7 @@ package com.example.fishingtest.Model;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.location.Location;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -55,6 +56,7 @@ public class Common {
     // Location
     public static double curLat = 200.0;
     public static double curLon = 200.0;
+    public static Location curLoc;
 
 //    public static List<Competition> compList = new ArrayList<>();
 //    public static List<Competition> compsBydate = new ArrayList<>();
@@ -234,6 +236,37 @@ public class Common {
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
             p.setMargins(l, t, r, b);
             v.requestLayout();
+        }
+    }
+
+    public static double DMStoDD(String givenDMS, String geoRef) {
+        double dimensionality = 0.0;
+        if (null==givenDMS){
+            return dimensionality;
+        }
+
+        String[] split = givenDMS.split(",");
+        for (int i = 0; i < split.length; i++) {
+
+            String[] s = split[i].split("/");
+            double v = Double.parseDouble(s[0]) / Double.parseDouble(s[1]);
+            dimensionality=dimensionality+v/Math.pow(60,i);
+        }
+
+        if (geoRef.equals("S") || geoRef.equals("W")) {
+            dimensionality = dimensionality * -1;
+        }
+
+        return dimensionality;
+    }
+
+    public static boolean ifInCircle(Location center, Location test, float radius) {
+        float distanceInMeters = center.distanceTo(test);
+        boolean isWithin = distanceInMeters < radius;
+        if (isWithin) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
