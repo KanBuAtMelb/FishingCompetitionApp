@@ -21,6 +21,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Controller.EditCommentActivity"
+            android:parentActivityName=".Controller.PostDetailActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Controller.PostDetailActivity"
             android:parentActivityName=".Controller.ViewPostsActivity"

@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -190,6 +192,11 @@ public class Common {
         Toast.makeText(context, "Post Success!", Toast.LENGTH_SHORT).show();
     }
 
+    public static void commentToDB(final Context context, final DatabaseReference database, Comment comment) {
+        database.setValue(comment);
+        Toast.makeText(context, "Comment Success!", Toast.LENGTH_SHORT).show();
+    }
+
     public static Uri getImageContentUri(Context context, File imageFile) {
         String filePath = imageFile.getAbsolutePath();
         Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -213,5 +220,20 @@ public class Common {
     public static String timeStampToTime(String timeStamp) {
         String result = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.parseLong(String.valueOf(timeStamp)) * 1000));
         return result;
+    }
+
+    public static int dpToPx(Context context, int dp) {
+        float density = context.getResources()
+                .getDisplayMetrics()
+                .density;
+        return Math.round((float) dp * density);
+    }
+
+    public static void setMargins (View v, int l, int t, int r, int b) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins(l, t, r, b);
+            v.requestLayout();
+        }
     }
 }

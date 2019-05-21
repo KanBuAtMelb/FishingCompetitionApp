@@ -108,16 +108,8 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
                 }
             });
 
-
             // Button only visible for competition in progress
-
-
-
-
-            // Display Posts
-            // Todo: Ziqi to do the view of post recycleview
-
-
+            // Todo: Ziqi to do visible for competition in progress
         }
 
     }

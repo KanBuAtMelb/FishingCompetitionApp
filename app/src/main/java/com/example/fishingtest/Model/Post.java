@@ -40,4 +40,12 @@ public class Post implements Serializable {
     public String getMeaDownloadUrl() {
         return meaDownloadUrl;
     }
+
+    public String getCompId() {
+        return compId;
+    }
+
+    public String getPostId() {
+        return postId;
+    }
 }
