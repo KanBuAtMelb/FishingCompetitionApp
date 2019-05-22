@@ -101,6 +101,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
     LocationManager locationManager;
     DatabaseReference databaseGPS;
     MyLocationListener locationListener;
+    String mProvider = new String();
 
 
     private final class MyLocationListener implements LocationListener {
@@ -226,7 +227,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
-        // GPS
+        // GPS list for available provider
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         List<String> list = locationManager.getProviders(true);
@@ -237,30 +238,31 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
             }
         }
 
-//        String provider = new String();
-//        if(list.contains(LocationManager.GPS_PROVIDER)){
-//            provider = LocationManager.GPS_PROVIDER;
+
+
+        if(list.contains(LocationManager.GPS_PROVIDER)){
+            mProvider = LocationManager.GPS_PROVIDER;
+
+        }else if(list.contains(LocationManager.NETWORK_PROVIDER)){
+            mProvider = LocationManager.NETWORK_PROVIDER;
+        }else{
+            Toast.makeText(this, "Please turn on your GPS or Connect to Wifi",
+                    Toast.LENGTH_LONG).show();
+        };
+
+//        Criteria criteria = new Criteria();
 //
-//        }else if(list.contains(LocationManager.NETWORK_PROVIDER)){
-//            provider = LocationManager.NETWORK_PROVIDER;
-//        }else{
-//            Toast.makeText(this, "Please turn on your GPS or Connect to Wifi",
-//                    Toast.LENGTH_LONG).show();
-//        };
-
-        Criteria criteria = new Criteria();
-
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
-        criteria.setBearingAccuracy(Criteria.ACCURACY_HIGH);
-        criteria.setSpeedAccuracy(Criteria.ACCURACY_HIGH);
-        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
-        criteria.setVerticalAccuracy(Criteria.ACCURACY_HIGH);
-
-        String mProvider = locationManager.getBestProvider(criteria, true);
-        if (mProvider != null) {
-            Log.e("KB_Home", "mProvider:" + mProvider);
-        }
+//        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+//        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
+//        criteria.setBearingAccuracy(Criteria.ACCURACY_HIGH);
+//        criteria.setSpeedAccuracy(Criteria.ACCURACY_HIGH);
+//        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
+//        criteria.setVerticalAccuracy(Criteria.ACCURACY_HIGH);
+//
+//        String mProvider = locationManager.getBestProvider(criteria, true);
+//        if (mProvider != null) {
+//            Log.e("KB_Home", "mProvider:" + mProvider);
+//        }
 
        locationListener = new MyLocationListener();
 
@@ -304,8 +306,9 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 //            startTrackerService();
 
 
+//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
+//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
         } else {
 
             //If the user denies the permission request, then display a toast with some more information//
