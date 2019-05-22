@@ -131,7 +131,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         @Override
         public void onProviderDisabled(String provider) {
-            Log.e("KB_Home","onProviderDisabled");
+            Log.e("KB_Home","onProviderDisabled: " + provider);
         }
     }
 
@@ -229,7 +229,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         // GPS list for available provider
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
         List<String> list = locationManager.getProviders(true);
 
         if (list != null) {
@@ -237,8 +236,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 Log.e("KB_Home", "name: " + x);
             }
         }
-
-
 
         if(list.contains(LocationManager.GPS_PROVIDER)){
             mProvider = LocationManager.GPS_PROVIDER;
@@ -275,7 +272,10 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                         PERMISSIONS_REQUEST);
                 return;
             }
-            locationManager.requestLocationUpdates(mProvider, 1000, 2, locationListener);
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
+//            locationManager.requestLocationUpdates(mProvider, 1000, 2, locationListener);
 //            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000,2,locationListener);
         }
     }
@@ -308,7 +308,12 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
 //            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
 //            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
+
+
+            locationManager.requestLocationUpdates(mProvider, 1000,1,locationListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
+
         } else {
 
             //If the user denies the permission request, then display a toast with some more information//
