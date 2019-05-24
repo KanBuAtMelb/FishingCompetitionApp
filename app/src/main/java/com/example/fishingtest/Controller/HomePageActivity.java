@@ -309,7 +309,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 //            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
 
 
-            locationManager.requestLocationUpdates(mProvider, 1000,1,locationListener);
+//            locationManager.requestLocationUpdates(mProvider, 1000,1,locationListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
 
@@ -392,8 +392,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                             // stop GPS service
 //                            stopTrackerService();
                             locationManager.removeUpdates(locationListener);
-
-
 
                             // delete GPS Live data in Firebase
                             databaseGPS.removeValue();
