@@ -69,6 +69,7 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
 
     public int row_index = -1;
     Context context;
+
     // Constructor
     public WinnerPostListAdapter(ArrayList<Post> posts, Context context){
         this.posts = posts;
@@ -98,6 +99,7 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 uName = dataSnapshot.getValue(String.class);
+                viewHolder.author.setText("Author: " + uName);
             }
 
             @Override
@@ -106,7 +108,7 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
                 Toast.makeText(context,"User error", Toast.LENGTH_SHORT).show();
             }
         });
-        viewHolder.author.setText("Author: " + uName);
+
 
         // Display post date and time
         Calendar c = Calendar.getInstance();

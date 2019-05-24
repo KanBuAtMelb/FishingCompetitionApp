@@ -51,6 +51,7 @@ public class AddCompResultsActivity extends AppCompatActivity {
 
     // Competition selected
     String compID;
+    String compName;
     String cStatus;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,8 @@ public class AddCompResultsActivity extends AppCompatActivity {
                     Competition comp = compSnapshot.getValue(Competition.class);
                     if(comp.getcStatus().equals(WAIT_FOR_RESULTS_STATUS)){
                         comp.checkArrayList();
-                        compList.add(comp);
+                        if(comp.getWinner().equals(Common.NA) && comp.getResults().equals(Common.NA) && comp.getcStatus().equals("2"))
+                            compList.add(comp);
                     }
 
                 }
@@ -117,6 +119,7 @@ public class AddCompResultsActivity extends AppCompatActivity {
 
                 // Hold these invisible values
                 compID = comp.getCompID();
+                compName = comp.getCname();
                 cStatus = comp.getcStatus();     // TODO: DO WE NEED IT?
             }
         });
@@ -127,6 +130,7 @@ public class AddCompResultsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent selectResultIntent = new Intent(AddCompResultsActivity.this, SelectCompWinnerActivity.class);
                 selectResultIntent.putExtra(Common.compID,compID);
+                selectResultIntent.putExtra(Common.compName, compName);
                 startActivity(selectResultIntent);
 
             }

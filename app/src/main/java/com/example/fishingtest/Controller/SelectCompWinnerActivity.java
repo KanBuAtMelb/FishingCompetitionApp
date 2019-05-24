@@ -42,6 +42,7 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
 
     String compID;
     String userID;
+    String userName;
     String compResult;
 
 
@@ -63,12 +64,46 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
         // Create an adapter
         posts = new ArrayList<>();
         pAdapter = new WinnerPostListAdapter(posts, this);
+
         // Set adaptor
         recyclerView.setAdapter(pAdapter);
 
 
         // Get the winner information from the adapter
+
+        cName.setText(getIntent().getStringExtra(Common.compName));
+
+        if(Common.currentPostItem != null) {
+            userID = Common.currentPostItem.userId;
+
+            // Get winner name
+            databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
+            databaseUser.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot userSnapshot: dataSnapshot.getChildren()){
+                        User temp = userSnapshot.getValue(User.class);
+                        userName = temp.getDisplayName();
+                        cWinner.setText(userName);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }else{
+            Toast.makeText(this, "Please select a Post as the Winner", Toast.LENGTH_SHORT).show();
+        }
+
+
+        // Competation FirebasecompID
         compID = getIntent().getStringExtra(Common.compID);
+        databaseComp = FirebaseDatabase.getInstance().getReference("Competitions").child(compID);
+
+        // Get Post list from Firebase
         databasePost = FirebaseDatabase.getInstance().getReference("Posts").child("Competitions").child(compID);
         databasePost.addValueEventListener(new ValueEventListener() {
             @Override
@@ -89,6 +124,7 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
             }
         });
 
+
         // Click button to confirm result
         btnAddCompResult.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,8 +143,7 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
                     userID = post.getTimeStamp();
                     compResult = post.getMeasuredData();
 
-                    databaseComp = FirebaseDatabase.getInstance().getReference("Competitions").child(compID);
-                    databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
+
 
                     // Update Users database
                     databaseUser.addListenerForSingleValueEvent(new ValueEventListener() {

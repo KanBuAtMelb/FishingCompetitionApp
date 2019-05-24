@@ -75,6 +75,7 @@ public class Common {
 
     // Used in Competition result selection
     public static String compID = "compID";
+    public static String compName = "compName";
 
 
     // Check the time to the competition date
