@@ -1,6 +1,7 @@
 package com.example.fishingtest.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -133,6 +134,14 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
 
             }
         });
+
+        if(row_index ==position){
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#FFE4F3"));
+
+        }else{
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#FFEEF2"));
+
+        }
 
     }
 

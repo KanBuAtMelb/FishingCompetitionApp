@@ -1,5 +1,6 @@
 package com.example.fishingtest.Controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,8 +31,8 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
 
     TextView cName;
     RecyclerView recyclerView;
-    TextView cWinner;
-    TextView cResult;
+//    TextView cWinner;
+//    TextView cResult;
     Button btnAddCompResult;
 
     ArrayList<Post> posts;
@@ -54,8 +55,8 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
         // UI
         cName = (TextView) findViewById(R.id.view_comp_results_comp_name);
         recyclerView = (RecyclerView)findViewById(R.id.view_comp_results_post_list);
-        cWinner = (TextView) findViewById(R.id.view_comp_results_comp_winner);
-        cResult = (TextView) findViewById(R.id.view_comp_results_comp_result);
+//        cWinner = (TextView) findViewById(R.id.view_comp_results_comp_winner);
+//        cResult = (TextView) findViewById(R.id.view_comp_results_comp_result);
         btnAddCompResult = (Button) findViewById(R.id.admin_button_add_comp_result);
 
         // Set up RecyclerView
@@ -158,6 +159,11 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
 
                         }
                     });
+
+                    Intent selectCompIntent = new Intent(SelectCompWinnerActivity.this, AddCompResultsActivity.class);
+                    startActivity(selectCompIntent);
+                    finish();
+
 
                 }else{
                     Toast.makeText(SelectCompWinnerActivity.this, "Please select a post", Toast.LENGTH_SHORT).show();

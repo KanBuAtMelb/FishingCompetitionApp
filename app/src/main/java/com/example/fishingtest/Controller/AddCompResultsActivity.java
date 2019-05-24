@@ -2,18 +2,14 @@ package com.example.fishingtest.Controller;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.TestLooperManager;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fishingtest.Adapter.EditCompListAdapter;
 import com.example.fishingtest.Model.Common;
@@ -24,9 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -110,13 +103,19 @@ public class AddCompResultsActivity extends AppCompatActivity {
                 Competition comp = compList.get(position);
 
                 cName.setText(comp.getCname());
-                cDate.setText(comp.getDate());
-                cStartTime.setText(comp.getStartTime());
-                cStopTime.setText(comp.getStopTime());
-                cReward.setText(Integer.toString(comp.getReward()));
+                cDate.setText("Date: " + comp.getDate());
+                cStartTime.setText("Start at: "+comp.getStartTime());
+                cStopTime.setText("Stop at: " + comp.getStopTime());
+
+                try{
+                    cReward.setText("Reward: $" + Integer.toString(comp.getReward()) + " AUD");
+                }
+                catch(Exception e){
+                    Toast.makeText(AddCompResultsActivity.this,"Reward data type incorrect",Toast.LENGTH_SHORT).show();
+                };
 
                 String[] compTypes = getBaseContext().getResources().getStringArray(R.array.comp_type);
-                cType.setText(compTypes[comp.getCompType()]);
+                cType.setText("Competition Type: "+compTypes[comp.getCompType()]);
 
                 // Hold these invisible values
                 compID = comp.getCompID();
@@ -139,5 +138,11 @@ public class AddCompResultsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
 
+        Intent goBack = new Intent(AddCompResultsActivity.this, HomePageActivity.class);
+        startActivity(goBack);
+        finish();
+    }
 }

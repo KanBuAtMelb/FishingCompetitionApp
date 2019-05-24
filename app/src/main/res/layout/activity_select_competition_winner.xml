@@ -37,6 +37,7 @@
         android:ems="10"
         android:textStyle="bold"
         android:textAlignment="center"
+        android:textSize="30dp"
         android:hint="Comp Name"
         android:inputType="text"
         app:layout_constraintTop_toBottomOf="@+id/view_comp_results_page_title"
@@ -52,49 +53,9 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/view_comp_results_comp_name"
-        app:layout_constraintBottom_toTopOf="@+id/view_comp_results_winner_box"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-
-
-
-    <LinearLayout
-        android:id="@+id/view_comp_results_winner_box"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="10"
-        app:layout_constraintTop_toBottomOf="@+id/view_comp_results_post_list"
         app:layout_constraintBottom_toTopOf="@+id/admin_button_add_comp_result"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-
-        <TextView
-            android:id="@+id/view_comp_results_comp_winner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
-            android:layout_weight="10"
-            android:ems="10"
-            android:hint="Comp Winner"
-            android:inputType="text" />
-
-        <TextView
-            android:id="@+id/view_comp_results_comp_result"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_weight="10"
-            android:ems="10"
-            android:hint="Comp Result"
-            android:inputType="text" />
-
-    </LinearLayout>
-
-
-
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <Button
         android:id="@+id/admin_button_add_comp_result"
@@ -106,7 +67,7 @@
         android:layout_marginBottom="20dp"
         android:background="@color/cardview_light_background"
         android:text="Update Competition"
-        app:layout_constraintTop_toBottomOf="@+id/view_comp_results_winner_box"
+        app:layout_constraintTop_toBottomOf="@+id/view_comp_results_post_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

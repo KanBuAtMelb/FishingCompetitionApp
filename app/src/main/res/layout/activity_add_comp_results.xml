@@ -28,10 +28,10 @@
     <ListView
         android:id="@+id/add_comp_result_comp_list"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:layout_margin="6dp"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="2dp"
         android:layout_marginBottom="4dp"
         android:divider="@color/warm_grey"
@@ -56,6 +56,20 @@
         android:hint="Comp Name"
         android:inputType="text"
         app:layout_constraintTop_toBottomOf="@+id/add_comp_result_comp_list"
+        app:layout_constraintBottom_toTopOf="@+id/update_comp_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/update_comp_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:hint="Comp Date"
+        android:inputType="none"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/add_comp_result_comp_name"
         app:layout_constraintBottom_toTopOf="@+id/add_comp_result_comp_date_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -66,22 +80,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/add_comp_result_comp_name"
+        app:layout_constraintTop_toBottomOf="@+id/update_comp_date"
         app:layout_constraintBottom_toTopOf="@+id/update_comp_reward"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="10dp">
         
 
-        <TextView
-            android:id="@+id/update_comp_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:textSize="20dp"
-            android:hint="Comp Date"
-            android:inputType="none"
-            android:textAlignment="center"/>
 
         <TextView
             android:id="@+id/update_comp_start_time"
@@ -114,6 +119,7 @@
         android:textSize="20dp"
         android:textStyle="bold"
         android:textAlignment="center"
+        android:hint="Reward"
         app:layout_constraintTop_toBottomOf="@+id/add_comp_result_comp_date_time"
         app:layout_constraintBottom_toTopOf="@+id/add_comp_result_comp_type"
         app:layout_constraintEnd_toEndOf="parent"
