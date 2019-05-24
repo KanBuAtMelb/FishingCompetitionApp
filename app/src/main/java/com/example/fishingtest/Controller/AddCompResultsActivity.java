@@ -3,6 +3,7 @@ package com.example.fishingtest.Controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.TestLooperManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -54,7 +55,8 @@ public class AddCompResultsActivity extends AppCompatActivity {
     String compName;
     String cStatus;
 
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_comp_results);
 
@@ -72,7 +74,7 @@ public class AddCompResultsActivity extends AppCompatActivity {
                     Competition comp = compSnapshot.getValue(Competition.class);
                     if(comp.getcStatus().equals(WAIT_FOR_RESULTS_STATUS)){
                         comp.checkArrayList();
-                        if(comp.getWinner().equals(Common.NA) && comp.getResults().equals(Common.NA) && comp.getcStatus().equals("2"))
+                        if(comp.getWinner().equals(Common.NA) && comp.getResults().equals(Common.NA))
                             compList.add(comp);
                     }
 
@@ -80,7 +82,6 @@ public class AddCompResultsActivity extends AppCompatActivity {
 
                 EditCompListAdapter compListAdapter = new EditCompListAdapter(AddCompResultsActivity.this, compList);
                 cListView.setAdapter(compListAdapter);
-
             }
 
             @Override
@@ -129,8 +130,8 @@ public class AddCompResultsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent selectResultIntent = new Intent(AddCompResultsActivity.this, SelectCompWinnerActivity.class);
-                selectResultIntent.putExtra(Common.compID,compID);
-                selectResultIntent.putExtra(Common.compName, compName);
+                selectResultIntent.putExtra(Common.COMPID,compID);
+                selectResultIntent.putExtra(Common.COMPNAME, compName);
                 startActivity(selectResultIntent);
 
             }

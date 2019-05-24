@@ -71,36 +71,12 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
 
         // Get the winner information from the adapter
 
-        cName.setText(getIntent().getStringExtra(Common.compName));
+        cName.setText(getIntent().getStringExtra(Common.COMPNAME));
 
-        if(Common.currentPostItem != null) {
-            userID = Common.currentPostItem.userId;
-
-            // Get winner name
-            databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
-            databaseUser.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot userSnapshot: dataSnapshot.getChildren()){
-                        User temp = userSnapshot.getValue(User.class);
-                        userName = temp.getDisplayName();
-                        cWinner.setText(userName);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-        }else{
-            Toast.makeText(this, "Please select a Post as the Winner", Toast.LENGTH_SHORT).show();
-        }
 
 
         // Competation FirebasecompID
-        compID = getIntent().getStringExtra(Common.compID);
+        compID = getIntent().getStringExtra(Common.COMPID);
         databaseComp = FirebaseDatabase.getInstance().getReference("Competitions").child(compID);
 
         // Get Post list from Firebase
@@ -130,22 +106,16 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(pAdapter.row_index >=0){ // check if any post selected
+                if(Common.currentPostItem !=null){ // check if any post selected
 
                     Post post = Common.currentPostItem;
 
-                    // TODO: Update Competition status in Competitions database
-
-                    // TODO: Update User comp_won in Users database
-
-
-                    compID = post.getCompId();
-                    userID = post.getTimeStamp();
-                    compResult = post.getMeasuredData();
-
+                    userID = Common.currentPostItem.getUserId();
 
 
                     // Update Users database
+                    databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
+
                     databaseUser.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -181,9 +151,6 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
 
                             temp.setResults(post.getMeasuredData());
                             databaseComp.setValue(temp);
-//                                Log.d(TAG,"User "+userID+" added to Competition "+compID+" Attendant list");
-//                            Toast.makeText(context, "Competition Registration Successful", Toast.LENGTH_SHORT).show();
-
                         }
 
                         @Override
@@ -191,7 +158,6 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
 
                         }
                     });
-
 
                 }else{
                     Toast.makeText(SelectCompWinnerActivity.this, "Please select a post", Toast.LENGTH_SHORT).show();

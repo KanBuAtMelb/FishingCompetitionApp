@@ -26,10 +26,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 
-public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAdapter.CompViewHolder>{
+public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAdapter.PostViewHolder>{
 
     // New class addressing each "Competition" item view in the list
-    class CompViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class PostViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView compImage;
         TextView author;
@@ -38,7 +38,7 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
 
         ItemClickListener itemClickListener;
 
-        public CompViewHolder(View itemView){
+        public PostViewHolder(View itemView){
             super(itemView);
             compImage = itemView.findViewById(R.id.comp_image);
             author = itemView.findViewById(R.id.post_author);
@@ -78,14 +78,14 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
 
     @NonNull
     @Override
-    public WinnerPostListAdapter.CompViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public PostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_select_comp_results_comp_item,viewGroup,false);
-        WinnerPostListAdapter.CompViewHolder imageViewHolder = new WinnerPostListAdapter.CompViewHolder(view);
+        PostViewHolder imageViewHolder = new PostViewHolder(view);
         return imageViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WinnerPostListAdapter.CompViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull PostViewHolder viewHolder, int position) {
 
         final Post post = posts.get(position);
 
@@ -112,7 +112,7 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
 
         // Display post date and time
         Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(Long.getLong(post.getTimeStamp()));
+        c.setTimeInMillis(Long.parseLong(post.getTimeStamp()));
 
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
         postTime = formatter.format(c.getTime());

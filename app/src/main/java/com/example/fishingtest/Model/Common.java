@@ -74,8 +74,8 @@ public class Common {
     public static String user_admin = "Administrator";
 
     // Used in Competition result selection
-    public static String compID = "compID";
-    public static String compName = "compName";
+    public static String COMPID = "compID";
+    public static String COMPNAME = "compName";
 
 
     // Check the time to the competition date
