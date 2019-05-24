@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import static com.example.fishingtest.Model.Common.currentCompItem;
 
@@ -27,6 +29,7 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
     TextView cAttendants;
     TextView cDescription;
 
+    FirebaseUser fbUser;
 
     Button btn_newPost;
     Button btn_viewPosts;
@@ -51,7 +54,10 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
         btn_newPost = (Button)findViewById(R.id.viewComp_PostButton);
         btn_viewPosts = (Button)findViewById(R.id.viewComp_ViewPostButton);
 
-
+        fbUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (fbUser == null) {
+            finish();
+        }
 
         if(currentCompItem != null){
             currentCompItem.checkArrayList();
@@ -77,13 +83,15 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
             cAttendants.setText("Attendant number : " + Integer.toString(currentCompItem.getAttendants().size()));
 
 
-            if (currentCompItem.getcStatus().equals("1")) {
+
+            if (currentItem.getcStatus().equals("1") && checkWhetherReigstered()) {
                 btn_newPost.setVisibility(View.VISIBLE);
             } else {
                 btn_newPost.setVisibility(View.INVISIBLE);
             }
 
-            if (currentCompItem.getcStatus().equals("2") || currentCompItem.getcStatus().equals("1")) {
+
+            if (currentItem.getcStatus().equals("2") || currentItem.getcStatus().equals("1") || currentItem.getcStatus().equals("3") ) {
                 btn_viewPosts.setVisibility(View.VISIBLE);
             } else {
                 btn_viewPosts.setVisibility(View.INVISIBLE);
@@ -121,5 +129,12 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
         this.finish();
         startActivity(backHome);
 //        super.onBackPressed();
+    }
+
+    private boolean checkWhetherReigstered() {
+        if (currentItem.getAttendants().contains(fbUser.getUid())) {
+            return true;
+        }
+        return false;
     }
 }
