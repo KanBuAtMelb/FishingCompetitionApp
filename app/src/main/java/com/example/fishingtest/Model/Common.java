@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -151,6 +152,7 @@ public class Common {
         StorageReference measuredFileRef = measuredImagesRef.child(measuredFilename);
 
         DatabaseReference postDBRef = database.child("Posts").child(competitionCategory).child(currentComp.getCompID()).child(postID);
+        DatabaseReference userDBRef = database.child("Users").child(currentUser.getUid());
         //create upload task which is a new thread, then it will upload the image to cloud storage by local image uri
         UploadTask uploadOriTask = originalFileRef.putFile(oriImageUri);
         UploadTask uploadMeaTask = measuredFileRef.putFile(meaImageUri);
@@ -181,6 +183,7 @@ public class Common {
                             Post post = new Post(postID, currentUser.getUid(), currentComp.getCompID(), oriDownloadUrl.toString(), meaDownloadUrl.toString(), measuredData, timestamp, curLon, curLat);
                             Toast.makeText(context, "Posting......", Toast.LENGTH_SHORT).show();
                             postToDB(context, postDBRef, post);
+                            attendedToComp(context, userDBRef, currentComp.getCompID());
                         }
                     }
                 });
@@ -192,6 +195,30 @@ public class Common {
     private static void postToDB(final Context context, final DatabaseReference database, Post post) {
         database.setValue(post);
         Toast.makeText(context, "Post Success!", Toast.LENGTH_SHORT).show();
+    }
+
+    private static void attendedToComp(final Context context, final DatabaseReference database, String compID) {
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User thisuser = dataSnapshot.getValue(User.class);
+
+                List<String> user_attend = thisuser.getComps_attended();
+                user_attend.add(compID);
+                database.child("comps_attended").setValue(user_attend);
+
+                List<String> user_registeredComps = thisuser.getComps_registered();
+                user_registeredComps.remove(compID);
+                database.child("comps_registered").setValue(user_registeredComps);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        database.addListenerForSingleValueEvent(userListener);
+        Toast.makeText(context, "Add attended Success!", Toast.LENGTH_SHORT).show();
     }
 
     public static void commentToDB(final Context context, final DatabaseReference database, Comment comment) {
