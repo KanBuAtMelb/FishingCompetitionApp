@@ -84,14 +84,14 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
 
 
 
-            if (currentItem.getcStatus().equals("1") && checkWhetherReigstered()) {
+            if (currentCompItem.getcStatus().equals("1") && checkWhetherReigstered()) {
                 btn_newPost.setVisibility(View.VISIBLE);
             } else {
                 btn_newPost.setVisibility(View.INVISIBLE);
             }
 
 
-            if (currentItem.getcStatus().equals("2") || currentItem.getcStatus().equals("1") || currentItem.getcStatus().equals("3") ) {
+            if (currentCompItem.getcStatus().equals("2") || currentCompItem.getcStatus().equals("1") || currentCompItem.getcStatus().equals("3") ) {
                 btn_viewPosts.setVisibility(View.VISIBLE);
             } else {
                 btn_viewPosts.setVisibility(View.INVISIBLE);
@@ -132,7 +132,7 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
     }
 
     private boolean checkWhetherReigstered() {
-        if (currentItem.getAttendants().contains(fbUser.getUid())) {
+        if (currentCompItem.getAttendants().contains(fbUser.getUid())) {
             return true;
         }
         return false;

@@ -35,7 +35,6 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
     // New class addressing each "Competition" item view in the list
     class CompViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        int currentItem;
         ImageView compImage;
         TextView compTittle;
         TextView compType;
