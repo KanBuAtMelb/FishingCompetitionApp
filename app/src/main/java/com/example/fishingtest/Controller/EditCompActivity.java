@@ -1,9 +1,7 @@
 package com.example.fishingtest.Controller;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +9,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -27,7 +24,6 @@ import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.R;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +34,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,7 +75,7 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_competition);
+        setContentView(R.layout.activity_edit_comp);
 
         compID = new String();
         image_url = new String();
@@ -91,7 +86,33 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
 
         // Firebase
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
+        databaseComps.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
+                compList.clear();
+                for(DataSnapshot compSnapshot: dataSnapshot.getChildren()){
+                    Competition comp = compSnapshot.getValue(Competition.class);
+                    comp.checkArrayList();
+                    compList.add(comp);
+                }
+
+                EditCompListAdapter compListAdapter = new EditCompListAdapter(EditCompActivity.this, compList);
+                cListView.setAdapter(compListAdapter);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+        // UI
         cName = (EditText) findViewById(R.id.update_comp_name);
         cReward = (EditText) findViewById(R.id.update_comp_reward);
         cDate= (EditText) findViewById(R.id.update_comp_date);
@@ -176,7 +197,7 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
             }
         });
 
-        // Click the "Add Comp" button
+        // Click the "Update Comp" button
         cUpdate = (Button) findViewById(R.id.admin_button_updateComp);
 
         cUpdate.setOnClickListener(new View.OnClickListener(){
@@ -211,28 +232,6 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
     @Override
     protected void onStart() {
         super.onStart();
-
-        databaseComps.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                compList.clear();
-                for(DataSnapshot compSnapshot: dataSnapshot.getChildren()){
-                    Competition comp = compSnapshot.getValue(Competition.class);
-                    comp.checkArrayList();
-                    compList.add(comp);
-                }
-
-                EditCompListAdapter compListAdapter = new EditCompListAdapter(EditCompActivity.this, compList);
-                cListView.setAdapter(compListAdapter);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
 

@@ -116,6 +116,8 @@ public class User {
         if(!this.comps_won.contains(compID))
             this.comps_won.add(compID);
     }
+
+
     // Getters
 
     public String getUid() {

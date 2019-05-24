@@ -51,18 +51,13 @@ public class Common {
 
     private final static String TAG = "Common";
 
-    public static Competition currentItem = null;
+    public static Competition currentCompItem = null;
+    public static Post currentPostItem = null;
 
     // Location
     public static double curLat = 200.0;
     public static double curLon = 200.0;
     public static Location curLoc;
-
-//    public static List<Competition> compList = new ArrayList<>();
-//    public static List<Competition> compsBydate = new ArrayList<>();
-//    public static List<Competition> compsByName = new ArrayList<>();
-//    public static List<Competition> compsByReward = new ArrayList<>();
-//    public static List<Competition> compsByType = new ArrayList<>();
 
 
     // Used in Competition and User classes
@@ -76,6 +71,9 @@ public class Common {
     // Used in User class
     public static String user_member = "Member";
     public static String user_admin = "Administrator";
+
+    // Used in Competition result selection
+    public static String compID = "compID";
 
 
     // Check the time to the competition date

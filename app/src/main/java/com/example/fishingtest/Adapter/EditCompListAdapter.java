@@ -19,7 +19,7 @@ public class EditCompListAdapter extends ArrayAdapter<Competition> {
     private List<Competition> compList;
 
     public EditCompListAdapter(Activity context, List<Competition> compList){
-        super(context, R.layout.activity_add_competition, compList);
+        super(context, R.layout.activity_edit_comp, compList);
         this.context = context;
         this.compList = compList;
     }

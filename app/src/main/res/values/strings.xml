@@ -38,7 +38,8 @@
     <string-array name="comp_status">
         <item>Upcoming</item>
         <item>In Progress</item>
-        <item>Finished</item>
+        <item>Waiting For Results</item>
+        <item>Completed</item>
     </string-array>
 
     <string-array name="comp_type">
@@ -64,5 +65,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="title_activity_admin_playground">adminPlayground</string>
+    <string name="title_activity_add_comp_results">AddCompResultsActivity</string>
+    <string name="title_activity_select_comp_winner">SelectCompWinnerActivity</string>
 
 </resources>

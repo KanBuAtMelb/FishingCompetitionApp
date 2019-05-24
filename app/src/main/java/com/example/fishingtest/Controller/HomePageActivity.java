@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -253,7 +252,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 //        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
 //        criteria.setBearingAccuracy(Criteria.ACCURACY_HIGH);
 //        criteria.setSpeedAccuracy(Criteria.ACCURACY_HIGH);
-//        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
+//        criteria.setHorifzontalAccuracy(Criteria.ACCURACY_HIGH);
 //        criteria.setVerticalAccuracy(Criteria.ACCURACY_HIGH);
 //
 //        String mProvider = locationManager.getBestProvider(criteria, true);
@@ -351,7 +350,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
             public boolean onQueryTextSubmit(String s) {
                 for(int i = 0; i < compList.size(); i++){
                     if(compList.get(i).getCname().equals(s)){
-                        Common.currentItem = compList.get(i);
+                        Common.currentCompItem = compList.get(i);
                         startActivity(new Intent(HomePageActivity.this, ViewCompDetailsActivity.class));
                         finish();
                         break;
@@ -405,7 +404,11 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                             finish();
                         }
                     });
-        } else if(id == R.id.side_nav_admin_add_comp){
+        } else if(id == R.id.side_nav_admin_add_comp_results){
+            Intent addCompIntent = new Intent(this, AddCompResultsActivity.class);
+            startActivity(addCompIntent);
+
+        }else if(id == R.id.side_nav_admin_add_comp){
             Intent addCompIntent = new Intent(this, AddCompActivity.class);
             startActivity(addCompIntent);
 

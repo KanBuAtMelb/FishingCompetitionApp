@@ -195,6 +195,7 @@ public class Competition implements Serializable {
     }
 
 
+
     // Getters
     public String getCompID() {
         return compID;

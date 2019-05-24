@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="6dp"
+    android:background="@color/pink"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/add_comp_result_page_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:background="@color/black_overlay"
+        android:gravity="bottom"
+        android:padding="4dp"
+        android:text="Admin - Add Competition Results"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/add_comp_result_comp_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/add_comp_result_comp_list"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_margin="6dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="4dp"
+        android:divider="@color/warm_grey"
+        android:dividerHeight="2dp"
+        app:layout_constraintTop_toBottomOf="@+id/add_comp_result_page_title"
+        app:layout_constraintBottom_toTopOf="@+id/add_comp_result_comp_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/add_comp_result_comp_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="4dp"
+        android:ems="10"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:hint="Comp Name"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@+id/add_comp_result_comp_list"
+        app:layout_constraintBottom_toTopOf="@+id/add_comp_result_comp_date_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+    <LinearLayout
+        android:id="@+id/add_comp_result_comp_date_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/add_comp_result_comp_name"
+        app:layout_constraintBottom_toTopOf="@+id/update_comp_reward"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="10dp">
+        
+
+        <TextView
+            android:id="@+id/update_comp_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:hint="Comp Date"
+            android:inputType="none"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:id="@+id/update_comp_start_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:hint="Start Time"
+            android:inputType="time"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:id="@+id/update_comp_stop_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:hint="Stop Time"
+            android:inputType="time"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/update_comp_reward"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/add_comp_result_comp_date_time"
+        app:layout_constraintBottom_toTopOf="@+id/add_comp_result_comp_type"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+    
+    
+    <TextView
+        android:id="@+id/add_comp_result_comp_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/update_comp_reward"
+        app:layout_constraintBottom_toTopOf="@+id/admin_button_select_comp_for_results"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+   
+    <Button
+        android:id="@+id/admin_button_select_comp_for_results"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/cardview_light_background"
+        android:text="View All the Posts"
+        app:layout_constraintTop_toBottomOf="@+id/add_comp_result_comp_type"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+</android.support.constraint.ConstraintLayout>

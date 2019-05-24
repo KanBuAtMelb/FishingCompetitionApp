@@ -18,6 +18,10 @@
             android:title="Admin"
             android:id="@+id/side_nav_admin">
                 <menu>
+                        <item android:id="@+id/side_nav_admin_add_comp_results"
+                            android:icon="@drawable/ic_add_box_black_24dp"
+                            android:title="Add Competition Results"/>
+
                         <item android:id="@+id/side_nav_admin_add_comp"
                             android:icon="@drawable/ic_add_box_black_24dp"
                             android:title="Add New Competitions"/>

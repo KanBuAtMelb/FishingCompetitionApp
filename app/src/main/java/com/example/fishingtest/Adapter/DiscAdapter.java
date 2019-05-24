@@ -1,12 +1,9 @@
 package com.example.fishingtest.Adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.BoringLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +19,6 @@ import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,12 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder>{
 
@@ -180,7 +173,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
             public void onClick(View view, int position) {
                 if(position>= 0){
                     row_index = position;
-                    Common.currentItem = comps.get(position);
+                    Common.currentCompItem = comps.get(position);
                     notifyDataSetChanged();
                 }else{
                     Toast.makeText(context, "Please select a competition to view.",Toast.LENGTH_LONG).show();

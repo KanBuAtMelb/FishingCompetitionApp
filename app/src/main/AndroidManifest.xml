@@ -21,7 +21,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Controller.EditCommentActivity"
+        <activity
+            android:name=".Controller.SelectCompWinnerActivity"
+            android:label="@string/title_activity_select_comp_winner"
+            android:parentActivityName=".Controller.AddCompResultsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.fishingtest.Controller.AddCompResultsActivity" />
+        </activity>
+        <activity
+            android:name=".Controller.AddCompResultsActivity"
+            android:label="@string/title_activity_add_comp_results"
+            android:parentActivityName=".Controller.HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.fishingtest.Controller.HomePageActivity" />
+        </activity>
+        <activity
+            android:name=".Controller.EditCommentActivity"
             android:parentActivityName=".Controller.PostDetailActivity"
             android:screenOrientation="portrait" />
         <activity

@@ -182,7 +182,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
                 public void onClick(View view, int i) {
                     if(position>= 0){
                         row_index = position;
-                        Common.currentItem = findComp(position);
+                        Common.currentCompItem = findComp(position);
 
                         notifyDataSetChanged();
                     }else{
