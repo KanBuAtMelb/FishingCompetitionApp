@@ -70,29 +70,6 @@ public class DiscoveryFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         // Create an adapter
         comps = new ArrayList<>();
-        dAdapter = new DiscAdapter(comps,getContext());
-        // Set adaptor
-        recyclerView.setAdapter(dAdapter);
-
-
-
-        fab = (FloatingActionButton) view.findViewById(R.id.floating_button_discovery);
-
-
-        fab.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                // TODO: Check if an Item have been selected
-                if(dAdapter.row_index >= 0){
-                    Intent myIntent = new Intent(getActivity(), ViewCompDetailsActivity.class);
-                    getActivity().startActivity(myIntent);
-                }
-                else{
-                    Toast.makeText(getContext(), "Please select a competition for full detail review", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
 
         // Get Competitions unregistered by the user from Firebase
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
@@ -152,6 +129,28 @@ public class DiscoveryFragment extends Fragment {
                 }
 
                 dAdapter.notifyDataSetChanged();
+            }
+        });
+
+
+        dAdapter = new DiscAdapter(comps,getContext());
+        // Set adaptor
+        recyclerView.setAdapter(dAdapter);
+
+
+        // Click on Floating button to view the selected competition in details
+        fab = (FloatingActionButton) view.findViewById(R.id.floating_button_discovery);
+        fab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                // Check if an Item have been selected
+                if(dAdapter.row_index >= 0){
+                    Intent myIntent = new Intent(getActivity(), ViewCompDetailsActivity.class);
+                    getActivity().startActivity(myIntent);
+                }
+                else{
+                    Toast.makeText(getContext(), "Please select a competition for full detail review", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

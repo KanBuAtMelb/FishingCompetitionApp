@@ -202,14 +202,18 @@ public class Common {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User thisuser = dataSnapshot.getValue(User.class);
 
-                List<String> user_attend = thisuser.getComps_attended();
-                if (!user_attend.contains(compID)) {
-                    user_attend.add(compID);
-                    database.child("comps_attended").setValue(user_attend);
+                ArrayList<String> user_attend = thisuser.getComps_attended();
+                if (user_attend != null) {
+                    if (!user_attend.contains(compID)) {
+                        user_attend.add(compID);
+                        database.child("comps_attended").setValue(user_attend);
 
-                    List<String> user_registeredComps = thisuser.getComps_registered();
-                    user_registeredComps.remove(compID);
-                    database.child("comps_registered").setValue(user_registeredComps);
+                        List<String> user_registeredComps = thisuser.getComps_registered();
+                        user_registeredComps.remove(compID);
+                        database.child("comps_registered").setValue(user_registeredComps);
+                    }
+                } else {
+                    ArrayList<String> temp_user_attend = new ArrayList<>();
                 }
             }
 
