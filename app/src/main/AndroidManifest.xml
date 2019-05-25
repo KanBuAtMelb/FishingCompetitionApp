@@ -22,6 +22,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".Controller.ViewMyCompHistoryActivity"
+            android:label="@string/title_activity_view_my_comp_history"
+            android:parentActivityName=".Controller.ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.fishingtest.Controller.ProfileActivity" />
+        </activity>
+        <activity
             android:name=".Controller.SelectCompWinnerActivity"
             android:label="@string/title_activity_select_comp_winner"
             android:parentActivityName=".Controller.AddCompResultsActivity"

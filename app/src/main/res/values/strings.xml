@@ -67,5 +67,6 @@
     <string name="title_activity_admin_playground">adminPlayground</string>
     <string name="title_activity_add_comp_results">AddCompResultsActivity</string>
     <string name="title_activity_select_comp_winner">SelectCompWinnerActivity</string>
+    <string name="title_activity_view_my_comp_history">ViewMyCompHistoryActivity</string>
 
 </resources>

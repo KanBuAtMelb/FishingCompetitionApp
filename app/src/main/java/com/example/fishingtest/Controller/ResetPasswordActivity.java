@@ -45,15 +45,13 @@ public class ResetPasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
                 firebaseAuth.sendPasswordResetEmail(mEmail.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<Void>(){
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
                                     Toast.makeText(ResetPasswordActivity.this,
-                                            "Password send to your email", Toast.LENGTH_LONG).show();
+                                            "Password link sent to your email", Toast.LENGTH_LONG).show();
                                 }else{
                                     Toast.makeText(ResetPasswordActivity.this,
                                             task.getException().getMessage(), Toast.LENGTH_LONG).show();

@@ -83,7 +83,6 @@ public class AddCompResultsActivity extends AppCompatActivity {
             }
         });
 
-
         // UI
         cListView = (ListView)findViewById(R.id.add_comp_result_comp_list);
         cName =(TextView)findViewById(R.id.add_comp_result_comp_name);

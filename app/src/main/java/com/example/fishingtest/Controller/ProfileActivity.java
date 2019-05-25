@@ -3,6 +3,7 @@ package com.example.fishingtest.Controller;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -19,8 +20,10 @@ import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
 import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,8 +44,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     DatabaseReference databaseUser;
     StorageReference userImage;
-    Button button1;
-    Button button2;
+    Button buttonPassword;
+    Button buttonHistory;
     TextView email;
     TextView username;
     TextView attended;
@@ -51,39 +54,46 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     Uri imageUri;
     String userID;
     ImageView profileImage;
+    String userEmail;
     static final int RC_IMAGE_GALLERY = 2;
+
+    // Firebase for password reset
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        userImage = FirebaseStorage.getInstance().getReference("images").child("head_picture");
+        userImage = FirebaseStorage.getInstance().getReference("Comp_Images");
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
-        button1 = (Button) findViewById(R.id.edit_profile);
-        button2 = (Button) findViewById(R.id.game_record);
+        firebaseAuth = FirebaseAuth.getInstance();
+        buttonPassword = (Button) findViewById(R.id.profile_reset_pwd);
+        buttonHistory = (Button) findViewById(R.id.profile_comp_history);
         profileImage = (ImageView) findViewById(R.id.default_picture);
-        button1.setOnClickListener(this);
-        button2.setOnClickListener(this);
+        buttonPassword.setOnClickListener(this);
+        buttonHistory.setOnClickListener(this);
         profileImage.setOnClickListener(this);
         email = (TextView) findViewById(R.id.email_address);
         username = (TextView) findViewById(R.id.user_name);
         attended = (TextView) findViewById(R.id.attended);
         upcoming = (TextView) findViewById(R.id.upcoming);
         won = (TextView) findViewById(R.id.won);
-        attended.setOnClickListener(this);
-        upcoming.setOnClickListener(this);
-        won.setOnClickListener(this);
+
+//
+//        attended.setOnClickListener(this);
+//        upcoming.setOnClickListener(this);
+//        won.setOnClickListener(this);
+//
 
         //display user name and email address
         databaseUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                String a = user.getEmail();
-                String b = user.getDisplayName();
-                email.setText("Email: " + a);
-                username.setText("Name: " + b);
+                userEmail = user.getEmail();
+                email.setText("Email: " + userEmail);
+                username.setText("Name: " + user.getDisplayName());
 
                 int c = check(user.getComps_attended()).size();
                 int d = check(user.getComps_registered()).size();
@@ -113,10 +123,28 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.edit_profile:
-                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-                startActivity(intent);
-                finish();
+            case R.id.profile_reset_pwd:
+//                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+//                startActivity(intent);
+//                finish();
+
+                if(userEmail != null){
+                    firebaseAuth.sendPasswordResetEmail(userEmail)
+                            .addOnCompleteListener(new OnCompleteListener<Void>(){
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Toast.makeText(ProfileActivity.this,
+                                                "Password link sent to your email", Toast.LENGTH_LONG).show();
+                                    }else{
+                                        Toast.makeText(ProfileActivity.this,
+                                                task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+
+                                }
+                            });
+                }
+
                 break;
             case R.id.default_picture:
                 Intent galleryIntent = new Intent();
@@ -124,8 +152,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent, RC_IMAGE_GALLERY);
                 break;
-            case R.id.game_record:
-                //TODO: Add Game_Record Intent
+            case R.id.profile_comp_history:
+                Intent intent = new Intent(ProfileActivity.this, ViewMyCompHistoryActivity.class);
+                startActivity(intent);
+
                 break;
             case R.id.attended:
                 //TODO: Add Game_Record Intent

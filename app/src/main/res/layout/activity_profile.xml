@@ -60,8 +60,8 @@
 
     <TextView
         android:id="@+id/won"
-        android:layout_width="68dp"
-        android:layout_height="wrap_content"
+        android:layout_width="92dp"
+        android:layout_height="27dp"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/attended"
         android:layout_marginEnd="20dp"
@@ -69,27 +69,27 @@
 
 
     <Button
-        android:id="@+id/game_record"
+        android:id="@+id/profile_comp_history"
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
         android:layout_marginTop="500dp"
         android:gravity = "center"
         android:textSize="20dp"
         android:background="#f39c12"
-        android:text = "Game Record"
+        android:text = "Competition History"
         android:textColor="#ECF0F1"
         android:textAllCaps = "false"/>
 
     <Button
-        android:id="@+id/edit_profile"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
+        android:id="@+id/profile_reset_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="440dp"
-        android:gravity = "center"
         android:background="#2ecc71"
+        android:gravity="center"
+        android:text="Reset the Password"
+        android:textAllCaps="false"
         android:textColor="#ECF0F1"
-        android:textSize="20dp"
-        android:text = "Reset the Password"
-        android:textAllCaps = "false"/>
+        android:textSize="20dp" />
 
 </RelativeLayout>

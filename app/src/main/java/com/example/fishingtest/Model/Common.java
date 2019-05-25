@@ -132,14 +132,14 @@ public class Common {
         String timestamp = tsLong.toString();
 
         final String competitionCategory = "Competitions";
-        final String competitionImageCategory = "Comp_Images";
-        final String postImageCategory = "Posts";
+        final String competitionImageCategory = "Post_Images";
+//        final String postImageCategory = "Posts";
         final String originalFishPhotoCategory = "Original";
         final String measuredFishPhotoCategory = "Measured";
         final String postID = timestamp + "_" + currentUser.getUid();
 
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference compRef = storageRef.child(competitionImageCategory).child(postImageCategory);
+        StorageReference compRef = storageRef.child(competitionImageCategory);
         StorageReference userRef = compRef.child(currentUser.getUid());
         StorageReference postRef = userRef.child(postID);
         StorageReference originalImagesRef = postRef.child(originalFishPhotoCategory);
