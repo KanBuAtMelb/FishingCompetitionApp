@@ -59,8 +59,6 @@ public class ViewMyCompHistoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-
-
         comps = new ArrayList<>();
         hAdapter = new MyCompHistoryAdapter(comps, ViewMyCompHistoryActivity.this);
 
@@ -70,7 +68,8 @@ public class ViewMyCompHistoryActivity extends AppCompatActivity {
         databaseUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User currentUser = dataSnapshot.getValue(User.class);
+                currentUser = dataSnapshot.getValue(User.class);
+                currentUser.checkArrayList();
                 hAdapter.setCurrentUser(currentUser);
             }
 

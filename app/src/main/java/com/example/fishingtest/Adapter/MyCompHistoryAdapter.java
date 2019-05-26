@@ -44,8 +44,6 @@ public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdap
 
         ItemClickListener itemClickListener;
 
-
-
         public CompViewHolder(View itemView){
             super(itemView);
             compImage = itemView.findViewById(R.id.comp_image);
@@ -80,6 +78,7 @@ public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdap
 
     // Constructor
     public MyCompHistoryAdapter(ArrayList<Competition> comps, Context context){
+
         this.comps = comps;
         this.context = context;
     }
@@ -108,10 +107,17 @@ public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdap
         if(currentUser != null){
             if(currentUser.getComps_won().contains(comp.getCompID())){
                 viewHolder.compWon.setText("You are the Winner! Congrats!");
-                viewHolder.itemView.setBackgroundColor(Color.parseColor("#EC7063"));
-            }else
+                viewHolder.compWon.setTextColor(Color.parseColor("#EC7063"));
+
+                viewHolder.itemView.setBackgroundColor(Color.parseColor("#F4D0CC"));
+            }else{
                 viewHolder.compWon.setText("Unfortunatly you missed the awards");
+                viewHolder.compWon.setTextColor(Color.parseColor("#D3D3D3"));
+
                 viewHolder.itemView.setBackgroundColor(Color.parseColor("#006495"));
+
+            }
+
         }else{
             viewHolder.compWon.setText("Hold on! Loading the data");
         }
@@ -149,8 +155,13 @@ public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdap
                 Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
             }
         }else{
-            viewHolder.compTittle.setBackgroundColor(Color.parseColor("#6495ED"));
-//            viewHolder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            String backgroundColor;
+            if(currentUser.getComps_won().contains(comp.getCompID())){
+                backgroundColor = "#F4D0CC";
+            }else{
+                backgroundColor = "#006495";
+            }
+                viewHolder.compTittle.setBackgroundColor(Color.parseColor(backgroundColor));
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_blue);
             else{

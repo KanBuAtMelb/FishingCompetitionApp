@@ -124,9 +124,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.profile_reset_pwd:
-//                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-//                startActivity(intent);
-//                finish();
 
                 if(userEmail != null){
                     firebaseAuth.sendPasswordResetEmail(userEmail)
@@ -197,6 +194,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+
+        Intent intent = new Intent(ProfileActivity.this, HomePageActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 
     //Check if any ArrayList is null, if yes, instantiate it
