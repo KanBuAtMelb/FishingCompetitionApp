@@ -214,6 +214,12 @@ public class Common {
                     }
                 } else {
                     ArrayList<String> temp_user_attend = new ArrayList<>();
+                    temp_user_attend.add(compID);
+                    database.child("comps_attended").setValue(temp_user_attend);
+
+                    List<String> user_registeredComps = thisuser.getComps_registered();
+                    user_registeredComps.remove(compID);
+                    database.child("comps_registered").setValue(user_registeredComps);
                 }
             }
 
