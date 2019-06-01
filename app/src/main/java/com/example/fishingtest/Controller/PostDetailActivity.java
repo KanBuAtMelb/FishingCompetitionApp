@@ -35,6 +35,7 @@ import java.util.List;
 public class PostDetailActivity extends AppCompatActivity {
 
     Post currentPost;
+    TextView fishnameText;
     TextView dataText;
     ImageView userAvatar;
     TextView username;
@@ -58,6 +59,7 @@ public class PostDetailActivity extends AppCompatActivity {
         currentPost = (Post) intent.getSerializableExtra("selectedPost");
         database = FirebaseDatabase.getInstance().getReference();
         commentLinearLayout = (LinearLayout) findViewById(R.id.linear_comment);
+        fishnameText = (TextView) findViewById(R.id.post_Namecontent);
         dataText = (TextView) findViewById(R.id.post_content);
         username = (TextView) findViewById(R.id.text_post_username);
         time = (TextView) findViewById(R.id.text_post_time);
@@ -107,6 +109,13 @@ public class PostDetailActivity extends AppCompatActivity {
         databaseUser.addListenerForSingleValueEvent(userListener);
 
         time.setText(Common.timeStampToTime(currentPost.timeStamp));
+
+        if (currentPost.getFishingName() == null) {
+            fishnameText.setText(R.string.fishingname_unknown);
+        } else {
+            fishnameText.setText(currentPost.getFishingName());
+        }
+
         dataText.setText(currentPost.getMeasuredData());
         Picasso.get().load(currentPost.getOriDownloadUrl()).fit().into(fishPhoto_ori);
         Picasso.get().load(currentPost.getMeaDownloadUrl()).rotate(90).fit().into(fishPhoto_mea);

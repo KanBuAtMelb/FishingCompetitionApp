@@ -10,6 +10,7 @@ public class Post implements Serializable {
     public String oriDownloadUrl;
     public String meaDownloadUrl;
     public String measuredData;
+    public String fishingName;
     public String timeStamp;
     public double longitude;
     public double latitude;
@@ -19,13 +20,14 @@ public class Post implements Serializable {
 
 
 
-    public Post(String postId, String userId, String compId, String oriDownloadUrl, String meaDownloadUrl, String measuredData, String timeStamp, double longitude, double latitude) {
+    public Post(String postId, String userId, String compId, String oriDownloadUrl, String meaDownloadUrl, String measuredData, String fishingName, String timeStamp, double longitude, double latitude) {
         this.postId = postId;
         this.userId = userId;
         this.compId = compId;
         this.oriDownloadUrl = oriDownloadUrl;
         this.meaDownloadUrl = meaDownloadUrl;
         this.measuredData = measuredData;
+        this.fishingName = fishingName;
         this.timeStamp = timeStamp;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -59,4 +61,8 @@ public class Post implements Serializable {
     public double getLongitude() { return longitude; }
 
     public double getLatitude() { return latitude; }
+
+    public String getFishingName() {
+        return fishingName;
+    }
 }

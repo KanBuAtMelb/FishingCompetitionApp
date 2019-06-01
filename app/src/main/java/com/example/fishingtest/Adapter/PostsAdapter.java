@@ -71,6 +71,11 @@ public class PostsAdapter extends RecyclerView.Adapter{
         databaseUser.addListenerForSingleValueEvent(userListener);
         mHolder.time.setText(Common.timeStampToTime(post.timeStamp));
         mHolder.dataText.setText(post.getMeasuredData());
+        if (post.getFishingName() == null) {
+            mHolder.fishnameText.setText(R.string.fishingname_unknown);
+        } else {
+            mHolder.fishnameText.setText(post.getFishingName());
+        }
         Picasso.get().load(post.getOriDownloadUrl()).fit().into(mHolder.fishPhoto);
     }
 
@@ -99,6 +104,7 @@ public class PostsAdapter extends RecyclerView.Adapter{
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView fishnameText;
         TextView dataText;
         ImageView userAvatar;
         TextView username;
@@ -108,6 +114,7 @@ public class PostsAdapter extends RecyclerView.Adapter{
         public MyViewHolder(View itemView) {
             super(itemView);
             dataText = (TextView) itemView.findViewById(R.id.post_content);
+            fishnameText = (TextView) itemView.findViewById(R.id.post_Namecontent);
             username = (TextView) itemView.findViewById(R.id.text_post_username);
             time = (TextView) itemView.findViewById(R.id.text_post_time);
             userAvatar = (ImageView) itemView.findViewById(R.id.imgView_post_avatar);

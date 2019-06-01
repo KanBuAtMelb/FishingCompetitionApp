@@ -6,17 +6,17 @@
     android:layout_marginBottom="10dp">
 
     <TextView
-        android:id="@+id/post_fixed_data_title"
+        android:id="@+id/post_fixed_data_Nametitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="The Fish Data:"
+        android:text="The Fish Name:"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="italic" />
 
     <TextView
-        android:id="@+id/post_content"
+        android:id="@+id/post_Namecontent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

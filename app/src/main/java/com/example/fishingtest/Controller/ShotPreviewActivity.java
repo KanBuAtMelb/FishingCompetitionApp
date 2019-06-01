@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,6 +60,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
     ImageButton imgBtn_shot;
     ImageButton imgBtn_measure;
     TextView txt_measure;
+    EditText txt_fishname;
     Button btn_refresh;
     Button btn_post;
     TextView txt_shotHints;
@@ -97,6 +99,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         imgBtn_shot = (ImageButton) findViewById(R.id.imageButton_shot);
         imgBtn_measure = (ImageButton) findViewById(R.id.imageButton_latest);
         txt_measure =(TextView) findViewById(R.id.clipboardTextView);
+        txt_fishname =(EditText) findViewById(R.id.fixedFishText);
         btn_post = (Button) findViewById(R.id.postButton);
         txt_shotHints = (TextView) findViewById(R.id.shotHintsTextView);
         txt_measureHints = (TextView) findViewById(R.id.refreshHintsTextView);
@@ -161,7 +164,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
                     if (Common.ifInCircle(comp_location, Common.curLoc, comp_radius)) {
                         if (freshFlag) {
                             Toast.makeText(ShotPreviewActivity.this, "You clicked the post button",Toast.LENGTH_SHORT).show();
-                            Common.uploadFishingPost(ShotPreviewActivity.this, database, fbUser, currentComp, originalImageUri, measuredImageUri, measuredLong);
+                            Common.uploadFishingPost(ShotPreviewActivity.this, database, fbUser, currentComp, originalImageUri, measuredImageUri, txt_fishname.getText().toString(), measuredLong);
                             finish();
                         }
                     } else {

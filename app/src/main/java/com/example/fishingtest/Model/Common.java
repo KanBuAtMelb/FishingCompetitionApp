@@ -127,7 +127,7 @@ public class Common {
 
     //this function include uploading to storage and database. Before image save its download url in database, the image should be uploaded to the cloud storage and get the download url from the storage,
     //so that we can save the download url to database and retrieve by another usage directly for downloading the image.
-    public static void uploadFishingPost(final Context context, final DatabaseReference database, final FirebaseUser currentUser, final Competition currentComp, final Uri oriImageUri, final Uri meaImageUri, final String measuredData) {
+    public static void uploadFishingPost(final Context context, final DatabaseReference database, final FirebaseUser currentUser, final Competition currentComp, final Uri oriImageUri, final Uri meaImageUri, final String measuredData, final String fishingName) {
         Long tsLong = System.currentTimeMillis()/1000;
         String timestamp = tsLong.toString();
 
@@ -179,7 +179,7 @@ public class Common {
                         Uri meaDownloadUrl = taskSnapshot.getDownloadUrl();
                         Toast.makeText(context, "Measured Image: Upload finished!", Toast.LENGTH_SHORT).show();
                         if (uploadOriTask.isComplete() && uploadMeaTask.isComplete()) {
-                            Post post = new Post(postID, currentUser.getUid(), currentComp.getCompID(), oriDownloadUrl.toString(), meaDownloadUrl.toString(), measuredData, timestamp, curLon, curLat);
+                            Post post = new Post(postID, currentUser.getUid(), currentComp.getCompID(), oriDownloadUrl.toString(), meaDownloadUrl.toString(), measuredData, fishingName, timestamp, curLon, curLat);
                             Toast.makeText(context, "Posting......", Toast.LENGTH_SHORT).show();
                             postToDB(context, postDBRef, post);
                             attendedToComp(context, userDBRef, currentComp.getCompID());

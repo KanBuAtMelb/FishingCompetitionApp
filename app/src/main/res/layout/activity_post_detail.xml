@@ -15,6 +15,10 @@
             layout="@layout/banner_post" />
 
         <include
+            android:id="@+id/post_detail_fishname"
+            layout="@layout/row_post_text_fishname" />
+
+        <include
             android:id="@+id/post_detail_measure"
             layout="@layout/row_post_text_data" />
 
