@@ -209,7 +209,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
                             temp.checkArrayList();
                             if (temp.getComps_registered().contains(compID)) {
                                 temp.removeRegComp(compID);
-                                databaseUser.setValue(temp);
+                                databaseUser.child("comps_registered").setValue(temp.getComps_registered());
                                 Log.d(TAG, "Competition " + compID + " removed from User " + userID + " registration list");
                             }
                         }
