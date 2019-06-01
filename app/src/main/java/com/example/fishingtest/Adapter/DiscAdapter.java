@@ -141,7 +141,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                         temp.checkArrayList();
                         if(!temp.getAttendants().contains(userID)){
                             temp.addAttendant(userID);
-                            databaseComp.setValue(temp);
+                            databaseComp.child("attendants").setValue(temp.getAttendants());
                             Log.d(TAG,"User "+userID+" added to Competition "+compID+" Attendant list");
 //                            Toast.makeText(context, "Competition Registration Successful", Toast.LENGTH_SHORT).show();
                         }

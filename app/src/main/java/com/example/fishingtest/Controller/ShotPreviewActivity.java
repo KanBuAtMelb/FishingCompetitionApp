@@ -165,6 +165,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
                         if (freshFlag) {
                             Toast.makeText(ShotPreviewActivity.this, "You clicked the post button",Toast.LENGTH_SHORT).show();
                             Common.uploadFishingPost(ShotPreviewActivity.this, database, fbUser, currentComp, originalImageUri, measuredImageUri, measuredLong, txt_fishname.getText().toString());
+                            finish();
                         }
                     } else {
                         Toast.makeText(ShotPreviewActivity.this, "Your location is not in competition area.",Toast.LENGTH_SHORT).show();

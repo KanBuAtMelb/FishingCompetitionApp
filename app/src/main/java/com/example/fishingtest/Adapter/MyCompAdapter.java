@@ -228,7 +228,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
                             temp.checkArrayList();
                             if (temp.getAttendants().contains(userID)) {
                                 temp.removeAttendant(userID);
-                                databaseComp.setValue(temp);
+                                databaseComp.child("attendants").setValue(temp.getAttendants());
                                 Log.d(TAG, "User " + userID + " removed from competition " + compID + " attendant list");
                             }
                         }

@@ -151,7 +151,8 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
 
 
                             temp.setResults(post.getMeasuredData());
-                            databaseComp.setValue(temp);
+                            databaseComp.child("results").setValue(temp.getResults());
+                            databaseComp.child("winner").setValue(temp.getWinner());
                         }
 
                         @Override
