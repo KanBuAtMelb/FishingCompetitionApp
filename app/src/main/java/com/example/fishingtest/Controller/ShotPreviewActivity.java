@@ -164,7 +164,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
                     if (Common.ifInCircle(comp_location, Common.curLoc, comp_radius)) {
                         if (freshFlag) {
                             Toast.makeText(ShotPreviewActivity.this, "You clicked the post button",Toast.LENGTH_SHORT).show();
-                            Common.uploadFishingPost(ShotPreviewActivity.this, database, fbUser, currentComp, originalImageUri, measuredImageUri, txt_fishname.getText().toString(), measuredLong);
+                            Common.uploadFishingPost(ShotPreviewActivity.this, database, fbUser, currentComp, originalImageUri, measuredImageUri, measuredLong, txt_fishname.getText().toString());
                             finish();
                         }
                     } else {
