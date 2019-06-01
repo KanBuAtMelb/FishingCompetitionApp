@@ -127,7 +127,7 @@ public class SelectCompWinnerActivity extends AppCompatActivity {
                             if(!temp.getComps_won().contains(compID)){
                                 temp.addWonComp(compID);
                             }
-                            databaseUser.setValue(temp);
+                            databaseUser.child("comps_won").setValue(temp.getComps_won());
                         }
 
                         @Override
