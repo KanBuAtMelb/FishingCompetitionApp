@@ -11,6 +11,12 @@ import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static com.example.fishingtest.Model.Common.currentCompItem;
 
@@ -67,10 +73,31 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
             cStartTime.setText("Start Time: " + currentCompItem.getStartTime());
             cStopTime.setText("Ending Time: " + currentCompItem.getStopTime());
             cGeo.setText("Geo: " + currentCompItem.getGeo_map());
-            cWinner.setText("Winner: " + currentCompItem.getWinner());
+
             cResult.setText("Result: " + currentCompItem.getResults());
             cDescription.setSingleLine(false);
             cDescription.setText("Description: \n" + currentCompItem.getcDescription());
+
+
+            // Find winner name if available
+            String winnerID = currentCompItem.getWinner();
+            if(!winnerID.equals(Common.NA)){
+                DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(winnerID).child("displayName");
+                databaseUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String winner = dataSnapshot.getValue(String.class);
+                        cWinner.setText("Winner: " + winner);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }else
+                cWinner.setText("Winner: Not Available yet");
 
             // Spinner item index to text view
             String[] compTypes = getResources().getStringArray(R.array.comp_type);
