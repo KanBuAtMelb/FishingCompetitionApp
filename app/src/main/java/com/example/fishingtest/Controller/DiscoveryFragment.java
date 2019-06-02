@@ -95,7 +95,19 @@ public class DiscoveryFragment extends Fragment {
 
                     }
                 }
-                dAdapter.sortByName();
+                switch(Common.DISCOVERY_SORT_ORDER){
+                    case 0:
+                        dAdapter.sortByName();
+                        break;
+                    case 1:
+                        dAdapter.sortByDate();
+                        break;
+                    case 2:
+                        dAdapter.sortByReward();
+                        break;
+                    default:
+                        dAdapter.sortByName();
+                }
                 dAdapter.notifyDataSetChanged();
             }
 
@@ -117,15 +129,19 @@ public class DiscoveryFragment extends Fragment {
                 switch(checkedId){
                     case R.id.disc_sort_by_name:
                         dAdapter.sortByName();
+                        Common.DISCOVERY_SORT_ORDER = 0;
                         break;
                     case R.id.disc_sort_by_date:
                         dAdapter.sortByDate();
+                        Common.DISCOVERY_SORT_ORDER = 1;
                         break;
                     case R.id.disc_sort_by_reward:
                         dAdapter.sortByReward();
+                        Common.DISCOVERY_SORT_ORDER = 2;
                         break;
                     default:
                         dAdapter.sortByName();
+                        Common.DISCOVERY_SORT_ORDER = 0;
                 }
 
                 dAdapter.notifyDataSetChanged();
@@ -155,10 +171,11 @@ public class DiscoveryFragment extends Fragment {
         });
 
 
-
-
         return view;
     }
+
+
+
 
 
 }

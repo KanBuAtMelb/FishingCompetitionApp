@@ -109,6 +109,9 @@ public class Common {
 
     };
 
+    // Discovery Fragment Sort Order
+    public static int DISCOVERY_SORT_ORDER = -1;
+
 
     public static Date formattingDate(String compDate){
         // For Competition info

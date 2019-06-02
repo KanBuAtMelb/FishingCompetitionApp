@@ -159,9 +159,25 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                 Toast.makeText(context, "Competition Registration Successful", Toast.LENGTH_SHORT).show();
 
 
+                // Remain original sorting order
+                switch(Common.DISCOVERY_SORT_ORDER){
+                    case 0:
+                        sortByName();
+                        break;
+                    case 1:
+                        sortByDate();
+                        break;
+                    case 2:
+                        sortByReward();
+                        break;
+                    default:
+                        sortByName();
+                }
+                notifyDataSetChanged();
+
+                //Reset selected card
                 if(comps.size() == 0){
                     row_index = -1;
-
                 }
             }
         });
