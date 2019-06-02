@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Comp Date (dd/MM/yy, Compulsory)"
+        android:hint="Comp Date (from Calendar)"
         android:inputType="date" />
 
     <EditText

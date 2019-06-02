@@ -72,8 +72,10 @@ public class LogInActivity extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        if (email.isEmpty())
-            if (email.equals("") || password.equals("")) return;
+        if (email.equals("") || password.equals("")){
+            Toast.makeText(this, "Please fill the email address and password", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Toast.makeText(this, "Login in progress...", Toast.LENGTH_SHORT).show();
 
         // Use FirebaseAuth to sign in with email & password
@@ -84,8 +86,8 @@ public class LogInActivity extends AppCompatActivity {
                 Log.d("FishingApp", "signInWithEmail() onComplete: " + task.isSuccessful());
 
                 if (!task.isSuccessful()) {
-                    Log.d("FlashChat", "Problem signing in: " + task.getException());
-                    showErrorDialog("There was a problem signing in");
+                    Log.d("FlashChat", "Login Failure" + task.getException().getLocalizedMessage());
+                    showErrorDialog("Either the email or password might be incorrect. Please try again.");
                 } else {
                     Intent intent = new Intent(LogInActivity.this, HomePageActivity.class);
                     finish();
@@ -93,6 +95,8 @@ public class LogInActivity extends AppCompatActivity {
                 }
 
             }
+
+
         });
 
 
