@@ -168,6 +168,7 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
                 cStatus = comp.getcStatus();
 
                 if (comp.getAttendants().size() > 0)
+                    attendants.clear();
                     attendants = comp.getAttendants();
             }
         });
