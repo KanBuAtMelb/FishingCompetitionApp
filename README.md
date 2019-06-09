@@ -9,3 +9,11 @@ Qin Xu 917386
 
 ### Supervisor: 
 Prof. Richard Sinnott
+
+### Related Repositories:
+For Web App: https://github.com/xuqinzju/FishingWeb \
+For Server: https://github.com/RoryKirsi/Fish-Competition-Back-end-Server
+
+***Note:*** The Github source code for Web App and Server are private due to the sensitive credential information involved. Requests shall be sent on command to view the codes.
+
+***Demo Video:***  https://youtu.be/VC7MejeUkEo
