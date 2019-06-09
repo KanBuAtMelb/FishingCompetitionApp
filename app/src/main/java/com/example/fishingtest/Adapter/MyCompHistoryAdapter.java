@@ -106,15 +106,14 @@ public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdap
         if(currentUser != null){
             if(currentUser.getComps_won().contains(comp.getCompID())){
                 viewHolder.compWon.setText("You are the Winner! Congrats!");
-                viewHolder.compWon.setTextColor(Color.parseColor("#EC7063"));
+                viewHolder.compWon.setTextColor(Color.parseColor(context.getString(R.string.cardview_mycompHistory_compWon_background_winner)));
 
-                viewHolder.itemView.setBackgroundColor(Color.parseColor("#F4D0CC"));
+                viewHolder.itemView.setBackgroundColor(Color.parseColor(context.getString(R.string.cardview_mycompHistory_itemView_background_winner)));
             }else{
                 viewHolder.compWon.setText("Unfortunatly you missed the awards");
-                viewHolder.compWon.setTextColor(Color.parseColor("#D3D3D3"));
-                viewHolder.itemView.setBackgroundColor(Color.parseColor("#006495"));
+                viewHolder.compWon.setTextColor(Color.parseColor(context.getString(R.string.cardview_mycompHistory_compWon_background_loser)));
+                viewHolder.itemView.setBackgroundColor(Color.parseColor(context.getString(R.string.cardview_mycompHistory_itemView_background_loser)));
             }
-
         }else{
             viewHolder.compWon.setText("Hold on! Loading the data");
         }
@@ -136,7 +135,7 @@ public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdap
 
         // Competition images
         if(row_index ==position){
-            viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
+            viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.cardview_title_background_selected)));
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
             else{

@@ -8,7 +8,7 @@
     android:layout_height="150dp"
     android:layout_margin="15dp"
     android:foreground="?selectableItemBackground"
-    card_view:cardBackgroundColor="#6495ED"
+    card_view:cardBackgroundColor="@color/light_blue"
     card_view:cardCornerRadius="12dp"
     card_view:cardElevation="3dp"
     card_view:contentPadding="4dp"

@@ -147,7 +147,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             fillView(vh, comp, position);
             vh.timeBeforeStart.setText("Competition in Progress! ");
             vh.timeBeforeStart.setTextSize(18);
-            vh.timeBeforeStart.setTextColor(Color.parseColor("#00335c"));
+            vh.timeBeforeStart.setTextColor(Color.parseColor(context.getString(R.string.textview_mycomp_timebeforeStart_textcolor_urgent)));
         }
 
         // Set up competition card view for competition starting within 24 hours
@@ -161,7 +161,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             long diffHours = timeLeftStart / (60 * 60 * 1000) % 24;
             vh.timeBeforeStart.setText("Only " + (int) diffHours + " hours, " + (int) diffMinutes + " min left!");
             vh.timeBeforeStart.setTextSize(16);
-            vh.timeBeforeStart.setTextColor(Color.parseColor("#00335c"));
+            vh.timeBeforeStart.setTextColor(Color.parseColor(context.getString(R.string.textview_mycomp_timebeforeStart_textcolor_urgent)));
         }
 
         // Set up competition card view for competition starting after 24 hours
@@ -175,7 +175,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             long diffDays = timeLeftStart / (24 * 60 * 60 * 1000);
             vh.timeBeforeStart.setText("Still have " + (int) diffDays + " days, " + (int) diffHours + " hours, ");
             vh.timeBeforeStart.setTextSize(12);
-            vh.timeBeforeStart.setTextColor(Color.parseColor("#66000000"));
+            vh.timeBeforeStart.setTextColor(Color.parseColor(context.getString(R.string.textview_mycomp_timebeforeStart_textcolor_normal)));
         }
 
         // Set up card view change on selection
@@ -277,7 +277,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
 
         // When the change is selected, color changes occur to competition image and title
         if (row_index == position) {
-            viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
+            viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.cardview_title_background_selected)));
 
             if (comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
@@ -285,7 +285,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
                 Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
             }
         } else {
-            viewHolder.compTittle.setBackgroundColor(Color.parseColor("#00FF0000"));
+            viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.cardview_mycomp_title_background_unselected)));
 
             if (comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_deep_aqua);

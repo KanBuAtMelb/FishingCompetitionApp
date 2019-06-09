@@ -34,7 +34,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="2dp"
         android:layout_marginBottom="4dp"
-        android:divider="#FFCC00"
+        android:divider="@color/yellow"
         android:dividerHeight="2dp"
         app:layout_constraintBottom_toTopOf="@id/update_comp_name"
         app:layout_constraintEnd_toEndOf="parent"

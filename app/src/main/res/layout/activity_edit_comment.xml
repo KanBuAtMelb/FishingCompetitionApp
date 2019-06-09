@@ -11,7 +11,7 @@
         android:id="@+id/txt_comment"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="#E6E6E6"
+        android:background="@color/browser_actions_bg_grey"
         android:autofillHints="Write your comment here."
         android:padding="10dp"
         android:layout_marginBottom="30dp"/>

@@ -142,11 +142,10 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
         });
 
         if(row_index ==position){
-            viewHolder.itemView.setBackgroundColor(Color.parseColor("#FFE4F3"));
+            viewHolder.itemView.setBackgroundColor(Color.parseColor(context.getString(R.string.cardview_winnerPost_itemView_background_selected)));
 
         }else{
-            viewHolder.itemView.setBackgroundColor(Color.parseColor("#FFEEF2"));
-
+            viewHolder.itemView.setBackgroundColor(Color.parseColor(context.getString(R.string.cardview_winnerPost_itemView_background_unselected)));
         }
 
     }

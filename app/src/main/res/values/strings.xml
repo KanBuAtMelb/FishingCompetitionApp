@@ -52,7 +52,7 @@
         <item>By Fish Quantity</item>
     </string-array>
 
-    <string name="card_selected_text">#F98866</string>
+
 
     <string name="tracking_enabled_notif">Location Tracking Notification</string>
     <string name="test_email">firebase1@gmail.com</string>
@@ -69,5 +69,20 @@
     <string name="title_activity_select_comp_winner">SelectCompWinnerActivity</string>
     <string name="title_activity_view_my_comp_history">ViewMyCompHistoryActivity</string>
     <string name="fishingname_unknown">Unknown</string>
+
+    <string name="textview_mycomp_timebeforeStart_textcolor_urgent">#00335c</string>
+    <string name="textview_mycomp_timebeforeStart_textcolor_normal">#66000000</string>
+    <string name="cardview_mycomp_title_background_unselected">#00FF0000</string>
+
+    <string name="cardview_mycompHistory_compWon_background_winner">#EC7063</string>
+    <string name="cardview_mycompHistory_itemView_background_winner">#F4D0CC</string>
+    <string name="cardview_mycompHistory_compWon_background_loser">#D3D3D3</string>
+    <string name="cardview_mycompHistory_itemView_background_loser">#006495</string>
+
+    <string name="cardview_winnerPost_itemView_background_selected">#FFE4F3</string>
+    <string name="cardview_winnerPost_itemView_background_unselected">#FFEEF2</string>
+
+    <string name="cardview_disc_title_background_unselected">#6495ED</string>
+    <string name="cardview_title_background_selected">#F98866</string>
 
 </resources>

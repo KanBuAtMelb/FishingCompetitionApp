@@ -206,7 +206,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
         if(row_index ==position){
             // Set title background on competition selection
-            viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
+            viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.cardview_title_background_selected)));
             // Set the competition fish image color change if it has no customised competition image uploaded
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
@@ -215,7 +215,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
             }
         }else{
             // Set title background when competition not selected
-            viewHolder.compTittle.setBackgroundColor(Color.parseColor("#6495ED"));
+            viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.cardview_disc_title_background_unselected)));
             // Set the competition fish image color change if it has no customised competition image uploaded
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_blue);

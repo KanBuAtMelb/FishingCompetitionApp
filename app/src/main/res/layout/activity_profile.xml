@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="165dp"
-        android:textColor="#2A2A2A"
+        android:textColor="@color/dark_grey"
         android:text="Name: "
         android:textSize="16sp"/>
 
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/user_name"
-        android:textColor="#2A2A2A"
+        android:textColor="@color/dark_grey"
         android:text="Email: "
         android:textSize="16sp"/>
 
@@ -75,9 +75,9 @@
         android:layout_marginTop="500dp"
         android:gravity = "center"
         android:textSize="20dp"
-        android:background="#f39c12"
+        android:background="@color/deep_yellow"
         android:text = "Competition History"
-        android:textColor="#ECF0F1"
+        android:textColor="@color/white"
         android:textAllCaps = "false"/>
 
     <Button
@@ -85,11 +85,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="440dp"
-        android:background="#2ecc71"
+        android:background="@color/light_green"
         android:gravity="center"
         android:text="Reset the Password"
         android:textAllCaps="false"
-        android:textColor="#ECF0F1"
+        android:textColor="@color/white"
         android:textSize="20dp" />
 
 </RelativeLayout>
