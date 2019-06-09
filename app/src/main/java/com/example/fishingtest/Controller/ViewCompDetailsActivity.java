@@ -11,7 +11,6 @@ import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,9 +19,19 @@ import com.google.firebase.database.ValueEventListener;
 
 import static com.example.fishingtest.Model.Common.currentCompItem;
 
+/**
+ * Completed by Kan Bu and Ziqi Zhang on 8/06/2019.
+ *
+ * The controller for the "View the Competition Details" activity
+ * after clicking the floating action button on the Home page.
+ */
 
 public class ViewCompDetailsActivity extends AppCompatActivity {
 
+    // Local variables
+    FirebaseUser fbUser;
+
+    // UI views
     TextView cTitle;
     TextView cReward;
     TextView cDate;
@@ -35,11 +44,8 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
     TextView cAttendants;
     TextView cDescription;
 
-    FirebaseUser fbUser;
-
     Button btn_newPost;
     Button btn_viewPosts;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +66,13 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
         btn_newPost = (Button)findViewById(R.id.viewComp_PostButton);
         btn_viewPosts = (Button)findViewById(R.id.viewComp_ViewPostButton);
 
+        // Get the current user
         fbUser = FirebaseAuth.getInstance().getCurrentUser();
         if (fbUser == null) {
             finish();
         }
 
+        // Get the selected the competition stored in Common class
         if(currentCompItem != null){
             currentCompItem.checkArrayList();
             cTitle.setText(currentCompItem.getCname());
@@ -77,7 +85,6 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
             cResult.setText("Result: " + currentCompItem.getResults());
             cDescription.setSingleLine(false);
             cDescription.setText("Description: \n" + currentCompItem.getcDescription());
-
 
             // Find winner name if available
             String winnerID = currentCompItem.getWinner();
@@ -95,7 +102,6 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
 
                     }
                 });
-
             }else
                 cWinner.setText("Winner: Not Available yet");
 
@@ -109,14 +115,12 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
             // Convert Attendant list to total number
             cAttendants.setText("Attendant number : " + Integer.toString(currentCompItem.getAttendants().size()));
 
-
-
+            // Post button visibility according to the competition status
             if (currentCompItem.getcStatus().equals("1") && checkWhetherReigstered()) {
                 btn_newPost.setVisibility(View.VISIBLE);
             } else {
                 btn_newPost.setVisibility(View.INVISIBLE);
             }
-
 
             if (currentCompItem.getcStatus().equals("2") || currentCompItem.getcStatus().equals("1") || currentCompItem.getcStatus().equals("3") ) {
                 btn_viewPosts.setVisibility(View.VISIBLE);
@@ -143,9 +147,6 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-
-            // Button only visible for competition in progress
-            // Todo: Ziqi to do visible for competition in progress
         }
 
     }
@@ -155,7 +156,6 @@ public class ViewCompDetailsActivity extends AppCompatActivity {
         Intent backHome = new Intent(this, HomePageActivity.class);
         this.finish();
         startActivity(backHome);
-//        super.onBackPressed();
     }
 
     private boolean checkWhetherReigstered() {

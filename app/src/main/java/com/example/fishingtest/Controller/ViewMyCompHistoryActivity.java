@@ -3,18 +3,14 @@ package com.example.fishingtest.Controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.example.fishingtest.Adapter.MyCompAdapter;
 import com.example.fishingtest.Adapter.MyCompHistoryAdapter;
-import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
@@ -27,28 +23,33 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * The controller for the "View My Competitions" activity
+ * after the "View My Competition" buttion clicked on the "Profile" page.
+ */
+
 public class ViewMyCompHistoryActivity extends AppCompatActivity {
 
     final static String TAG = "My Competition History";
 
+    // Local variables
+    MyCompHistoryAdapter hAdapter;
+    ArrayList<Competition> comps;
+    DatabaseReference databaseComps;
+    User currentUser;
 
+    // UI views
     Toolbar toolbar;
     RecyclerView recyclerView;
     FloatingActionButton fab;
 
-    MyCompHistoryAdapter hAdapter;
-
-    ArrayList<Competition> comps;
-    DatabaseReference databaseComps;
-
-    User currentUser;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_view_my_comp_history);
+
         toolbar = findViewById(R.id.profile_tool_bar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(TAG);
@@ -59,6 +60,7 @@ public class ViewMyCompHistoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
+        // Initialize the Comp List and the Recycler View Adapter
         comps = new ArrayList<>();
         hAdapter = new MyCompHistoryAdapter(comps, ViewMyCompHistoryActivity.this);
 
@@ -79,12 +81,14 @@ public class ViewMyCompHistoryActivity extends AppCompatActivity {
             }
         });
 
-
+        // Get the Comp List for the Recycler View adapter
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
         databaseComps.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // Clear the Comp List by the previous Firebase update
                 hAdapter.clearCompList();
+
                 for(DataSnapshot compSnapshot : dataSnapshot.getChildren()){
                     Competition comp = compSnapshot.getValue(Competition.class);
 
@@ -96,19 +100,21 @@ public class ViewMyCompHistoryActivity extends AppCompatActivity {
                     }
 
                 }
+
+                // Sort the Comp List by date and the notify the adapter of the changes caused by sorting
                 hAdapter.sortByDate();
                 hAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //TODO: write something here??
             }
         });
 
-        // Set adaptor
+        // Set Recycler View adaptor
         recyclerView.setAdapter(hAdapter);
 
+        // Set up floating action button OnClick listener
         fab = findViewById(R.id.floating_button_profile);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,14 +127,8 @@ public class ViewMyCompHistoryActivity extends AppCompatActivity {
                 else{
                     Toast.makeText(ViewMyCompHistoryActivity.this, "Please select a competition for full detail review", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
     }
-
-
 }

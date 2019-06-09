@@ -8,42 +8,36 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.TimeZone;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+
+/**
+ * Completed by Kan Bu and Ziqi Zhang on 8/06/2019.
+ *
+ * It is used for data sharing and passing between different
+ * activity, constant values and public static method storing.
+ */
 
 public class Common {
 
@@ -52,16 +46,16 @@ public class Common {
 
     private final static String TAG = "Common";
 
+    // Use for value passing between Recycler View adapter and the "ViewCompetitionDetails" activity
     public static Competition currentCompItem = null;
     public static Post currentPostItem = null;
 
-    // Location
+    // User Location info
     public static double curLat = 200.0;
     public static double curLon = 200.0;
     public static Location curLoc;
 
-
-    // Used in Competition and User classes
+    // Constants used in Competition and User classes
     public static String NA = "NA";
     public static Date NA_Date = new Date(2019,1,1);
     public static int NA_Integer = -1;
@@ -69,11 +63,11 @@ public class Common {
     public static String EMPTY = "";
 
 
-    // Used in User class
+    // Constants used in User class
     public static String user_member = "Member";
     public static String user_admin = "Administrator";
 
-    // Used in Competition result selection
+    // Constants used in Competition result selection
     public static String COMPID = "compID";
     public static String COMPNAME = "compName";
 
@@ -112,31 +106,16 @@ public class Common {
     // Discovery Fragment Sort Order
     public static int DISCOVERY_SORT_ORDER = -1;
 
-
-    public static Date formattingDate(String compDate){
-        // For Competition info
-        DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm z");
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        Date date = new Date();
-        try {
-        // Convert string into Date
-        date = df.parse("20/04/19 23:50 GMT+08:00");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-      return date;
-    };
-
-    //this function include uploading to storage and database. Before image save its download url in database, the image should be uploaded to the cloud storage and get the download url from the storage,
-    //so that we can save the download url to database and retrieve by another usage directly for downloading the image.
+    //This function include uploading to storage and database.
+    // Before image save its download url in database, the image should be uploaded to the cloud storage
+    // and get the download url from the storage,
+    // so that we can save the download url to database and retrieve by another usage directly for downloading the image.
     public static void uploadFishingPost(final Context context, final DatabaseReference database, final FirebaseUser currentUser, final Competition currentComp, final Uri oriImageUri, final Uri meaImageUri, final String measuredData, final String fishingName) {
         Long tsLong = System.currentTimeMillis()/1000;
         String timestamp = tsLong.toString();
 
         final String competitionCategory = "Competitions";
         final String competitionImageCategory = "Post_Images";
-//        final String postImageCategory = "Posts";
         final String originalFishPhotoCategory = "Original";
         final String measuredFishPhotoCategory = "Measured";
         final String postID = timestamp + "_" + currentUser.getUid();
@@ -193,7 +172,9 @@ public class Common {
         });
     }
 
-    //upload the post with additional information to database, it will upload the image and post as two different category in database and link themselves by post id to match the image and post
+    //upload the post with additional information to database,
+    // it will upload the image and post as two different category in database
+    // and link themselves by post id to match the image and post
     private static void postToDB(final Context context, final DatabaseReference database, Post post) {
         database.setValue(post);
         Toast.makeText(context, "Post Success!", Toast.LENGTH_SHORT).show();
@@ -270,14 +251,6 @@ public class Common {
                 .getDisplayMetrics()
                 .density;
         return Math.round((float) dp * density);
-    }
-
-    public static void setMargins (View v, int l, int t, int r, int b) {
-        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            p.setMargins(l, t, r, b);
-            v.requestLayout();
-        }
     }
 
 

@@ -9,12 +9,17 @@ import android.support.v4.app.DialogFragment;
 
 import java.util.Calendar;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * The controller for the Date Picker used in "AddCompActivity", "EditCompActivity" for the Administrator.
+ */
+
 public class DatePickerFragment extends DialogFragment {
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);

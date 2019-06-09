@@ -19,6 +19,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * The controller for the "Log In" activity at the start of the App.
+ */
+
 public class LogInActivity extends AppCompatActivity {
 
     // Member variables here:
@@ -32,6 +38,7 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Firebase authentication initialization
         mAuth = FirebaseAuth.getInstance();
         mEmailView = findViewById(R.id.login_email);
         mPasswordView = findViewById(R.id.login_password);
@@ -44,9 +51,7 @@ public class LogInActivity extends AppCompatActivity {
                 return false;
             }
         });
-
     }
-
 
     // Executed when Sign in button pressed
     public void signInExistingUser(View v)   {
@@ -82,9 +87,9 @@ public class LogInActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.d("FishingApp", "signInWithEmail() onComplete: " + task.isSuccessful()); // For debugging purpose
 
-                Log.d("FishingApp", "signInWithEmail() onComplete: " + task.isSuccessful());
-
+                // Check the Firebase authentication results
                 if (!task.isSuccessful()) {
                     Log.d("FlashChat", "Login Failure" + task.getException().getLocalizedMessage());
                     showErrorDialog("Either the email or password might be incorrect. Please try again.");
@@ -93,18 +98,12 @@ public class LogInActivity extends AppCompatActivity {
                     finish();
                     startActivity(intent);
                 }
-
             }
-
-
         });
-
-
     }
 
     // Show error on screen with an alert dialog
     private void showErrorDialog(String message) {
-
         new AlertDialog.Builder(this)
                 .setTitle("Oops")
                 .setMessage(message)

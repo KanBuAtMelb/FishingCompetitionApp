@@ -265,7 +265,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
         return c;
     };
 
-    // Fill the visuals on the competition card view
+    // Fill the views on the competition card view
     private void fillView(ItemViewHolder viewHolder, Competition comp, int position) {
 
         viewHolder.compTittle.setText(comp.getCname());

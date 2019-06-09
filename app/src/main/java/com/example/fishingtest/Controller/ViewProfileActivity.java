@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fishingtest.Model.Common;
-import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
@@ -36,12 +32,17 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-
 import java.util.ArrayList;
 
+/**
+ * Completed by Qin Xu on 8/06/2019.
+ *
+ * The controller for the "View Personal Profile" activity.
+ */
 
-public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
+public class ViewProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
+    // UI views
     DatabaseReference databaseUser;
     StorageReference userImage;
     Button buttonPassword;
@@ -64,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
         userImage = FirebaseStorage.getInstance().getReference("Comp_Images");
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
@@ -79,12 +81,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         attended = (TextView) findViewById(R.id.attended);
         upcoming = (TextView) findViewById(R.id.upcoming);
         won = (TextView) findViewById(R.id.won);
-
-//
-//        attended.setOnClickListener(this);
-//        upcoming.setOnClickListener(this);
-//        won.setOnClickListener(this);
-//
 
         //display user name and email address
         databaseUser.addValueEventListener(new ValueEventListener() {
@@ -123,7 +119,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.profile_reset_pwd:
+            case R.id.profile_reset_pwd: // Upon "Reset My Password" button clicked
 
                 if(userEmail != null){
                     firebaseAuth.sendPasswordResetEmail(userEmail)
@@ -131,41 +127,35 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Toast.makeText(ProfileActivity.this,
+                                        Toast.makeText(ViewProfileActivity.this,
                                                 "Password link sent to your email", Toast.LENGTH_LONG).show();
                                     }else{
-                                        Toast.makeText(ProfileActivity.this,
+                                        Toast.makeText(ViewProfileActivity.this,
                                                 task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                     }
-
                                 }
                             });
                 }
-
                 break;
-            case R.id.default_picture:
+
+            case R.id.default_picture: // Upon personal avatar image clicked
                 Intent galleryIntent = new Intent();
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent, RC_IMAGE_GALLERY);
                 break;
-            case R.id.profile_comp_history:
-                Intent intent = new Intent(ProfileActivity.this, ViewMyCompHistoryActivity.class);
-                startActivity(intent);
 
+            case R.id.profile_comp_history:  // Upon "My Competition History" button clicked
+                Intent intent = new Intent(ViewProfileActivity.this, ViewMyCompHistoryActivity.class);
+                startActivity(intent);
                 break;
-            case R.id.attended:
-                //TODO: Add Game_Record Intent
-                break;
-            case R.id.upcoming:
-                //TODO: Add Upcoming Competition Intent
-            case R.id.won:
-                //TODO: Add Reward Record Intent
+
             default:
                 break;
         }
     }
 
+    // Overridden method for image selection from the mobile photo gallery
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -178,32 +168,20 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(ProfileActivity.this, "Avatar update completed!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ViewProfileActivity.this, "Avatar update completed!", Toast.LENGTH_LONG).show();
                     String url = taskSnapshot.getDownloadUrl().toString();
                     databaseUser.child("imagePath").setValue(url);
                 }
             });
-  }
+         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish(); // back button
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    // Overridden method for "Back" button pressed
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
-
-        Intent intent = new Intent(ProfileActivity.this, HomePageActivity.class);
+        Intent intent = new Intent(ViewProfileActivity.this, HomePageActivity.class);
         startActivity(intent);
         finish();
-
     }
 
     //Check if any ArrayList is null, if yes, instantiate it
@@ -211,7 +189,5 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if (arr==null)
         return new ArrayList<>();
         return arr;
-
     }
-
 }

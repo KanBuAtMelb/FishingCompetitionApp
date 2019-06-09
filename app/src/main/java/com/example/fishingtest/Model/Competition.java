@@ -7,6 +7,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * Competition class containing all the information required for a competition
+ */
+
 public class Competition implements Serializable {
     private String compID;
     public  String cname;
@@ -135,7 +141,7 @@ public class Competition implements Serializable {
         this.date_translated = newDateFormat();
     }
 
-    // Check if any Arraylist is null after taken from Firebase
+    // Check if any ArrayList is null after taken from Firebase
     public void checkArrayList(){
         if(this.attendants == null)
             this.attendants = new ArrayList<>();
@@ -156,7 +162,7 @@ public class Competition implements Serializable {
             this.attendants.remove(userID);
     }
 
-
+    // Reformatting the competition date and time
     public Date calCompDateTime(){
 
         // For Competition info
@@ -169,10 +175,10 @@ public class Competition implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return newDate;
     }
 
+    // Generate new format of the competition date and time
     public String newDateFormat(){
 
         String newFormat = new String();

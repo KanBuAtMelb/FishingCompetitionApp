@@ -24,11 +24,11 @@
         <activity
             android:name=".Controller.ViewMyCompHistoryActivity"
             android:label="@string/title_activity_view_my_comp_history"
-            android:parentActivityName=".Controller.ProfileActivity"
+            android:parentActivityName=".Controller.ViewProfileActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.fishingtest.Controller.ProfileActivity" />
+                android:value="com.example.fishingtest.Controller.ViewProfileActivity" />
         </activity>
         <activity
             android:name=".Controller.SelectCompWinnerActivity"
@@ -65,8 +65,7 @@
             android:name=".Controller.ShotPreviewActivity"
             android:parentActivityName=".Controller.ViewCompDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Controller.ProfileActivity" />
-        <activity android:name=".Controller.EditProfileActivity" />
+        <activity android:name=".Controller.ViewProfileActivity" />
         <activity
             android:name=".Controller.ViewCompDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

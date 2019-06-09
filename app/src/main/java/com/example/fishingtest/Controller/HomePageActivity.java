@@ -34,7 +34,6 @@ import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.Model.User;
 import com.example.fishingtest.Adapter.ViewPagerAdapter;
 import com.example.fishingtest.R;
-import com.example.fishingtest.Service.TrackingService;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -50,13 +49,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * The controller for the "Home" page.
+ */
+
 public class HomePageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    // Set tag to the view??
+    // Set tag to the view
     private static  final String TAG = "MainPageActivity";
     private static final int PERMISSIONS_REQUEST = 100;
-
-
 
     // Toolbar
     Toolbar mToolbar;
@@ -84,14 +87,13 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
     public boolean isLogin = false;
 
     // User's Firebase info
-    DatabaseReference loginedUser;  // why no public or private??
+    DatabaseReference loginedUser;
     private FirebaseAuth myAuth;
 
     // Competition Firebase info
     DatabaseReference databaseComps;
     ArrayList<Competition> compList;
     List<String> nameList;
-
 
     // Posts time
     Timestamp currStamp;
@@ -102,13 +104,13 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
     MyLocationListener locationListener;
     String mProvider = new String();
 
-
+    // New class for the Loaction Listen related to GPS service
     private final class MyLocationListener implements LocationListener {
-
+        // Constructor
         public MyLocationListener(){
         }
 
-
+        // Store the real-time location to the Common
         @Override
         public void onLocationChanged(Location location) {
             Log.e("KB_Home","onLocationChanged" + location.toString());
@@ -125,12 +127,12 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         @Override
         public void onProviderEnabled(String provider) {
-            Log.e("KB_Home","onProviderEnabled");
+            Log.e("FishComp_Home","onProviderEnabled: " + provider); // For debugging purpose
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-            Log.e("KB_Home","onProviderDisabled: " + provider);
+            Log.e("FishComp_Home","onProviderDisabled: " + provider); // For debugging purpose
         }
     }
 
@@ -143,16 +145,14 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         mToolbar =  findViewById(R.id.main_top_toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("HOME");
-        // SearchView in Toolbar in onCreateOptionsMenu??
+        // Sorted competition name list
         nameList = new ArrayList<>();
-
 
         // Firebase
         currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseGPS = FirebaseDatabase.getInstance().getReference().child("Live_GPS").child(currentUserID);
 
-
-        // -- Get current user
+        // Get current user
         loginedUser = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserID);
         loginedUser.addValueEventListener(new ValueEventListener() {
             @Override
@@ -169,7 +169,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
-
+        // Initialize and fill the Comp List with the latest competitions from the Firebase
         compList = new ArrayList<>();
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
         databaseComps.addValueEventListener(new ValueEventListener() {
@@ -180,21 +180,15 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                     Competition comp = compSnapshot.getValue(Competition.class);
                     compList.add(comp);
                 }
-
                 nameList = compList.stream()
                         .map(Competition::getCname)
                         .collect(Collectors.toList());
-
-//                searchAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // TODO: Do something here?
             }
         });
-
-
 
         // NavigationView setup
         navigationView = findViewById(R.id.nav_view);
@@ -213,7 +207,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-
         //Set up Drawer layout
         // DrawerLayout
         myDrawerlayout = findViewById(R.id.drawer_layout);
@@ -221,9 +214,6 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 this, myDrawerlayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         myDrawerlayout.addDrawerListener(toggle);
         toggle.syncState();
-
-
-        currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
         // GPS list for available provider
@@ -246,36 +236,22 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                     Toast.LENGTH_LONG).show();
         };
 
-//        Criteria criteria = new Criteria();
-//
-//        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-//        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
-//        criteria.setBearingAccuracy(Criteria.ACCURACY_HIGH);
-//        criteria.setSpeedAccuracy(Criteria.ACCURACY_HIGH);
-//        criteria.setHorifzontalAccuracy(Criteria.ACCURACY_HIGH);
-//        criteria.setVerticalAccuracy(Criteria.ACCURACY_HIGH);
-//
-//        String mProvider = locationManager.getBestProvider(criteria, true);
-//        if (mProvider != null) {
-//            Log.e("KB_Home", "mProvider:" + mProvider);
-//        }
-
        locationListener = new MyLocationListener();
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //If the app doesn’t currently have access to the user’s location, then request access
+                //If the app does not currently have access to the user’s location, then request access
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         PERMISSIONS_REQUEST);
                 return;
             }
+            // Set up Location Update with selected location listener
+            locationManager.requestLocationUpdates(mProvider, 1000, 2, locationListener);
 
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
-//            locationManager.requestLocationUpdates(mProvider, 1000, 2, locationListener);
-//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000,2,locationListener);
+            // For indoor App demo use
+//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
+//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
         }
     }
 
@@ -301,21 +277,15 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         if (requestCode == PERMISSIONS_REQUEST && grantResults.length == 1
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-            //...then start the GPS tracking service//
-//            startTrackerService();
+            // Set up Location Update with selected location listener
+            locationManager.requestLocationUpdates(mProvider, 1000, 2, locationListener);
 
-
+            // For indoor App demo use
 //            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
 //            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
-
-
-//            locationManager.requestLocationUpdates(mProvider, 1000,1,locationListener);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 2, locationListener);
-
         } else {
 
-            //If the user denies the permission request, then display a toast with some more information//
+            //If the user denies the permission request, then display a toast with some more information
             Toast.makeText(this, "Please enable location services to allow GPS tracking", Toast.LENGTH_SHORT).show();
         }
 
@@ -328,7 +298,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         // Get the Search menu
         MenuItem searchItem = menu.findItem(R.id.toolbar_search);
-        // Get the searchview object
+        // Get the Search View object
         searchView = (SearchView) searchItem.getActionView();
         searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setDropDownBackgroundResource(R.color.white);
@@ -365,13 +335,8 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                 return false;
             }
         });
-
-
         return true;
     }
-
-
-
 
     // Side Navigation bar Item selected
     @Override
@@ -381,7 +346,7 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
 
         if (id == R.id.side_nav_profile) {
             //Transfer to EditUserActivity
-            Intent profileIntent = new Intent(this, ProfileActivity.class);
+            Intent profileIntent = new Intent(this, ViewProfileActivity.class);
             startActivity(profileIntent);
 
         } else if (id == R.id.side_nav_logout) {
@@ -389,13 +354,11 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
                     .signOut(this)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         public void onComplete(@NonNull Task<Void> task) {
-                            // stop GPS service
-//                            stopTrackerService();
+                            // Remove the working location listener for user privacy issue
                             locationManager.removeUpdates(locationListener);
 
                             // delete GPS Live data in Firebase
                             databaseGPS.removeValue();
-
 
                             // user is now signed out
                             startActivity(new Intent(HomePageActivity.this, LogInActivity.class));
@@ -423,32 +386,8 @@ public class HomePageActivity extends AppCompatActivity implements NavigationVie
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-//            super.onBackPressed();
+            super.onBackPressed();
         }
-    }
-
-
-
-    //Start the TrackerService//
-    private void startTrackerService() {
-
-        Intent startIntent=new Intent(this, TrackingService.class);
-        startIntent.putExtra("UserID", currentUserID);
-        this.startService(startIntent);
-
-        //Notify the user that tracking has been enabled//
-        Toast.makeText(this, "GPS tracking enabled", Toast.LENGTH_SHORT).show();
-
-    }
-
-    //Stop the Tracakerservice
-    private void stopTrackerService(){
-
-        Intent stopIntent =new Intent(this, TrackingService.class);
-        this.stopService(stopIntent);
-
-        //Notify the user that tracking has been enabled//
-        Toast.makeText(this, "GPS tracking disabled", Toast.LENGTH_SHORT).show();
     }
 
 }

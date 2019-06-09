@@ -38,8 +38,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class EditCompActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * The controller for the "Edit Competitions" activity for the Administrator.
+ */
 
+public class EditCompActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     // Competition UI
     EditText cName;
@@ -47,7 +52,7 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
     EditText cDate;
     EditText cStartTime;
     EditText cStopTime;
-    Spinner cType;  // TODO: using diaglog window to replace spinner
+    Spinner cType;
     EditText cWinner;
     EditText cResult;
     EditText cGeo;
@@ -66,31 +71,29 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
     String cStatus;
     ArrayList<String> attendants;
 
-
     // For Competition Image uploading
     static final int COMP_IMAGE_GALLERY = 22;
     Uri imageUri;
-    ImageView profileImage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_comp);
 
+        // Initialize the local variables
         compID = new String();
         image_url = new String();
         cStatus = new String();
         attendants = new ArrayList<>();
-
-
 
         // Firebase
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
         databaseComps.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                // Clear the Comp List filled by last Firebase database change
                 compList.clear();
+                // Fill the Comp List with the latest database snapshot
                 for(DataSnapshot compSnapshot: dataSnapshot.getChildren()){
                     Competition comp = compSnapshot.getValue(Competition.class);
                     comp.checkArrayList();
@@ -99,20 +102,14 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
 
                 EditCompListAdapter compListAdapter = new EditCompListAdapter(EditCompActivity.this, compList);
                 cListView.setAdapter(compListAdapter);
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
-
-
-
-
-        // UI
+        // UI views
         cName = (EditText) findViewById(R.id.update_comp_name);
         cReward = (EditText) findViewById(R.id.update_comp_reward);
         cDate= (EditText) findViewById(R.id.update_comp_date);
@@ -125,7 +122,6 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
         cDescription = (EditText) findViewById(R.id.update_comp_description);
         cImage = (ImageButton) findViewById(R.id.update_comp_comp_image);
 
-
         // Set up Spinner
         cType.setSelection(0);
 
@@ -133,6 +129,7 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
         compList = new ArrayList<>();
         cListView = (ListView)findViewById(R.id.update_comp_listview);
 
+        // Fill the view with values from the competition selected in the List View
         cListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -146,7 +143,6 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
 
                 // Spinner
                 cType.setSelection(comp.getCompType());
-
                 cResult.setText(comp.getResults());
                 cGeo.setText(comp.getGeo_map());
                 cDescription.setText(comp.getcDescription());
@@ -185,22 +181,18 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
             }
         });
 
-
         // Click Competition Date to select the date on a Calendar
         cDate.setShowSoftInputOnFocus(false);
         cDate.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
-
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(), "Date Picker");
             }
         });
 
-        // Click the "Update Comp" button
+        // Click the "Update Comp" button and update the Firebase database
         cUpdate = (Button) findViewById(R.id.admin_button_updateComp);
-
         cUpdate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -209,7 +201,7 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
         });
     }
 
-
+    // Successfully fetch the competition image from the database
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -233,13 +225,10 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
     @Override
     protected void onStart() {
         super.onStart();
-
     }
 
+    // Update the Competition database in Firebase with the new view data
     private void update_comp() {
-
-
-        // TODO: FORMAT CHECKS TO BE DONE
         String name = cName.getText().toString().trim();
         String date = cDate.getText().toString().trim();
         int reward = Integer.parseInt(cReward.getText().toString().trim());
@@ -251,15 +240,16 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
         String geo = cGeo.getText().toString().trim();
         String description = cDescription.getText().toString().trim();
 
+        // Check the data before updating to the Firebase
         if(TextUtils.isEmpty(name)||TextUtils.isEmpty(date)||TextUtils.isEmpty(startT)||TextUtils.isEmpty(stopT)){
-
             Toast.makeText(this, "Please enter a competition name and date and times", Toast.LENGTH_SHORT).show();
-
         }else if(!(Common.verifyTime(startT) && Common.verifyTime(stopT))){
             Toast.makeText(this,"Please ensure the time stamps are in format of \"HH:mm\", applying 24 hrs",Toast.LENGTH_LONG).show();
         }else if(!Common.verifyGeoInfo(geo)){
             Toast.makeText(this,"Please ensure the geo information is in format of \"lat, long, radius\"",Toast.LENGTH_LONG).show();
         }else{
+
+            // Update the Firebase
             Competition comp = new Competition(compID,name,reward,date,startT,stopT,geo,attendants,result,winner,type,description, image_url, cStatus);
             databaseComps.child(compID).setValue(comp);
             Toast.makeText(this,"Competition updated!",Toast.LENGTH_LONG).show();
@@ -267,6 +257,7 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
         }
     }
 
+    // Clear all view values
     private void clear_textView() {
         cName.setText(Common.EMPTY);
         cDate.setText(Common.EMPTY);
@@ -280,6 +271,7 @@ public class EditCompActivity extends AppCompatActivity implements DatePickerDia
         cDescription.setText(Common.EMPTY);
     }
 
+    // Overridden method for Data Picker view after implement DatePickerDialog.OnDateSetListener
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();

@@ -17,24 +17,26 @@ import android.location.Criteria;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.IBinder;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.DebugUtils;
 import android.util.Log;
 import android.Manifest;
 import android.location.Location;
-import android.app.Notification;
 import android.content.pm.PackageManager;
 import android.app.PendingIntent;
 import android.app.Service;
 
 import java.util.List;
-import java.util.concurrent.Executor;
+
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * The service is not used currently in the project
+ * but can be kept for future usage
+ */
 
 public class TrackingService extends Service {
 

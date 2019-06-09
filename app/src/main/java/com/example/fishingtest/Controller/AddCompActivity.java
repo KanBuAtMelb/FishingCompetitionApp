@@ -57,7 +57,7 @@ public class AddCompActivity extends AppCompatActivity implements DatePickerDial
         // Firebase
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
 
-        // Initiate the visuals
+        // Initiate the views
         cName = (EditText) findViewById(R.id.add_comp_name);
         cReward = (EditText) findViewById(R.id.add_comp_reward);
         cDate= (EditText) findViewById(R.id.add_comp_date);
@@ -91,7 +91,7 @@ public class AddCompActivity extends AppCompatActivity implements DatePickerDial
     // Add competition to the Firebase Competitions database
     private void add_comp() {
 
-        // Check input format before get the value from the visuals
+        // Check input format before get the value from the views
         String name = cName.getText().toString().trim();
         String date = cDate.getText().toString().trim();
         int reward = 0;
@@ -123,7 +123,7 @@ public class AddCompActivity extends AppCompatActivity implements DatePickerDial
         }
     }
 
-    // Clear content of all the visual values
+    // Clear content of all the view values
     private void clear_textView(){
         cName.setText(Common.EMPTY);
         cDate.setText(Common.EMPTY);
@@ -136,7 +136,7 @@ public class AddCompActivity extends AppCompatActivity implements DatePickerDial
     }
 
 
-    // Overridden method for Data Picker visual after implement DatePickerDialog.OnDateSetListener
+    // Overridden method for Data Picker view after implement DatePickerDialog.OnDateSetListener
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();

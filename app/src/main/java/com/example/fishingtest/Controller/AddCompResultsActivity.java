@@ -23,10 +23,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * The controller for the "Add Competition Results" activity for the Administrator.
+ */
+
 public class AddCompResultsActivity extends AppCompatActivity {
 
     final static String WAIT_FOR_RESULTS_STATUS = "2";
-
 
     // UI
     ListView cListView;
@@ -57,11 +62,9 @@ public class AddCompResultsActivity extends AppCompatActivity {
 
         //Fetch "Waiting-for-Results"competitions from Firebase and store into compList
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
-
         databaseComps.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 compList.clear();
                 for(DataSnapshot compSnapshot: dataSnapshot.getChildren()){
                     Competition comp = compSnapshot.getValue(Competition.class);
@@ -70,9 +73,9 @@ public class AddCompResultsActivity extends AppCompatActivity {
                         if(comp.getWinner().equals(Common.NA) && comp.getResults().equals(Common.NA))
                             compList.add(comp);
                     }
-
                 }
 
+                // Set up the Array Adapter for the List view displaying all the competitions for result addition
                 EditCompListAdapter compListAdapter = new EditCompListAdapter(AddCompResultsActivity.this, compList);
                 cListView.setAdapter(compListAdapter);
             }
@@ -96,11 +99,13 @@ public class AddCompResultsActivity extends AppCompatActivity {
         // Set up List of Competition
         compList = new ArrayList<>();
 
+        // Set up onClick operation for the items in the Competition List View
         cListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Competition comp = compList.get(position);
 
+                // Set the text for the views of each competition item
                 cName.setText(comp.getCname());
                 cDate.setText("Date: " + comp.getDate());
                 cStartTime.setText("Start at: "+comp.getStartTime());
@@ -119,11 +124,11 @@ public class AddCompResultsActivity extends AppCompatActivity {
                 // Hold these invisible values
                 compID = comp.getCompID();
                 compName = comp.getCname();
-                cStatus = comp.getcStatus();     // TODO: DO WE NEED IT?
+                cStatus = comp.getcStatus();
             }
         });
 
-        // Click "View All the Posts" Buton
+        // Click "View All the Posts" Button and transfer to the "Select Competition Winner" page
         btn_select_comp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,6 +142,8 @@ public class AddCompResultsActivity extends AppCompatActivity {
 
     }
 
+
+    // Re-define the "Back" button that the page transfer to the Home page on clicking
     @Override
     public void onBackPressed() {
 

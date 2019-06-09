@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.example.fishingtest.Adapter.MyCompAdapter;
 import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
-import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,24 +30,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * The fragment residing in "HomePageActivity"
+ * to display the user's registered competitions for the user
+ */
 
 public class MyCompetitionsFragment extends Fragment {
 
+    // Local variables
+    List<Map<Integer, Competition>> comps_registered;
+
+    // UI views
     RecyclerView recyclerView;
     FloatingActionButton fab;
 
-    List<Map<Integer, Competition>> comps_registered;
-
-    private FirebaseUser user;
     private DatabaseReference databaseComps;
-    private DatabaseReference databaseUser;
     private String userID;
     private MyCompAdapter cAdapter;
 
-
+    // Constructor
     public MyCompetitionsFragment() {
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,11 +81,10 @@ public class MyCompetitionsFragment extends Fragment {
         // Set adaptor
         recyclerView.setAdapter(cAdapter);
 
-
-
-        //Floating button
+        //floating action button
         fab = (FloatingActionButton) view.findViewById(R.id.floating_button_comp);
 
+        // Set up the OnClick listener of the floating action button
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -95,11 +98,10 @@ public class MyCompetitionsFragment extends Fragment {
                 }
             }
         });
-
-
         return view;
     }
 
+    // Initialize the Recycler View adapter
     private void initAdapter() {
         comps_registered = new ArrayList<>();
         // Find the full details of the registered competition from Firebase database
@@ -114,8 +116,13 @@ public class MyCompetitionsFragment extends Fragment {
 
                 for(DataSnapshot compSnapshot: dataSnapshot.getChildren()){
                     Competition comp = compSnapshot.getValue(Competition.class);
+
+                    // Initialize the empty ArrayList from the Firebase as they are otherwise null
                     comp.checkArrayList();
-                    if(comp.getAttendants().contains(userID)){
+
+                    if(comp.getAttendants().contains(userID)){ // Check if the competition is registered by the current user
+
+                        // Check if the unregistered competition has not yet started
                         String compStartAt = comp.getDate().trim() + " " + comp.getStartTime().trim() + " GMT+10:00"; // Competition Time is based on AEST by default
                         long resultStart = Common.timeToCompStart(compStartAt);
                         long hourStart = resultStart / (60 * 60 * 1000);
@@ -123,6 +130,7 @@ public class MyCompetitionsFragment extends Fragment {
                         String compStopAt = comp.getDate().trim() + " " + comp.getStopTime().trim() + " GMT+10:00"; // Competition Time is based on AEST by default
                         long resultStop = Common.timeToCompStart(compStopAt);
 
+                        // Categorise the competition display type
                         if(resultStart <= 0 && resultStop >= 0){
                             comp_inPrg.add(comp);
                         }else if(resultStart > 0 && hourStart <= 24){
@@ -130,7 +138,6 @@ public class MyCompetitionsFragment extends Fragment {
                         }else if(hourStart > 24){
                             comp_normal.add(comp);
                         }
-
                     }
                 }
 
@@ -139,9 +146,10 @@ public class MyCompetitionsFragment extends Fragment {
                 comp_24Hr.sort(Comparator.comparing(Competition::calCompDateTime));
                 comp_normal.sort(Comparator.comparing(Competition::calCompDateTime));
 
+                // A map combining the competition display type and the Competition object
                 Map<Integer, Competition> map;
 
-                // Add Tittle
+                // Add three Tittle items for displaying three different types of competitions
                 if(comp_inPrg.size()>0){
                     map = new HashMap<Integer, Competition>();
                     map.put(MyCompAdapter.VIEW_TYPE_TITLE, new Competition("Competition in Progress")); // user Competition ID as title text
@@ -177,17 +185,13 @@ public class MyCompetitionsFragment extends Fragment {
                     }
                 }
 
+                // Notify the recylcer view adapter of the changes in the list of Comp Map
                 cAdapter.notifyDataSetChanged();
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
-
-
     }
-
 }

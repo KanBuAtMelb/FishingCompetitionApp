@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,24 +28,30 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * The fragment residing in "HomePageActivity"
+ * to display up-coming competitions for users to view and register
+ */
 
 public class DiscoveryFragment extends Fragment {
+    // Local variables
+    public static final String TAG = "Discovery Fragment";
+    ArrayList<Competition> comps;
+    private DatabaseReference databaseComps;
+    private FirebaseUser user;
 
+    // UI views
     RadioGroup radioGroup;
     RecyclerView recyclerView;
     DiscAdapter dAdapter;
     FloatingActionButton fab;
 
-    ArrayList<Competition> comps;
-    private DatabaseReference databaseComps;
-
-    private FirebaseUser user;
-
-
+    //Constructor
     public DiscoveryFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +67,6 @@ public class DiscoveryFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
-
-
 
         // Get a reference to recyclerView
         recyclerView =  view.findViewById(R.id.recyclerView_discovery);
@@ -91,10 +96,10 @@ public class DiscoveryFragment extends Fragment {
                                 dAdapter.addComp(comp);
                             }
                         }
-
-
                     }
                 }
+
+                // Keep competition sorting order consistent after Comp List updated by Firebase
                 switch(Common.DISCOVERY_SORT_ORDER){
                     case 0:
                         dAdapter.sortByName();
@@ -108,18 +113,17 @@ public class DiscoveryFragment extends Fragment {
                     default:
                         dAdapter.sortByName();
                 }
+                // Notify the changes
                 dAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //TODO: write something here??
             }
         });
 
         // Radio button
         radioGroup = view.findViewById(R.id.disc_sort_group);
-
 
         // Sorting options
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -148,13 +152,11 @@ public class DiscoveryFragment extends Fragment {
             }
         });
 
-
+        // Set adaptor to the Recycler View
         dAdapter = new DiscAdapter(comps,getContext());
-        // Set adaptor
         recyclerView.setAdapter(dAdapter);
 
-
-        // Click on Floating button to view the selected competition in details
+        // Click on floating action button to view the selected competition in details
         fab = (FloatingActionButton) view.findViewById(R.id.floating_button_discovery);
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -169,8 +171,6 @@ public class DiscoveryFragment extends Fragment {
                 }
             }
         });
-
-
         return view;
     }
 

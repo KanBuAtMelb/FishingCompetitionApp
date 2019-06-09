@@ -16,10 +16,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.w3c.dom.Text;
+/**
+ * Completed by Qin Xu on 8/06/2019.
+ *
+ * The controller for the "Password Reset" activity
+ * after clicking the "Reset My Password" button on the Log-in Page..
+ */
 
 public class ResetPasswordActivity extends AppCompatActivity {
 
+
+    // UI views
     Toolbar mtoolBar;
     ProgressBar mProgressBar;
     TextView mEmail;
@@ -38,13 +45,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
         mResetPwd_btn = (Button) findViewById(R.id.resetpwd_btn);
 
         mtoolBar.setTitle("Forgot password");
-
         firebaseAuth = FirebaseAuth.getInstance();
 
+        // Upon clicking the password reset button
         mResetPwd_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 firebaseAuth.sendPasswordResetEmail(mEmail.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<Void>(){
                             @Override

@@ -4,6 +4,12 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * User class containing all the information required for a user
+ */
+
 @IgnoreExtraProperties
 public class User {
     String uid;
