@@ -27,6 +27,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * Recycler View Adapter for the Recycler View implemented in "SelectCompWinnerActivity"
+ * which is the controller for the "Select Winner" page for the Administrator
+ * after a competition waiting for results has been selected.
+ */
+
 public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAdapter.PostViewHolder>{
 
     // New class addressing each "Competition" item view in the list
@@ -62,12 +70,10 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
 
     // Local variables
     private static final String TAG = "Result List Adapter";
-    ArrayList<Post> posts;
+    ArrayList<Post> posts; // Post List
     DatabaseReference databaseUserName;
     String uName;
     String postTime;
-
-
     public int row_index = -1;
     Context context;
 
@@ -120,7 +126,7 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
 
         viewHolder.postTime.setText("Post Published Time: "+ postTime);
 
-
+        // Set the post background color changes when the item is clicked
         viewHolder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -151,9 +157,9 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
         return posts.size();
     }
 
+    // Add post to the Post List
     public void addPost(Post post){
         posts.add(post);
-//        notifyDataSetChanged();  //TODO: WHY NEEDED HERE?
     }
 
     public Boolean contains(Post post){
@@ -167,9 +173,5 @@ public class WinnerPostListAdapter extends RecyclerView.Adapter<WinnerPostListAd
     public void sortByTime(){
         // create sorted comp list for different usage
         posts.sort(Comparator.comparing(Post::getTimeStamp));
-    }
-
-    public String getuName() {
-        return uName;
     }
 }

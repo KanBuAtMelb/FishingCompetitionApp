@@ -30,26 +30,31 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * Recycler View Adapter for the Recycler View implemented in "MyCompetitionFragment"
+ * which is the controller for the "My Competition" page of the Home Page.
+ */
 
 public class MyCompAdapter extends RecyclerView.Adapter {
 
     // Local variables
     private final static String TAG = "MyCompetition Adapter";
-    //    private ArrayList<Competition> comps;
     private Context context;
 
-
-
+    // Competition display category
     public int row_index = -1;
     public static final int VIEW_TYPE_TITLE= 0;
     public static final int VIEW_TYPE_INPRG=1;
     public static final int VIEW_TYPE_24HR =2;
     public static final int VIEW_TYPE_ITEM= 3;
 
+    // A list of pairs of competition display category and competition
     private List<Map<Integer,Competition>> mData;
 
 
-    // New class addressing each "Competition" item view in the list
+    // New class addressing each "Competition" item view in the competition map list
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView compImage;
         TextView compTittle;
@@ -84,6 +89,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
         }
     }
 
+    // New class inherited from "ItemViewHolder" for competition display category title
     class TitleViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         public TitleViewHolder(@NonNull View itemView) {
@@ -105,6 +111,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater mInflater = LayoutInflater.from(viewGroup.getContext());
 
+        // Judge the competition display category
         switch(viewType){
             case VIEW_TYPE_TITLE:
                 viewHolder = new TitleViewHolder(mInflater.inflate(R.layout.recyclerview_title, viewGroup, false));
@@ -118,9 +125,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_ITEM:
                 viewHolder = new ItemViewHolder(mInflater.inflate(R.layout.cardview_rgst_comp_item_normal, viewGroup,false));
                 break;
-
         }
-
         return viewHolder;
     }
 
@@ -135,7 +140,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             vh.title.setText(mData.get(position).get(VIEW_TYPE_TITLE).getCompID());
         }
 
-        // Set up competition card view
+        // Set up competition card view for competition in progress
         else if(mData.get(position).containsKey(VIEW_TYPE_INPRG)){
             ItemViewHolder vh = (ItemViewHolder) viewHolder;
             comp = mData.get(position).get(VIEW_TYPE_INPRG);
@@ -143,9 +148,9 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             vh.timeBeforeStart.setText("Competition in Progress! ");
             vh.timeBeforeStart.setTextSize(18);
             vh.timeBeforeStart.setTextColor(Color.parseColor("#00335c"));
-//            vh.itemView.setBackgroundColor(Color.parseColor("#EC7063"));
         }
 
+        // Set up competition card view for competition starting within 24 hours
         else if(mData.get(position).containsKey(VIEW_TYPE_24HR)){
             ItemViewHolder vh = (ItemViewHolder) viewHolder;
             comp = mData.get(position).get(VIEW_TYPE_24HR);
@@ -157,9 +162,9 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             vh.timeBeforeStart.setText("Only " + (int) diffHours + " hours, " + (int) diffMinutes + " min left!");
             vh.timeBeforeStart.setTextSize(16);
             vh.timeBeforeStart.setTextColor(Color.parseColor("#00335c"));
-//            vh.itemView.setBackgroundColor(Color.parseColor("#ffa600"));
         }
 
+        // Set up competition card view for competition starting after 24 hours
         else if(mData.get(position).containsKey(VIEW_TYPE_ITEM)){
             ItemViewHolder vh = (ItemViewHolder) viewHolder;
             comp = mData.get(position).get(VIEW_TYPE_ITEM);
@@ -171,10 +176,9 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             vh.timeBeforeStart.setText("Still have " + (int) diffDays + " days, " + (int) diffHours + " hours, ");
             vh.timeBeforeStart.setTextSize(12);
             vh.timeBeforeStart.setTextColor(Color.parseColor("#66000000"));
-//            vh.itemView.setBackgroundColor(Color.parseColor("#6495ED"));
         }
 
-
+        // Set up card view change on selection
         if(viewHolder instanceof ItemViewHolder){
             ItemViewHolder vh = (ItemViewHolder) viewHolder;
             vh.setItemClickListener(new ItemClickListener() {
@@ -183,7 +187,6 @@ public class MyCompAdapter extends RecyclerView.Adapter {
                     if(position>= 0){
                         row_index = position;
                         Common.currentCompItem = findComp(position);
-
                         notifyDataSetChanged();
                     }else{
                         Toast.makeText(context, "Please select a competition to view.",Toast.LENGTH_LONG).show();
@@ -191,6 +194,7 @@ public class MyCompAdapter extends RecyclerView.Adapter {
                 }
             });
 
+            // The "Unregister" button on each competition card view is clicked, changes are applied to Firebase database
             vh.compUnregisterBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -249,19 +253,19 @@ public class MyCompAdapter extends RecyclerView.Adapter {
         }
     }
 
+    // Find competition by index
     private Competition findComp(int position) {
         Competition c = new Competition();
-
         if(mData.get(position).get(VIEW_TYPE_INPRG)!= null)
             c= mData.get(position).get(VIEW_TYPE_INPRG);
         else if(mData.get(position).get(VIEW_TYPE_24HR)!= null)
             c= mData.get(position).get(VIEW_TYPE_24HR);
         else if(mData.get(position).get(VIEW_TYPE_ITEM)!= null)
             c= mData.get(position).get(VIEW_TYPE_ITEM);
-
         return c;
     };
 
+    // Fill the visuals on the competition card view
     private void fillView(ItemViewHolder viewHolder, Competition comp, int position) {
 
         viewHolder.compTittle.setText(comp.getCname());
@@ -271,13 +275,13 @@ public class MyCompAdapter extends RecyclerView.Adapter {
         viewHolder.compReward.setText("Reward: $" + comp.getReward() + " AUD");
         viewHolder.compDateTime.setText("Date: " + comp.getDate() + " Time: From " + comp.getStartTime() + " To " + comp.getStopTime());
 
+        // When the change is selected, color changes occur to competition image and title
         if (row_index == position) {
             viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
 
             if (comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
             else {
-                // Set the customised competition image
                 Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
             }
         } else {
@@ -286,7 +290,6 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             if (comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_deep_aqua);
             else {
-                // Set the customised competition image
                 Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
             }
         }
@@ -305,8 +308,6 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             return VIEW_TYPE_24HR;
         else
             return VIEW_TYPE_ITEM;
-
-
     };
 
 
@@ -318,12 +319,13 @@ public class MyCompAdapter extends RecyclerView.Adapter {
             return 0;
     }
 
-
+    // Add item to competition map list
     public void addCompMap(Map map){
         mData.add(map);
         notifyDataSetChanged();
     }
 
+    // Clear map
     public void clearCompList(){
         this.mData.clear();
     }

@@ -8,13 +8,18 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * Fragment Pager Adapter for the Home Page to host two fragments
+ * of "DiscoveryActivity" and "MyCompetitionActivity".
+ */
+
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-
+    // Local variables
     private final List<Fragment> fragmentList = new ArrayList<>();
     private final List<String> fragmentListTittle = new ArrayList<>();
-//    private String[] fgTitles = new String[]{"Competitions", "Discovery"};
-
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -25,7 +30,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return fragmentList.get(i);
     }
 
-
     @Override
     public int getCount() {
         return fragmentListTittle.size();
@@ -35,9 +39,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return fragmentListTittle.get(position);
-//        return fgTitles[position];
     }
 
+    // Add fragment to the fragment list
     public void AddFragment(Fragment fragment, String title){
         fragmentList.add(fragment);
         fragmentListTittle.add(title);

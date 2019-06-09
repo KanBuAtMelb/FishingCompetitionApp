@@ -23,8 +23,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class AddCompActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * The controller for the "Add Competitions" activity for the Administrator.
+ */
 
+public class AddCompActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     // Competition UI
     EditText cName;
@@ -43,19 +48,16 @@ public class AddCompActivity extends AppCompatActivity implements DatePickerDial
     ArrayList<String> attendants = new ArrayList<>();
     ArrayList<String> winners = new ArrayList<>();
 
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_comp);
-
         ArrayList<String> winners = new ArrayList<>();
-
 
         // Firebase
         databaseComps = FirebaseDatabase.getInstance().getReference("Competitions");
 
+        // Initiate the visuals
         cName = (EditText) findViewById(R.id.add_comp_name);
         cReward = (EditText) findViewById(R.id.add_comp_reward);
         cDate= (EditText) findViewById(R.id.add_comp_date);
@@ -64,21 +66,17 @@ public class AddCompActivity extends AppCompatActivity implements DatePickerDial
         cType = (Spinner) findViewById(R.id.add_comp_type);
         cGeo= (EditText) findViewById(R.id.add_comp_geo);
         cDescription = (EditText) findViewById(R.id.add_comp_description);
-
+        cAdd = (Button) findViewById(R.id.admin_button_addComp);
 
         // Click Competition Date to select the date on a Calendar
         cDate.setShowSoftInputOnFocus(false);
         cDate.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
-
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(), "Date Picker");
             }
         });
-
-        cAdd = (Button) findViewById(R.id.admin_button_addComp);
 
         // Click the "Add Comp" button
         cAdd.setOnClickListener(new View.OnClickListener(){
@@ -90,10 +88,10 @@ public class AddCompActivity extends AppCompatActivity implements DatePickerDial
         });
     }
 
-
+    // Add competition to the Firebase Competitions database
     private void add_comp() {
 
-        // TODO: Check input format, espeically date and time, dollar value and geo info
+        // Check input format before get the value from the visuals
         String name = cName.getText().toString().trim();
         String date = cDate.getText().toString().trim();
         int reward = 0;
@@ -104,25 +102,20 @@ public class AddCompActivity extends AppCompatActivity implements DatePickerDial
         }catch(Exception e){
             Toast.makeText(this, "Please enter a competition reward (as an integer) and type", Toast.LENGTH_SHORT).show();
         }
-
         String startT = cStartTime.getText().toString().trim();
         String stopT = cStopTime.getText().toString().trim();
-
         String geo = cGeo.getText().toString().trim();
         String description = cDescription.getText().toString().trim();
 
-
         if(TextUtils.isEmpty(name)||TextUtils.isEmpty(date)||TextUtils.isEmpty(startT)||TextUtils.isEmpty(stopT)){
-
             Toast.makeText(this, "Please enter a competition name and date and times", Toast.LENGTH_SHORT).show();
-
         }else if(!(Common.verifyTime(startT) && Common.verifyTime(stopT))){
             Toast.makeText(this,"Please ensure the time stamps are in format of \"HH:mm\", applying 24 hrs",Toast.LENGTH_LONG).show();
         }else if(!Common.verifyGeoInfo(geo)){
             Toast.makeText(this,"Please ensure the geo information is in format of \"lat, long, radius\"",Toast.LENGTH_LONG).show();
         }else{
+            // Add the new competition to the Firebase
             String id = databaseComps.push().getKey();
-
             Competition comp = new Competition(id,name,reward,date,startT,stopT,geo,type,description);
             databaseComps.child(id).setValue(comp);
             Toast.makeText(this,"Competition updated!",Toast.LENGTH_LONG).show();
@@ -130,7 +123,7 @@ public class AddCompActivity extends AppCompatActivity implements DatePickerDial
         }
     }
 
-
+    // Clear content of all the visual values
     private void clear_textView(){
         cName.setText(Common.EMPTY);
         cDate.setText(Common.EMPTY);
@@ -142,16 +135,16 @@ public class AddCompActivity extends AppCompatActivity implements DatePickerDial
         cDescription.setText(Common.EMPTY);
     }
 
+
+    // Overridden method for Data Picker visual after implement DatePickerDialog.OnDateSetListener
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
         String compDate = format.format(c.getTime());
-
         cDate.setText(compDate);
     }
 }

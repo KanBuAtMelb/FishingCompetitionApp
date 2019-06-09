@@ -13,11 +13,19 @@ import com.example.fishingtest.R;
 
 import java.util.List;
 
-public class EditCompListAdapter extends ArrayAdapter<Competition> {
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * Array Adapter for the List Views both in "EditCompActivity" and "AddCompResultsActivity"
+ * which present a list of competitions in a scrolled list
+ */
 
+public class EditCompListAdapter extends ArrayAdapter<Competition> {
+    // Local variables
     private Activity context;
     private List<Competition> compList;
 
+    // Constructor
     public EditCompListAdapter(Activity context, List<Competition> compList){
         super(context, R.layout.activity_edit_comp, compList);
         this.context = context;
@@ -30,19 +38,12 @@ public class EditCompListAdapter extends ArrayAdapter<Competition> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.listview_comp,null, true);
 
-      // Get the Layout Parameters for ListView Current Item View
-//        ViewGroup.LayoutParams params = listViewItem.getLayoutParams();
-//
-//        // Set the height of the Item View
-//        params.height = 20;
-//        listViewItem.setLayoutParams(params);
-
-
         TextView compName = (TextView) listViewItem.findViewById(R.id.listView_compName);
         TextView compDate = (TextView) listViewItem.findViewById(R.id.listView_compDate);
 
+        // Get the selected competition
         Competition comp = compList.get(position);
-
+        // Set up the competition name and date on each competition item
         compName.setText(comp.getCname());
         compDate.setText(comp.getDate());
 

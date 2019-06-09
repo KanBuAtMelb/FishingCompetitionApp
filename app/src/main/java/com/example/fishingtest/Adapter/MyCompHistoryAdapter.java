@@ -4,11 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,17 +16,17 @@ import com.example.fishingtest.Model.Common;
 import com.example.fishingtest.Model.Competition;
 import com.example.fishingtest.Model.User;
 import com.example.fishingtest.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * Recycler View Adapter for the Recycler View implemented in "ViewMyCompHistoryActivity"
+ * which is the controller for "My Competition History" page.
+ */
 
 public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdapter.CompViewHolder>{
 
@@ -63,7 +61,6 @@ public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdap
         @Override
         public void onClick(View v) {
             itemClickListener.onClick(v, getAdapterPosition());
-
         }
     }
 
@@ -93,17 +90,19 @@ public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyCompHistoryAdapter.CompViewHolder viewHolder, int position) {
-
+        // Get the Competition object from the Comp List based on the position selected
         final Competition comp = comps.get(position);
 
+        // Set the text on each card view
         viewHolder.compTittle.setText(comp.getCname());
+        viewHolder.compReward.setText("Reward: $" + comp.getReward() + " AUD");
+        viewHolder.compDateTime.setText("Date: "+ comp.getDate()+ " Time: From "+comp.getStartTime() +" To "+comp.getStopTime());
 
         // Spinner item index to text view
         String[] compTypes = context.getResources().getStringArray(R.array.comp_type);
         viewHolder.compType.setText(compTypes[comp.getCompType()]);
 
-        viewHolder.compReward.setText("Reward: $" + comp.getReward() + " AUD");
-        viewHolder.compDateTime.setText("Date: "+ comp.getDate()+ " Time: From "+comp.getStartTime() +" To "+comp.getStopTime());
+        // Set text to the competition result
         if(currentUser != null){
             if(currentUser.getComps_won().contains(comp.getCompID())){
                 viewHolder.compWon.setText("You are the Winner! Congrats!");
@@ -113,18 +112,12 @@ public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdap
             }else{
                 viewHolder.compWon.setText("Unfortunatly you missed the awards");
                 viewHolder.compWon.setTextColor(Color.parseColor("#D3D3D3"));
-
                 viewHolder.itemView.setBackgroundColor(Color.parseColor("#006495"));
-
             }
 
         }else{
             viewHolder.compWon.setText("Hold on! Loading the data");
         }
-
-
-
-
 
         viewHolder.setItemClickListener(new ItemClickListener() {
             @Override
@@ -142,14 +135,10 @@ public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdap
 
 
         // Competition images
-
         if(row_index ==position){
             viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
-//            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffff66"));
-
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
-
             else{
                 // Set the customised competition image
                 Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
@@ -178,34 +167,29 @@ public class MyCompHistoryAdapter extends RecyclerView.Adapter<MyCompHistoryAdap
         return comps.size();
     }
 
+    // Add competition to Comp List
     public void addComp(Competition comp){
 
         comps.add(comp);
         notifyDataSetChanged();
     }
 
-
+    // Set the current user
     public void setCurrentUser(User user){this.currentUser = user;}
 
+    // Check if a competition already exists
     public Boolean contains(Competition comp){
         return comps.contains(comp);
     }
 
+    // Clear Comp List
     public void clearCompList(){
         this.comps.clear();
     }
 
-    public void sortByName(){
-        // create sorted comp list for different usage
-        comps.sort(Comparator.comparing(Competition::getCname));
-    }
-
+    // Sort Comp List by date
     public void sortByDate(){
         comps.sort(Comparator.comparing(Competition::calCompDateTime));
-    }
-
-    public void sortByReward(){
-        comps.sort(Comparator.comparing(Competition::getReward).reversed());
     }
 
 }

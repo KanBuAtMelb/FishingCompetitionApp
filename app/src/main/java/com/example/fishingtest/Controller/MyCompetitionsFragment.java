@@ -156,7 +156,7 @@ public class MyCompetitionsFragment extends Fragment {
 
                 if(comp_24Hr.size() > 0){
                     map = new HashMap<Integer, Competition>();
-                    map.put(MyCompAdapter.VIEW_TYPE_TITLE, new Competition("Competition Coming in 24 Hours"));
+                    map.put(MyCompAdapter.VIEW_TYPE_TITLE, new Competition("Competition Coming within 24 Hours"));
                     cAdapter.addCompMap(map);
 
                     for(int i = 0; i < comp_24Hr.size();i++){

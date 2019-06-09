@@ -30,9 +30,16 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * Recycler View Adapter for the Recycler View implemented in "DiscoveryFragment"
+ * which is the controller for the "Discovery" page of the Home Page.
+ */
+
 public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder>{
 
-    // New class addressing each "Competition" item view in the list
+    // New class addressing each "Competition" item view in the Comp List
     class CompViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView compImage;
@@ -69,10 +76,10 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
     // Local variables
     private static final String TAG = "Discovery Adapter";
-    ArrayList<Competition> comps;
-
-    public int row_index = -1;
+    ArrayList<Competition> comps; // Comp list
+    public int row_index = -1;  // Selected item index in Comp List
     Context context;
+
     // Constructor
     public  DiscAdapter(ArrayList<Competition> comps, Context context){
         this.comps = comps;
@@ -89,27 +96,25 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull DiscAdapter.CompViewHolder viewHolder, int position) {
-
+        // Get the Competition object from the Comp List based on the position selected
         final Competition comp = comps.get(position);
 
-
+        // Set the text on each card view
         viewHolder.compTittle.setText(comp.getCname());
+        viewHolder.compReward.setText("Reward: $" + comp.getReward() + " AUD");
+        viewHolder.compDateTime.setText("Date: "+ comp.getDate()+ " Time: From "+comp.getStartTime() +" To "+comp.getStopTime());
 
         // Spinner item index to text view
         String[] compTypes = context.getResources().getStringArray(R.array.comp_type);
         viewHolder.compType.setText(compTypes[comp.getCompType()]);
 
-        viewHolder.compReward.setText("Reward: $" + comp.getReward() + " AUD");
-        viewHolder.compDateTime.setText("Date: "+ comp.getDate()+ " Time: From "+comp.getStartTime() +" To "+comp.getStopTime());
-
         // Click on "Registration Now" button
         viewHolder.compRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // Get the user
                 final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 final String compID = comp.getCompID();
-
                 final DatabaseReference databaseComp = FirebaseDatabase.getInstance().getReference("Competitions").child(compID);
                 final DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(userID);
 
@@ -123,7 +128,6 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                             temp.addRegComp(compID);
                             databaseUser.child("comps_registered").setValue(temp.getComps_registered());
                             Log.d(TAG, "Competition" + compID + " added to User " + userID + " Registration Competition List");
-//                            Toast.makeText(context, "Competition added to your List!", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -142,8 +146,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                         if(!temp.getAttendants().contains(userID)){
                             temp.addAttendant(userID);
                             databaseComp.child("attendants").setValue(temp.getAttendants());
-                            Log.d(TAG,"User "+userID+" added to Competition "+compID+" Attendant list");
-//                            Toast.makeText(context, "Competition Registration Successful", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG,"User "+userID+" added to Competition "+compID+" Attendant list"); // FOr debugging purpose
                         }
                     }
 
@@ -156,8 +159,8 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                 //Subscribe this competition for waiting Notification from the competition
                 FirebaseMessaging.getInstance().subscribeToTopic(compID);
 
+                // Toast message
                 Toast.makeText(context, "Competition Registration Successful", Toast.LENGTH_SHORT).show();
-
 
                 // Remain original sorting order
                 switch(Common.DISCOVERY_SORT_ORDER){
@@ -173,6 +176,8 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
                     default:
                         sortByName();
                 }
+
+                // Notify the changes after sorting
                 notifyDataSetChanged();
 
                 //Reset selected card
@@ -183,6 +188,7 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         });
 
 
+        // Competition title background and fish image change upon selection
         viewHolder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -198,34 +204,25 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         });
 
 
-        // Competition images
-
         if(row_index ==position){
+            // Set title background on competition selection
             viewHolder.compTittle.setBackgroundColor(Color.parseColor(context.getString(R.string.card_selected_text)));
-//            viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffff66"));
-
+            // Set the competition fish image color change if it has no customised competition image uploaded
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_orange);
-
             else{
-                // Set the customised competition image
                 Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
             }
         }else{
+            // Set title background when competition not selected
             viewHolder.compTittle.setBackgroundColor(Color.parseColor("#6495ED"));
-//            viewHolder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            // Set the competition fish image color change if it has no customised competition image uploaded
             if(comp.getImage_url().equals(Common.NA))
                 viewHolder.compImage.setImageResource(R.drawable.ic_fish_blue);
             else{
-                // Set the customised competition image
                 Picasso.get().load(comp.getImage_url()).fit().into(viewHolder.compImage);
-//                viewHolder.compImage.setAdjustViewBounds(true);
-////                viewHolder.compImage.setMaxHeight(300);
-//                viewHolder.compImage.setMaxWidth(600);
-//                viewHolder.compImage.setScaleType(ImageView.ScaleType.FIT_XY);
             }
         }
-
     }
 
 
@@ -234,30 +231,34 @@ public class DiscAdapter extends RecyclerView.Adapter<DiscAdapter.CompViewHolder
         return comps.size();
     }
 
+    // Add competition to Comp List
     public void addComp(Competition comp){
-
         comps.add(comp);
         notifyDataSetChanged();
     }
 
-
+    // Check if a competition already exists
     public Boolean contains(Competition comp){
         return comps.contains(comp);
     }
 
+    // Clear Comp List
     public void clearCompList(){
         this.comps.clear();
     }
 
+    // Sort Comp List by competition name
     public void sortByName(){
         // create sorted comp list for different usage
         comps.sort(Comparator.comparing(Competition::getCname));
     }
 
+    // Sort Comp List by competition date
     public void sortByDate(){
         comps.sort(Comparator.comparing(Competition::calCompDateTime));
     }
 
+    // Sort Comp List by reward
     public void sortByReward(){
         comps.sort(Comparator.comparing(Competition::getReward).reversed());
     }
