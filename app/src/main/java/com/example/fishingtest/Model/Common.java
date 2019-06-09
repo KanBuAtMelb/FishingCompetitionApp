@@ -138,6 +138,7 @@ public class Common {
         UploadTask uploadOriTask = originalFileRef.putFile(oriImageUri);
         UploadTask uploadMeaTask = measuredFileRef.putFile(meaImageUri);
 
+        // invoke upload task to upload given images, if success, it will invoke sending post to database with the url of uploaded given images
         uploadOriTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -180,15 +181,18 @@ public class Common {
         Toast.makeText(context, "Post Success!", Toast.LENGTH_SHORT).show();
     }
 
+    // update user to attended list of given competition and remove uesr from registerd list if user has been posted
     private static void attendedToComp(final Context context, final DatabaseReference database, String compID) {
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User thisuser = dataSnapshot.getValue(User.class);
 
+                //get both list of attended and registered
                 ArrayList<String> user_attend = thisuser.getComps_attended();
                 if (user_attend != null) {
                     if (!user_attend.contains(compID)) {
+                        //reconstruct the list to add user to attended list and remove from registered list
                         user_attend.add(compID);
                         database.child("comps_attended").setValue(user_attend);
 
@@ -197,6 +201,7 @@ public class Common {
                         database.child("comps_registered").setValue(user_registeredComps);
                     }
                 } else {
+                    //reconstruct the list to add user to attended list and remove from registered list
                     ArrayList<String> temp_user_attend = new ArrayList<>();
                     temp_user_attend.add(compID);
                     database.child("comps_attended").setValue(temp_user_attend);
@@ -216,16 +221,21 @@ public class Common {
         Toast.makeText(context, "Add attended Success!", Toast.LENGTH_SHORT).show();
     }
 
+    //send the comment object to given competition database reference
     public static void commentToDB(final Context context, final DatabaseReference database, Comment comment) {
         database.setValue(comment);
         Toast.makeText(context, "Comment Success!", Toast.LENGTH_SHORT).show();
     }
 
+    // transform given file path of image to uri path
     public static Uri getImageContentUri(Context context, File imageFile) {
         String filePath = imageFile.getAbsolutePath();
+        // move the cursor to given file path
         Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 new String[] { MediaStore.Images.Media._ID }, MediaStore.Images.Media.DATA + "=? ",
                 new String[] { filePath }, null);
+
+        //retrieve image uri path in media store by the cursor location in media store
         if (cursor != null && cursor.moveToFirst()) {
             int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
             Uri baseUri = Uri.parse("content://media/external/images/media");
@@ -241,11 +251,13 @@ public class Common {
         }
     }
 
+    //transform timestamp to human readable time
     public static String timeStampToTime(String timeStamp) {
         String result = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.parseLong(String.valueOf(timeStamp)) * 1000));
         return result;
     }
 
+    // transform density independent pixel to pixel
     public static int dpToPx(Context context, int dp) {
         float density = context.getResources()
                 .getDisplayMetrics()
@@ -292,6 +304,7 @@ public class Common {
     }
 
 
+    // transform Degrees Minutes Seconds to Decimal Degrees Coordinates for EXIF format
     public static double DMStoDD(String givenDMS, String geoRef) {
         double dimensionality = 0.0;
         if (null==givenDMS){
@@ -313,6 +326,7 @@ public class Common {
         return dimensionality;
     }
 
+    //check whether given location is in given location and its radius
     public static boolean ifInCircle(Location center, Location test, float radius) {
         float distanceInMeters = center.distanceTo(test);
         boolean isWithin = distanceInMeters < radius;

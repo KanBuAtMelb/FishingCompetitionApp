@@ -1,5 +1,12 @@
 package com.example.fishingtest.Service;
-
+/**
+ *
+ * Project: Fishing Competition
+ * Author: Ziqi Zhang
+ * Date: 8/06/2019
+ * The service is for recieving notification from server
+ *
+ */
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -25,10 +32,12 @@ public class NotificationService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
+        // if message is payload format, read as payload data
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         }
 
+        // if message is notification format, read as notification data
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             String title = remoteMessage.getNotification().getTitle();
@@ -46,7 +55,7 @@ public class NotificationService extends FirebaseMessagingService {
     /**
      * Create and show a simple notification containing the received FCM message.
      *
-     * @param messageBody FCM message body received.
+     * FCM message body received.
      */
     private void sendNotification(String messageTitle, String messageBody) {
         Intent intent = new Intent(this, LogInActivity.class);
@@ -54,6 +63,8 @@ public class NotificationService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
         String channelId = getString(R.string.default_notification_channel_id);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        // build the notification by given message information
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(messageTitle)
@@ -72,6 +83,7 @@ public class NotificationService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
 
+        // to notify user built notification on notification bar
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 }

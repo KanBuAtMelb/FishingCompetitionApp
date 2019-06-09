@@ -22,6 +22,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Project: Fishing Competition
+ * Author: Ziqi Zhang
+ * Date: 8/06/2019
+ * The activity can view list of posts of given competition
+ *
+ */
+
 public class ViewPostsActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -43,11 +52,13 @@ public class ViewPostsActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this);
 
+        //get the competition data from parent activity
         Intent intent = getIntent();
         currentComp = (Competition) intent.getSerializableExtra("currentComp");
 
         postDBRef = database.child("Posts").child(competitionCategory).child(currentComp.getCompID());
 
+        // read posts of the current competition from database then check whether it is not post exist now
         database.child("Posts").child(competitionCategory).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -62,11 +73,13 @@ public class ViewPostsActivity extends AppCompatActivity {
             }
         });
 
+        // build the listener to read posts of the current competition from database dynamically
         ChildEventListener postListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.getChildrenCount() > 0) {
                     Post post = dataSnapshot.getValue(Post.class);
+                    // if a new post has been read then add to item list in adapter to show on the activity
                     adapter.addItem(post);
                     Log.i("Check Add","add post Measured Data = " + post.getMeasuredData());
                 } else {
@@ -95,6 +108,7 @@ public class ViewPostsActivity extends AppCompatActivity {
             }
         } ;
 
+        // invoke the listener with the current competition database reference and order by post time
         postDBRef.orderByChild("timeStamp").addChildEventListener(postListener);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

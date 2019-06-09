@@ -55,6 +55,15 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *
+ * Project: Fishing Competition
+ * Author: Ziqi Zhang
+ * Date: 8/06/2019
+ * Published post view can construct a post to send
+ *
+ */
+
 public class ShotPreviewActivity extends AppCompatActivity {
 
     ImageButton imgBtn_shot;
@@ -90,6 +99,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shot_preview);
 
+        // get current user authentication information
         fbUser = FirebaseAuth.getInstance().getCurrentUser();
         if (fbUser == null) {
             finish();
@@ -105,25 +115,30 @@ public class ShotPreviewActivity extends AppCompatActivity {
         txt_measureHints = (TextView) findViewById(R.id.refreshHintsTextView);
         btn_refresh = (Button) findViewById(R.id.refreshButton);
 
+        //get data from parent activity
         Intent intent = getIntent();
         currentComp = (Competition) intent.getSerializableExtra("currentComp");
 
         comp_latitude = Double.parseDouble(currentComp.getGeo_map().split(",")[0]);
         comp_longitude = Double.parseDouble(currentComp.getGeo_map().split(",")[1]);
 
+        //transform the competition area from km to m
         try {
             comp_radius = Float.valueOf((currentComp.getGeo_map().split(",")[2]).trim()).floatValue() * 1000;
         } catch (NumberFormatException e) {
             Toast.makeText(ShotPreviewActivity.this, "Competition radius wrong.",Toast.LENGTH_SHORT).show();
         }
 
+        // set up the competition location
         comp_location = new Location("");
         comp_location.setLatitude(comp_latitude);
         comp_location.setLongitude(comp_longitude);
 
+        // click the button to start camera
         imgBtn_shot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // request the permission for camera and save photo
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_Take_Photo_Action);
                 } else {
@@ -132,12 +147,15 @@ public class ShotPreviewActivity extends AppCompatActivity {
             }
         });
 
+        // click the button to navigate to 'Measure' app, if not installed, it will ask user to install 'Measure'
         imgBtn_measure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // request the permission for camera and save photo
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_Get_Latest_Data_Action);
                 } else {
+                    // if navigate to 'Measure' app success, read measurement data button is available
                     intentToMeasure();
                     btn_refresh.setClickable(true);
                     btn_refresh.setBackgroundColor(greenOrRed(true));
@@ -145,22 +163,26 @@ public class ShotPreviewActivity extends AppCompatActivity {
             }
         });
 
+        // read measurement data button to get the data from measurement operation of 'Measure' app
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getMeasureData();
+                // after click read measurement data button, it will check whether has already take photo. If all good, user can click send photo now
                 txt_measureHints.setVisibility(View.INVISIBLE);
                 btn_post.setClickable(postReady());
                 btn_post.setBackgroundColor(greenOrRed(postReady()));
             }
         });
 
+        // the button can send post which construct by given fill up published view content
         btn_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Common.curLoc != null) {
                     boolean freshFlag = checkImageFresh(originalFilePath, measuredFilePath);
 
+                    //Check user location, photo location, photo time to make constructed post is validated to send
                     if (Common.ifInCircle(comp_location, Common.curLoc, comp_radius)) {
                         if (freshFlag) {
                             Toast.makeText(ShotPreviewActivity.this, "You clicked the post button",Toast.LENGTH_SHORT).show();
@@ -183,10 +205,12 @@ public class ShotPreviewActivity extends AppCompatActivity {
         btn_post.setBackgroundColor(greenOrRed(postReady()));
     }
 
+    // check whether both fish photo and measurement photo is ready
     private boolean postReady() {
         return measuredDataReady && photoReady;
     }
 
+    //check whether the button is able to click, green is available, red is not.
     private int greenOrRed(boolean givenBool) {
         if (givenBool) {
             return Color.GREEN;
@@ -195,6 +219,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         }
     }
 
+    // Return the taken fish photo from camera
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode) {
@@ -216,6 +241,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         }
     }
 
+    // navigate user to 'Measure' app
     private void intentToMeasure() {
         if (isAppInstalled(this, measurePackageName)) {
             Toast.makeText(this,"We will jump to 'Measure' app to let you measure your Fish, please take the measured photo and copy your measured data before you touch Read Measure button.",Toast.LENGTH_SHORT).show();
@@ -229,6 +255,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         }
     }
 
+    // Check whether 'Measure' is installed
     public boolean isAppInstalled(Context context, String packageName) {
         try {
             context.getPackageManager().getPackageInfo(packageName, 0);
@@ -238,6 +265,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         }
     }
 
+    // if not installed 'Measure', navigate user to Android Market of 'Measure' app page
     public void goToMarket(Context context, String packageName) {
         Uri uri = Uri.parse("market://details?id=" + packageName);
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -248,15 +276,20 @@ public class ShotPreviewActivity extends AppCompatActivity {
         }
     }
 
+    // get the measurement photo and copied measurement data
     private void getMeasureData() {
         File measuredImageFile = getLatestPhoto(this);
         measuredImageUri = Common.getImageContentUri(this, measuredImageFile);
         Picasso.get().load(measuredImageUri).rotate(90).into(imgBtn_measure);
         //imgBtn_measure.setImageURI(measuredImageUri);
+
+        // use regular expression to retrieve the measurement data from clipboard
         String regex = "\\d+(\\.\\d+)?cm|\\d+(\\.\\d+)?m";
         Pattern meaPattern = Pattern.compile(regex);
         Matcher meaMatcher;
         try {
+            // retrieve clipboard data
+            // apply the regular expression to clipboard data
             ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             ClipData data = cm.getPrimaryClip();
             ClipData.Item item = data.getItemAt(0);
@@ -267,9 +300,11 @@ public class ShotPreviewActivity extends AppCompatActivity {
                 break;
             }
         } catch (NullPointerException e) {
+            // if clipboard data is not correct format
             Toast.makeText(this,"Please copy your fish measured data.",Toast.LENGTH_SHORT).show();
         }
 
+        //check whether measurement data and measurement photo are both ready
         if (!measuredLong.isEmpty() && measuredImageUri != null) {
             txt_measure.setText(measuredLong);
             measuredDataReady = true;
@@ -278,6 +313,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         }
     }
 
+    // open camera to take photo
     private void openCamera() {
         //get current version
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
@@ -315,6 +351,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         startActivityForResult(intent, PHOTO_REQUEST_CAREMA);
     }
 
+    //check whether it has sdcard mounting
     private static boolean hasSdcard() {
         return Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED);
@@ -328,9 +365,8 @@ public class ShotPreviewActivity extends AppCompatActivity {
         //check path and time
         String[] projection = {MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media.DATE_MODIFIED};
-        //
+        // build the photo album path
         String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
-        //
         String[] selectionArgs = {CAMERA_IMAGE_BUCKET_ID};
 
         //check album and sort photo
@@ -353,6 +389,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
         return String.valueOf(path.toLowerCase().hashCode());
     }
 
+    // request permission for taking photo and read photo of media store
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == REQUEST_CODE_ASK_Take_Photo_Action){
@@ -374,19 +411,23 @@ public class ShotPreviewActivity extends AppCompatActivity {
         }
     }
 
+    //check given measurement photo and fish photo are fresh
     private boolean checkImageFresh(File oriImg, File meaImg) {
         try {
             long fiveMins = 60*5;
             long threeMins = 60*3;
 
+            //transform the time as time stamp
             Long ori_fileTime = (oriImg.lastModified())/1000;
             Long mea_fileTime = (meaImg.lastModified())/1000;
             Long current_time = System.currentTimeMillis()/1000;
 
+            // check the time of measurement photo and fish photo is legal
             if (((current_time - ori_fileTime) < fiveMins) && ((current_time - mea_fileTime) < fiveMins)) {
                 if (Math.abs(mea_fileTime - ori_fileTime) <= threeMins) {
                     ExifInterface ori_exifInterface = new ExifInterface(oriImg.getPath());
 
+                    //retrieve fish photo geo location
                     Double ori_latitude = Common.DMStoDD(ori_exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE), ori_exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF));
                     Double ori_longitude = Common.DMStoDD(ori_exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE), ori_exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF));
 
@@ -394,6 +435,7 @@ public class ShotPreviewActivity extends AppCompatActivity {
                     ori_location.setLatitude(ori_latitude);
                     ori_location.setLongitude(ori_longitude);
 
+                    // check fish photo whether is in competition area
                     if (Common.ifInCircle(comp_location, ori_location, comp_radius)) {
                         return true;
                     } else {

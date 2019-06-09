@@ -32,6 +32,15 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Project: Fishing Competition
+ * Author: Ziqi Zhang
+ * Date: 8/06/2019
+ * The activity can view the post detail
+ *
+ */
+
 public class PostDetailActivity extends AppCompatActivity {
 
     Post currentPost;
@@ -55,8 +64,10 @@ public class PostDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
 
+        //Get the post data from parent activity
         Intent intent = getIntent();
         currentPost = (Post) intent.getSerializableExtra("selectedPost");
+
         database = FirebaseDatabase.getInstance().getReference();
         commentLinearLayout = (LinearLayout) findViewById(R.id.linear_comment);
         fishnameText = (TextView) findViewById(R.id.post_Namecontent);
@@ -69,8 +80,10 @@ public class PostDetailActivity extends AppCompatActivity {
         btn_send_Comment = (Button) findViewById(R.id.btn_post_detail_send_comment);
         commentDBRef = database.child("Posts").child(competitionCategory).child(currentPost.getCompId()).child(currentPost.postId).child("Comments");
 
+        // Read the post detail of given post data
         readPost();
 
+        //Navigate to send EditCommentActivity activity
         btn_send_Comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,11 +93,15 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
+        // Invoke read comment function to display all the comment of current post
         readComment();
     }
 
+    //The function can read the user and post data from database
     private void readPost() {
+        //build the reference of current post's user
         DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(currentPost.userId);
+        //create the database listener to listen the data change
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -106,62 +123,76 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         };
 
+        //invoke the listener with the database reference
         databaseUser.addListenerForSingleValueEvent(userListener);
 
         time.setText(Common.timeStampToTime(currentPost.timeStamp));
 
+        //if fish name is not given, then set the fish name as Unknown
         if (currentPost.getFishingName() == null) {
             fishnameText.setText(R.string.fishingname_unknown);
         } else {
             fishnameText.setText(currentPost.getFishingName());
         }
 
+        //load data to view
         dataText.setText(currentPost.getMeasuredData());
         Picasso.get().load(currentPost.getOriDownloadUrl()).fit().into(fishPhoto_ori);
         Picasso.get().load(currentPost.getMeaDownloadUrl()).rotate(90).fit().into(fishPhoto_mea);
     }
 
+    // Read all comment object from current post
     private void readComment() {
 
+        //Create child listener to listen the list of comment object in current post from database
         ChildEventListener postListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Comment comment = dataSnapshot.getValue(Comment.class);
 
+                //Construct the comment view programmatically
                 LinearLayout item_view = new LinearLayout(PostDetailActivity.this);
                 LinearLayout head_view = new LinearLayout(PostDetailActivity.this);
 
+                //Set the layout size
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 LinearLayout.LayoutParams head_lp = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
+                //set margin properties head of the item view
                 head_lp.setMargins(10, 10,10, 30);
 
+                //set orientation of views
                 item_view.setLayoutParams(lp);
                 item_view.setOrientation(LinearLayout.VERTICAL);
 
                 head_view.setLayoutParams(head_lp);
                 head_view.setOrientation(LinearLayout.HORIZONTAL);
 
+                //build image view and text view
                 ImageView img_ava = new ImageView(PostDetailActivity.this);
                 TextView txt_user_name = new TextView(PostDetailActivity.this);
 
                 ViewGroup.LayoutParams head_img_lp = new ViewGroup.LayoutParams(Common.dpToPx(PostDetailActivity.this, 60), Common.dpToPx(PostDetailActivity.this, 60));
                 ViewGroup.LayoutParams head_name_lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
+                //add layout properties to image view and text view
                 img_ava.setLayoutParams(head_img_lp);
                 txt_user_name.setLayoutParams(head_name_lp);
 
+                //set imageview and text view properties
                 img_ava.setPadding(10, 10, 10, 10);
 
                 txt_user_name.setTextSize(18);
                 txt_user_name.setTextColor(Color.BLACK);
 
+                //add content to image view and text view
                 head_view.addView(img_ava);
                 head_view.addView(txt_user_name);
 
+                // build content view and set properties
                 TextView content = new TextView(PostDetailActivity.this);
 
                 ViewGroup.LayoutParams content_lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -181,11 +212,13 @@ public class PostDetailActivity extends AppCompatActivity {
                 content.setTypeface(null, Typeface.ITALIC);
 
 
+                //construct the item view by adding each view which construct from above
                 item_view.addView(head_view);
                 item_view.addView(content);
                 item_view.addView(com_time);
 
 
+                //build listener of given comment database's user
                 DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(comment.userId);
                 ValueEventListener userListener = new ValueEventListener() {
                     @Override
@@ -207,11 +240,14 @@ public class PostDetailActivity extends AppCompatActivity {
                     }
                 };
 
+                //invoke the listener with the user database reference
                 databaseUser.addListenerForSingleValueEvent(userListener);
 
+                //set the data which read from above
                 content.setText('"' + comment.content + '"');
                 com_time.setText(Common.timeStampToTime(comment.timeStamp));
 
+                //separate the background color to neighboring comment in the comment list
                 if (itemCount % 2 == 0) {
                     item_view.setBackgroundColor(Color.parseColor("#E6E6E6"));
                     content.setBackgroundColor(Color.parseColor("#C0C0C0"));
@@ -219,6 +255,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     content.setBackgroundColor(Color.parseColor("#F5F5F5"));
                 }
 
+                //add the new comment to first place of the comment view
                 commentLinearLayout.addView(item_view, 0);
 
                 itemCount++;
@@ -246,6 +283,7 @@ public class PostDetailActivity extends AppCompatActivity {
         } ;
 
 
+        //invoke the comment listener with order by timestamp
         commentDBRef.orderByChild("timeStamp").addChildEventListener(postListener);
     }
 }

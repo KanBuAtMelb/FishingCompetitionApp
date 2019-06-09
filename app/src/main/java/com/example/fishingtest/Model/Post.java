@@ -1,5 +1,12 @@
 package com.example.fishingtest.Model;
-
+/**
+ *
+ * Project: Fishing Competition
+ * Author: Ziqi Zhang
+ * Date: 8/06/2019
+ * The class is object of Post
+ *
+ */
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -20,6 +27,7 @@ public class Post implements Serializable {
 
 
 
+    // constructing the post object
     public Post(String postId, String userId, String compId, String oriDownloadUrl, String meaDownloadUrl, String measuredData, String fishingName, String timeStamp, double longitude, double latitude) {
         this.postId = postId;
         this.userId = userId;

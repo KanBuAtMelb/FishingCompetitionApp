@@ -28,7 +28,17 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Project: Fishing Competition
+ * Author: Ziqi Zhang
+ * Date: 8/06/2019
+ * Recycler View Adapter for the Recycler View implemented in "ViewPostsActivity"
+ *
+ */
+
 public class PostsAdapter extends RecyclerView.Adapter{
+    //Initial variable
     List<Post> myPostsData = new ArrayList<>();
     Context mContext;
 
@@ -36,6 +46,7 @@ public class PostsAdapter extends RecyclerView.Adapter{
         mContext = context;
     }
 
+    //Inflate the item view 'cardview_posts_items' in recycle view
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -43,11 +54,13 @@ public class PostsAdapter extends RecyclerView.Adapter{
         return new MyViewHolder(itemView);
     }
 
+    //Read and bind the list of posts data to the 'cardview_posts_items' view attribute
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         MyViewHolder mHolder = (MyViewHolder) viewHolder;
         Post post = myPostsData.get(i);
         DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("Users").child(post.userId);
+        //Read user data from database
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -56,9 +69,10 @@ public class PostsAdapter extends RecyclerView.Adapter{
                 if (!(user.getImagePath().equals(Common.NA))) {
                     Picasso.get().load(user.getImagePath()).fit().into(mHolder.userAvatar);
                 } else {
+                    //Bind image to the 'userAvatar' imageview
                     mHolder.userAvatar.setImageResource(R.drawable.people);
                 }
-
+                //Bind text to the 'username' textview
                 mHolder.username.setText(user.getDisplayName());
             }
 
@@ -68,7 +82,9 @@ public class PostsAdapter extends RecyclerView.Adapter{
             }
         } ;
 
+
         databaseUser.addListenerForSingleValueEvent(userListener);
+        //Bind textview
         mHolder.time.setText(Common.timeStampToTime(post.timeStamp));
         mHolder.dataText.setText(post.getMeasuredData());
         if (post.getFishingName() == null) {
@@ -76,33 +92,37 @@ public class PostsAdapter extends RecyclerView.Adapter{
         } else {
             mHolder.fishnameText.setText(post.getFishingName());
         }
+        //Load image from post photo url
         Picasso.get().load(post.getOriDownloadUrl()).fit().into(mHolder.fishPhoto);
     }
 
+    //Function of get count of the data list
     @Override
     public int getItemCount() {
         return myPostsData.size();
     }
-
+    //Function of readd all data operation of the data list
     public void refreshItems(List<Post> items) {
         myPostsData.clear();
         myPostsData.addAll(items);
         notifyDataSetChanged();
     }
-
+    //Function of add operation of the data list
     public void addItems(List<Post> items) {
         myPostsData.addAll(items);
     }
+    //Function of add operation of the data list
     public void addItem(Post item){
         myPostsData.add(0, item);
         notifyDataSetChanged();
     }
+    //Function of delete operation of the data list
     public void deleteItem(int position) {
         myPostsData.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(0, myPostsData.size() - 1);
     }
-
+    //Construct and initial the attributes of the item view of the recycle view
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView fishnameText;
         TextView dataText;
@@ -111,6 +131,7 @@ public class PostsAdapter extends RecyclerView.Adapter{
         TextView time;
         ImageView fishPhoto;
 
+        // initial the attributes with corresponded attributes of item view
         public MyViewHolder(View itemView) {
             super(itemView);
             dataText = (TextView) itemView.findViewById(R.id.post_content);
@@ -120,6 +141,7 @@ public class PostsAdapter extends RecyclerView.Adapter{
             userAvatar = (ImageView) itemView.findViewById(R.id.imgView_post_avatar);
             fishPhoto = (ImageView) itemView.findViewById(R.id.imgView_post_fish_photo);
 
+            //Click the item to navigate the item's detail page
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
