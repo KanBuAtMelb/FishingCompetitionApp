@@ -2,13 +2,13 @@
 
 ## Project: Fishing Competition
 
+### Supervisor: 
+Prof. Richard Sinnott
+
 ### Members:
 Kan Bu 895016 \
 Ziqi Zhang 937568 \
 Qin Xu 917386 
-
-### Supervisor: 
-Prof. Richard Sinnott
 
 ### Related Repositories:
 For Web App: https://github.com/xuqinzju/FishingWeb \
