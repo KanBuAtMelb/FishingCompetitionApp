@@ -4,11 +4,16 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * User class containing all the information required for a user
+ */
+
 @IgnoreExtraProperties
 public class User {
     String uid;
     String email;
-    String password;
     String displayName;
     String imagePath;
     ArrayList<String> comps_attended;
@@ -22,10 +27,9 @@ public class User {
     }
 
     // Constructor for Admin with full info
-    public User(String uid, String email, String password, String displayName, String imagePath, ArrayList<String> comps_attended, ArrayList<String> comps_registered, ArrayList<String> comps_won, String accessLevel) {
+    public User(String uid, String email, String displayName, String imagePath, ArrayList<String> comps_attended, ArrayList<String> comps_registered, ArrayList<String> comps_won, String accessLevel) {
         this.uid = uid;
         this.email = email;
-        this.password = password;
         this.displayName = displayName;
         this.imagePath = imagePath;
         this.comps_attended = comps_attended;
@@ -38,7 +42,6 @@ public class User {
     public User(String uid, String email, String password, String displayName) {
         this.uid = uid;
         this.email = email;
-        this.password = password;
         this.displayName = displayName;
 
         this.imagePath = Common.NA;
@@ -52,7 +55,6 @@ public class User {
     public User(String uid, String email, String password, String displayName, ArrayList<String> comps_registered) {
         this.uid = uid;
         this.email = email;
-        this.password = password;
         this.displayName = displayName;
         this.comps_registered = comps_registered;
 
@@ -65,7 +67,6 @@ public class User {
     public User(String uid, String email, String password, String displayName, String imagePath, ArrayList<String> comps_attended, ArrayList<String> comps_registered) {
         this.uid = uid;
         this.email = email;
-        this.password = password;
         this.displayName = displayName;
         this.imagePath = imagePath;
         this.comps_attended = comps_attended;
@@ -78,7 +79,6 @@ public class User {
     public User(String uid, String email, String password, String displayName, String imagePath, ArrayList<String> comps_attended, ArrayList<String> comps_registered, ArrayList<String> comps_won) {
         this.uid = uid;
         this.displayName = displayName;
-        this.password = password;
         this.email = email;
         this.imagePath = imagePath;
         this.comps_attended = comps_attended;
@@ -106,6 +106,11 @@ public class User {
             this.comps_registered.add(compID);
     }
 
+    public void removeRegComp(String compID){
+        if(this.comps_registered.contains(compID))
+            this.comps_registered.remove(compID);
+    }
+
     // Add a new competition attended
     public void addAttComp(String compID){
         if(this.comps_attended.contains(compID))
@@ -117,6 +122,8 @@ public class User {
         if(!this.comps_won.contains(compID))
             this.comps_won.add(compID);
     }
+
+
     // Getters
 
     public String getUid() {
@@ -125,10 +132,6 @@ public class User {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public String getDisplayName() {
@@ -161,10 +164,6 @@ public class User {
         this.email = email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
@@ -188,5 +187,6 @@ public class User {
     public void setAccessLevel(String accessLevel) {
         this.accessLevel = accessLevel;
     }
+
 
 }

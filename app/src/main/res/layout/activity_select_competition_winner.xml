@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="2dp"
+    android:background="@color/light_pink"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/view_comp_results_page_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="2dp"
+        android:background="@color/black_overlay"
+        android:padding="4dp"
+        android:text="Admin - Set Competition Results"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/view_comp_results_comp_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <TextView
+        android:id="@+id/view_comp_results_comp_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="4dp"
+        android:ems="10"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textSize="30dp"
+        android:hint="Comp Name"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@+id/view_comp_results_page_title"
+        app:layout_constraintBottom_toTopOf="@+id/view_comp_results_post_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/view_comp_results_post_list"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/view_comp_results_comp_name"
+        app:layout_constraintBottom_toTopOf="@+id/admin_button_add_comp_result"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/admin_button_add_comp_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/cardview_light_background"
+        android:text="Confirm Final Winner"
+        app:layout_constraintTop_toBottomOf="@+id/view_comp_results_post_list"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+
+</android.support.constraint.ConstraintLayout>

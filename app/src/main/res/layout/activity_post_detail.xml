@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/post_detail_linear">
+
+        <include
+            android:id="@+id/post_detail_banner"
+            layout="@layout/banner_post" />
+
+        <include
+            android:id="@+id/post_detail_fishname"
+            layout="@layout/row_post_text_fishname" />
+
+        <include
+            android:id="@+id/post_detail_measure"
+            layout="@layout/row_post_text_data" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Original Fish Photo"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imgView_post_detail_ori"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_margin="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Measured Fish Photo"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imgView_post_detail_mea"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_margin="10dp" />
+
+        <Button
+            android:id="@+id/btn_post_detail_send_comment"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/fui_idp_button_background_twitter"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Send Comment"
+            android:textSize="14sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:lineSpacingExtra="18sp"
+            android:text="Comments"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/linear_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

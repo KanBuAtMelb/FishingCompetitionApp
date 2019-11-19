@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Controller.ViewProfileActivity">
+
+    <ImageView
+        android:id="@+id/default_picture"
+        android:layout_width="105dp"
+        android:layout_height="115dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        app:srcCompat="@drawable/people"
+        tools:layout_editor_absoluteX="153dp"
+        tools:layout_editor_absoluteY="16dp"
+        tools:ignore="VectorDrawableCompat" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="165dp"
+        android:textColor="@color/dark_grey"
+        android:text="Name: "
+        android:textSize="16sp"/>
+
+
+    <TextView
+        android:id="@+id/email_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/user_name"
+        android:textColor="@color/dark_grey"
+        android:text="Email: "
+        android:textSize="16sp"/>
+
+
+    <TextView
+        android:id="@+id/attended"
+        android:layout_width="92dp"
+        android:layout_height="27dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/upcoming"
+        android:layout_marginStart="20dp"
+        android:text="Attended: " />
+
+    <TextView
+        android:id="@+id/upcoming"
+        android:layout_width="92dp"
+        android:layout_height="27dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="230dp"
+        android:text="Upcoming: " />
+
+    <TextView
+        android:id="@+id/won"
+        android:layout_width="92dp"
+        android:layout_height="27dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/attended"
+        android:layout_marginEnd="20dp"
+        android:text="Won: " />
+
+
+    <Button
+        android:id="@+id/profile_comp_history"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop="500dp"
+        android:gravity = "center"
+        android:textSize="20dp"
+        android:background="@color/deep_yellow"
+        android:text = "Competition History"
+        android:textColor="@color/white"
+        android:textAllCaps = "false"/>
+
+    <Button
+        android:id="@+id/profile_reset_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="440dp"
+        android:background="@color/light_green"
+        android:gravity="center"
+        android:text="Reset the Password"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+
+</RelativeLayout>

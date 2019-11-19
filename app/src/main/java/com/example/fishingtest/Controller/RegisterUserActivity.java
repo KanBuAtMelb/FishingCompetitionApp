@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,9 +26,19 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * Completed by Kan Bu on 8/06/2019.
+ *
+ * The controller for the "Register" activity.
+ */
+
 public class RegisterUserActivity<pulbic> extends AppCompatActivity {
     //Tag
-    private final  String TAG = "User Registeration";
+    private final  String TAG = "User Registration";
+
+    //Toolbar
+    Toolbar mToolbar;
+
     // UI references.
     private AutoCompleteTextView mEmailView;
     private AutoCompleteTextView mUsernameView;
@@ -63,13 +74,19 @@ public class RegisterUserActivity<pulbic> extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(RegisterUserActivity.this, LogInActivity.class);
+        finish();
+        startActivity(intent);
+    }
 
     // Executed when Sign Up button is pressed.
     public void signUp(View v) {
         attemptRegistration();
     }
 
+    // Validate view values and update the Firebase
     private void attemptRegistration() {
 
         // Reset errors displayed in the form.
@@ -83,13 +100,13 @@ public class RegisterUserActivity<pulbic> extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        Log.d("FlashChat", "TextUtils.isEmpty(password): " + TextUtils.isEmpty(password));
-        Log.d("FlashChat", "TextUtils.isEmpty(password) && !isPasswordValid(password): " + (TextUtils.isEmpty(password) && !isPasswordValid(password)));
-
+        // For debugging purpose
+        Log.d(TAG, "TextUtils.isEmpty(password): " + TextUtils.isEmpty(password));
+        Log.d(TAG, "TextUtils.isEmpty(password) && !isPasswordValid(password): " + (TextUtils.isEmpty(password) && !isPasswordValid(password)));
 
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
-            Log.d("FlashChat", "Password Invalid");
+            Log.d(TAG, "Password Invalid");
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -104,7 +121,6 @@ public class RegisterUserActivity<pulbic> extends AppCompatActivity {
             focusView = mEmailView;
             cancel = true;
         }
-
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -112,15 +128,16 @@ public class RegisterUserActivity<pulbic> extends AppCompatActivity {
         } else {
             // Call create FirebaseUser()
             createFirebaseUser();
-
         }
     }
 
+    // Validate the given Email address
     private boolean isEmailValid(String email) {
         // Checking logic
         return email.contains("@");
     }
 
+    // Validate the given Password
     private boolean isPasswordValid(String password) {
         // Add own logic to check for a valid password
         String confirmPassword = mConfirmPasswordView.getText().toString();
@@ -129,13 +146,11 @@ public class RegisterUserActivity<pulbic> extends AppCompatActivity {
 
     // Create a Firebase user
     private void createFirebaseUser() {
-
         String email = mEmailView.getText().toString().trim();
         String password = mPasswordView.getText().toString().trim();
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
                 new OnCompleteListener<AuthResult>() {
-
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUser onComplete: " + task.isSuccessful());
@@ -145,9 +160,7 @@ public class RegisterUserActivity<pulbic> extends AppCompatActivity {
                             showErrorDialog("Registration attempt failed");
                         } else {
                             saveDisplayName();
-
                             addToDatabase();
-
                             Intent intent = new Intent(RegisterUserActivity.this, HomePageActivity.class);
                             finish();
                             startActivity(intent);
@@ -159,7 +172,6 @@ public class RegisterUserActivity<pulbic> extends AppCompatActivity {
 
     // Save the display name to Shared Preferences
     private void saveDisplayName() {
-
         FirebaseUser user = mAuth.getCurrentUser();
         String displayName = mUsernameView.getText().toString().trim();
 
@@ -167,7 +179,6 @@ public class RegisterUserActivity<pulbic> extends AppCompatActivity {
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                     .setDisplayName(displayName)
                     .build();
-
             user.updateProfile(profileUpdates)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -177,30 +188,24 @@ public class RegisterUserActivity<pulbic> extends AppCompatActivity {
                             }
                         }
                     });
-
-
         }
 
     }
 
     private void addToDatabase() {
-
+        // Initialize the database
         DatabaseReference databaseUsers;
-
         databaseUsers = FirebaseDatabase.getInstance().getReference("Users");
 
         String id = mAuth.getCurrentUser().getUid();
-
         User user = new User(id, mEmailView.getText().toString().trim(),mPasswordView.getText().toString().trim(), mUsernameView.getText().toString().trim());
-
+        // Add the new user to the Firebase base
         databaseUsers.child(id).setValue(user);
-
     }
 
 
     // Create an alert dialog to show in case registration failed
     private void showErrorDialog(String message){
-
         new AlertDialog.Builder(this)
                 .setTitle("Oops")
                 .setMessage(message)

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.fishingtest">
+    <!-- permision to the SD storage -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature android:name="android.hardware.location.network" />
 
     <application
         android:allowBackup="true"
@@ -10,11 +22,55 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Controller.RegisterCompActivity"
+            android:name=".Controller.ViewMyCompHistoryActivity"
+            android:label="@string/title_activity_view_my_comp_history"
+            android:parentActivityName=".Controller.ViewProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.fishingtest.Controller.ViewProfileActivity" />
+        </activity>
+        <activity
+            android:name=".Controller.SelectCompWinnerActivity"
+            android:label="@string/title_activity_select_comp_winner"
+            android:parentActivityName=".Controller.AddCompResultsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.fishingtest.Controller.AddCompResultsActivity" />
+        </activity>
+        <activity
+            android:name=".Controller.AddCompResultsActivity"
+            android:label="@string/title_activity_add_comp_results"
+            android:parentActivityName=".Controller.HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.fishingtest.Controller.HomePageActivity" />
+        </activity>
+        <activity
+            android:name=".Controller.EditCommentActivity"
+            android:parentActivityName=".Controller.PostDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Controller.PostDetailActivity"
+            android:parentActivityName=".Controller.ViewPostsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Controller.ResetPasswordActivity" />
+        <activity
+            android:name=".Controller.ViewPostsActivity"
+            android:parentActivityName=".Controller.ViewCompDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Controller.ShotPreviewActivity"
+            android:parentActivityName=".Controller.ViewCompDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Controller.ViewProfileActivity" />
+        <activity
+            android:name=".Controller.ViewCompDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_register_comp"
-            android:theme="@style/FullscreenTheme"></activity>
-        <activity android:name=".Controller.EditUserActivity" />
+            android:theme="@style/FullscreenTheme" />
         <activity android:name=".Controller.RegisterUserActivity" />
         <activity android:name=".Controller.LogInActivity">
             <intent-filter>
@@ -25,11 +81,27 @@
         </activity>
         <activity
             android:name=".Controller.HomePageActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Controller.AdminActivity"
+            android:name=".Controller.AddCompActivity"
             android:parentActivityName=".Controller.HomePageActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".Controller.EditCompActivity"
+            android:parentActivityName=".Controller.HomePageActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <service android:name=".Service.NotificationService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
     </application>
 
 </manifest>
