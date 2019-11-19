@@ -1,19 +1,7 @@
-# COMP90055 Computing Project (25 credit points): Software Development Project
+# Software Development Project
 
 ## Project: Fishing Competition
 
-### Supervisor: 
-Prof. Richard Sinnott
-
-### Members:
-Kan Bu 895016 \
-Ziqi Zhang 937568 \
-Qin Xu 917386 
-
-### Related Repositories:
-For Web App: https://github.com/xuqinzju/FishingWeb \
-For Server: https://github.com/RoryKirsi/Fish-Competition-Back-end-Server
-
-***Note:*** The Github source code for Web App and Server are private due to the sensitive credential information involved. Requests shall be sent on command to view the codes.
+The aim of this project is to develop an Android application “Fish Competition” and a web application associated for fishing competitions with a focus on competing of fish dimension. A third party Augmented Reality (AR) application called “Measure” by Google has been adapted, inside our mobile application, to measure the fish size. The data are stored in Firebase where we have fully utilized its authentication service, database service and storage service.  Additionally, Cloud server has deployed in charge of competition status management and email notification and mobile notification services. The mobile application is majorly designed for Android Nexus, API 28.
 
 ***Demo Video:***  https://youtu.be/VC7MejeUkEo
